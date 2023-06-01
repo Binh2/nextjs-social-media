@@ -5,14 +5,10 @@ import GitHubProvider from 'next-auth/providers/github';
 import Credentials from 'next-auth/providers/credentials';
 import prisma from '../../../lib/prisma';
 
-const authHandler: NextApiHandler = (req, res) => {
-  //Cannot destructure property 'nextauth' of 'req.query' as it is undefined.
-  console.log(req);
-  NextAuth(req, res, options);
-}
+const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
 export default authHandler;
 
-const options = {
+export const options = {
   site: process.env.NEXTAUTH_URL,
   providers: [
     GitHubProvider({

@@ -15,6 +15,7 @@ datasource db {
   // For local development
   provider = "sqlserver"
   url = env("SQL_SERVER_URL")
+  // url = "sqlserver://localhost:49671;database=SocialMedia;user=sa;password=123456;encrypt=true;trustServerCertificate=true;connectTimeout=20"
 }
 
 model Post {
@@ -24,7 +25,16 @@ model Post {
   published Boolean @default(false)
   author    User?@relation(fields:[authorId], references:[id])
   authorId  String?
+  // comments  Comment[]
 }
+// model Comment {
+//   post        Post@relation(fields:[postId], references:[id], onUpdate: NoAction)
+//   postId      String
+//   commenter   User@relation(fields:[commenterId], references:[id])
+//   commenterId String
+//   comment     String?
+//   @@id([postId, commenterId])
+// }
 
 model Account {
   id                 String  @id @default(cuid())
@@ -64,6 +74,7 @@ model User {
   posts         Post[]
   accounts      Account[]
   sessions      Session[]
+  // comments      Comment[]
 }
 
 model VerificationToken {

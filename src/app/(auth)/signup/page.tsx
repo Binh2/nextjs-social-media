@@ -1,8 +1,18 @@
-import { signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/router";
+"use client"
+import { SessionProvider, signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { AppLogo } from "@/components/AppLogo";
 
-export default function SignUp(props: any) {
+export default function ContextProvided() {
+  return (<>
+    <SessionProvider>
+      <SignUp></SignUp>
+    </SessionProvider>
+  </>)
+}
+
+function SignUp(props: any) {
   const session = useSession();
   const router = useRouter();
   
@@ -17,10 +27,7 @@ export default function SignUp(props: any) {
   });
 
   useEffect(() => {    
-    if (session.status == 'authenticated') {
-      console.log(session)
-      router.push('/')
-    }     
+    if (session.status == 'authenticated') router.push('/');
   }, [session, router])
   
   const handleChange = (prop: string) => (event: any) => {
@@ -44,6 +51,7 @@ export default function SignUp(props: any) {
     });
   }
   return (<>
+    <AppLogo></AppLogo>
     <form onSubmit={handleSigninUser}>
       <h1>Create an account</h1>
       <div>

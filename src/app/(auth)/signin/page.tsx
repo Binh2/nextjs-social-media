@@ -25,10 +25,7 @@ function SignIn() {
   });
 
   useEffect(() => {    
-    if (session.status == 'authenticated') {
-      console.log(session)
-      router.push('/')
-    }     
+    if (session.status == 'authenticated') router.push('/');     
   }, [router, session])
   
   const handleChange = (prop: string) => (event: any) => {
