@@ -2,7 +2,7 @@ import Image from 'next/image';
 import { useSession } from "next-auth/react";
 
 type Props = {
-  size?: number;
+  size?: number | string;
 }
 
 export const ProfileImage: React.FC<Props> = ({size}) => {
