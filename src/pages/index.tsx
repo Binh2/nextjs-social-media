@@ -44,7 +44,6 @@ const Home = (props: Props) => {
   }, [status, router]);
 
   return (<>
-    <Header></Header>
     <LeftSidebar></LeftSidebar>
     <main className='float-left'>
       <div>
