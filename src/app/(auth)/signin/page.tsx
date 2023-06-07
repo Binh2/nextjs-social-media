@@ -5,6 +5,7 @@ import { Intro } from "../../../components/Intro"
 import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AppLogo } from "@/components/AppLogo";
+import Head from 'next/head';
 
 export default function SessionProvided() {
   return (<>
@@ -48,6 +49,9 @@ function SignIn() {
   }
   
   return (<>
+    <Head>
+      <title>Sign in - SocialSphere</title>
+    </Head>
     <AppLogo></AppLogo>
     <Intro></Intro>
     <form onSubmit={signInUserWithCredentials}>

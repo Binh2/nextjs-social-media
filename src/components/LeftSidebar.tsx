@@ -6,25 +6,30 @@ export function LeftSidebar() {
   const { data: session, status } = useSession();
   
   return (<>
-    <section className={`float-left`}>
-      <div className="flex">
-        <Image src="/homepage-icon.svg" alt="Go to Homepage" width="32" height="32" />
-        <p>Home</p>
-      </div> 
-      <div className="flex">
-        <ProfileImage size="32"></ProfileImage>
-        <p>{session?.user?.name}</p>
-      </div>
-      <div className="flex">
-        <Image src="tv-icon.svg" alt="Watch videos" width="32" height="32" />
-        <p>Watch</p>
-      </div>
-      <div>
-        <p>Marketplace</p>
-      </div>
-      <div>Game</div>
+    <section className={`grid grid-cols-[32px_1fr] items-center`} style={{gridTemplateRows: "repeat(10, 32px)"}}>
+      <Image src="/homepage-icon.svg" alt="Go to Homepage" width="0" height="0" style={{width: 32, height: "auto"}} />
+      <p>Home</p>
+      
+      <ProfileImage size={32}></ProfileImage>
+      <p>{session?.user?.name}</p>
+
+      <hr></hr>
+      <hr></hr>
+    
+      <Image src="tv-icon.svg" alt="Watch videos" width="0" height="0" style={{width: 32, height: "auto"}} />
+      <p>Watch</p>
+    
+      <Image src="market-place-icon.svg" alt="Marketplace" width="0" height="0" style={{width: 32, height: "auto"}} />
+      <p>Marketplace</p>
+    
+      <Image src="game-controller-icon.svg" alt="Game" width="0" height="0" style={{width: 32, height: "auto"}} />
+      <p>Game</p>
+      
+      <Image src="news-icon.svg" alt="News" width="0" height="0" style={{width: 32, height: "auto"}} />
       <div>Users</div>
-      <div>View</div>
+
+      <Image src="see-all-icon.svg" alt="View all" width="0" height="0" style={{width: 32, height: "auto"}} />
+      <div>View all</div>
     </section>
   </>)
 }

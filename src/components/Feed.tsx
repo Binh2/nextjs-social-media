@@ -1,6 +1,7 @@
 import prisma from "@/lib/prisma";
 import { GetStaticProps } from "next";
-import Post, { PostProps } from "./Post";
+import Post from "./Post";
+import { PostProps } from "@/types/PostProps";
 // import { Post as PostProps } from "@prisma/client"
 
 type Props = {
@@ -8,12 +9,14 @@ type Props = {
 }
 
 export function Feed(props: Props) {
-  return (<div>
+  return (<ol className="flex flex-col gap-4">
     {
       props.feed &&
-      props.feed.map(post => (<div key={post.id}>
-        <Post post={post}></Post>
-      </div>))
+      props.feed.map(post => (
+        <li key={post.id} className="">
+          <Post post={post}></Post>
+        </li>
+      ))
     }
-  </div>)
+  </ol>)
 }

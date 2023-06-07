@@ -20,21 +20,27 @@ datasource db {
 
 model Post {
   id        String  @id @default(cuid())
-  title     String
-  content   String?
+  // title     String
+  content   String
+  image     String?
   published Boolean @default(false)
-  author    User?@relation(fields:[authorId], references:[id])
-  authorId  String?
-  // comments  Comment[]
+  author    User@relation(fields:[authorId], references:[id])
+  authorId  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @default(now())
+  comments  Comment[]
 }
-// model Comment {
-//   post        Post@relation(fields:[postId], references:[id], onUpdate: NoAction)
-//   postId      String
-//   commenter   User@relation(fields:[commenterId], references:[id])
-//   commenterId String
-//   comment     String?
-//   @@id([postId, commenterId])
-// }
+model Comment {
+  id          String  @id @default(cuid())
+  post        Post@relation(fields:[postId], references:[id], onUpdate: NoAction)
+  postId      String
+  author      User@relation(fields:[authorId], references:[id])
+  authorId    String
+  content     String
+  image       String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @default(now())
+}
 
 model Account {
   id                 String  @id @default(cuid())
@@ -74,7 +80,7 @@ model User {
   posts         Post[]
   accounts      Account[]
   sessions      Session[]
-  // comments      Comment[]
+  comments      Comment[]
 }
 
 model VerificationToken {

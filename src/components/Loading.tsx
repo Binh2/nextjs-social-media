@@ -4,7 +4,10 @@ type Props = {
 }
 
 export function Loading({width, height}: Props) {
-  return <div className={`rounded-[100%] inline-block w-[${width}] h-[${height}] animate-spin border-black radius-tl border-t-8 border-solid`}></div>;
+  return (<div className={`relative w-[${width}px] h-[${height}px]`}>
+  <div className={`absolute w-[${width}px] h-[${height}px] animate-spin border-8 border-solid border-transparent border-t-teal-200 rounded-[100%]`}></div>
+  <div className={`absolute w-[${width}px] h-[${height}px] animate-spin-reverse border-8 border-solid border-transparent border-l-teal-200 rounded-[100%]`}></div>
+</div>)
 }
 Loading.defaultProps = {
   width: 48,

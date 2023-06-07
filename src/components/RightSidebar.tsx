@@ -1,6 +1,6 @@
 export function RightSidebar() {
   return (<>
-    <section className="float-right">
+    <section className="">
       <div>Advertisement</div>
       <div>Your page</div>
       <div>Friend request</div>

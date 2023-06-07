@@ -13,7 +13,21 @@ module.exports = {
           'conic-gradient(from 180deg at 50% 50%, var(--tw-gradient-stops))',
       },
       colors: {
-        'teal': 'hsl(179, 79%, 55%)',
+        'teal': {
+          "50": "#ebfdfc",
+          "100": "#d6fafa",
+          "200": "#aef5f4",
+          "300": "#85f1ef",
+          "400": "#5dece9",
+          "500": "#34e7e4",
+          "600": "#2ab9b6",
+          "700": "#1f8b89",
+          "800": "#155c5b",
+          "900": "#0a2e2e"
+        }
+      },
+      animation: {
+        'spin-reverse': 'spin 1s linear infinite reverse'
       }
     },
   },
