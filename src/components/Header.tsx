@@ -23,15 +23,17 @@ export function Header() {
       <button onClick={() => signOut()}>Log out</button>
     </header> */}
 
-    <header className="bg-blue-500 flex items-center justify-between px-4 py-2 sticky	top-1">
+    <header className="bg-white flex items-center justify-between px-4 py-2 sticky top-1 shadow-md  ">
       <AppLogo />
-      <div className="flex items-center ">
-        <div className="flex items-center bg-gray-100 rounded-full py-2 px-4 text-sm text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white w-[calc(100% - 8px)]">
-          <input type="search" placeholder="Search on SocialSphere" className="w-full bg-transparent outline-none" />
-          <span className="ml-2">
-            <SearchIcon className="w-5 h-6 text-gray-400" />
-          </span>
-        </div>
+      <div className='p-2 flex flex-row w-96 bg-gray-100 rounded-full  text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white w-96'>
+        <span className="mr-1 ml-1 ">
+          <SearchIcon  className="w-5 h-6 text-gray-400" />
+        </span>
+        <input type="search" placeholder="Search on SocialSphere" className='flex-1 bg-transparent outline-none ml-2' />
+      </div>
+
+      
+      <div className="flex items-center">
         <button className="rounded-full bg-gray-200 text-gray-700 p-2 ml-2">
           <Image src="/messenger-icon.svg" alt="Messenger icon" width={24} height={24} />
         </button>
@@ -41,9 +43,10 @@ export function Header() {
         <button className="rounded-full overflow-hidden ring-2 ring-white ml-2">
           <ProfileImage />
         </button>
-        <button className="text-white hover:underline ml-4" onClick={() => signOut()}>Log out</button>
+        <button className="text-black hover:underline ml-4" onClick={() => signOut()}>Log out</button>
       </div>
     </header>
+
   </>)
 }
 

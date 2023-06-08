@@ -5,6 +5,7 @@ import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
 import Header from '@/components/Header';
+import LeftSidebar from '@/components/LeftSidebar';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (
@@ -16,6 +17,12 @@ const App = ({ Component, pageProps }: AppProps) => {
         <Component {...pageProps} />
       </div>
     </SessionProvider>
+
+    // <SessionProvider session={pageProps.session}>
+    //   <Component {...pageProps} />
+    // </SessionProvider>
+
+
   );
 };
 
