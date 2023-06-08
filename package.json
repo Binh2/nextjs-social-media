@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "preinstall": "npx only-allow pnpm",
+    
     "dev": "node server.js",
     "build": "next build",
     "start": "next start",
@@ -14,6 +14,7 @@
     "@fortawesome/fontawesome-svg-core": "^6.4.0",
     "@fortawesome/free-solid-svg-icons": "^6.4.0",
     "@fortawesome/react-fontawesome": "^0.2.0",
+    "@heroicons/react": "^1.0.4",
     "@next-auth/prisma-adapter": "^1.0.6",
     "@prisma/client": "^4.14.1",
     "@types/node": "20.2.1",

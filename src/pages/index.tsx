@@ -24,7 +24,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
     where: { published: true },
     include: {
       author: {
-        select: { 
+        select: {
           name: true,
           image: true,
         },
@@ -38,7 +38,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
       }
     },
   });
-  
+
   return {
     props: { feed: JSON.stringify(feed) },
     revalidate: 10,
@@ -61,27 +61,40 @@ const Home = (props: Props) => {
       <title>Homepage - SocialSphere</title>
     </Head>
 
-    <Header></Header>
-    <div className="grid grid-cols-[20%_1fr_20%] bg-[#eee]">
+    <div className="grid grid-cols-[27%_1fr_27%] bg-[#eee]">
+
+      {/* Left bar */}
       <LeftSidebar></LeftSidebar>
+
+      {/* body */}
       <main className=''>
-        <div className='bg-white my-4 rounded-lg'>
-          <div className='flex'>
-            <ProfileImage></ProfileImage>
-            
-            <PostPopup></PostPopup>
+        <div className="bg-white my-4 rounded-lg shadow">
+          <div className="flex items-center p-4 flex-1">
+            <ProfileImage />
+            <PostPopup />
           </div>
-          <div>
-            <button>
-              <p>Livestream</p>
-            </button>
-            <button>Photo/Video</button>
-            <button>Life events</button>
+          <hr className="border-gray-300 pb-2 mt-2" />
+
+          <div className="flex justify-between mt-1 mb-1 px-3">
+            <div className="h-12 flex items-center space-x-1 py-1 cursor-pointer hover:bg-gray-200 hover:rounded-lg pl-5 mb-2 ml-2 p-10">
+              <Image src="/livestream-icon.svg" alt="View all" width={32} height={32} />
+              <button className="text-sm font-medium">Livestream</button>
+            </div>
+            <div className="flex items-center space-x-1 py-1 cursor-pointer hover:bg-gray-200 hover:rounded-lg pl-5 mb-2 p-10">
+              <Image src="/photo-icon.svg" alt="View all" width={32} height={32} />
+              <button className="text-sm font-medium">Photo/Video</button>
+            </div>
+            <div className="flex items-center space-x-1 py-1 cursor-pointer hover:bg-gray-200 hover:rounded-lg pl-5 mb-2 p-10 mr-2">
+              <Image src="/flag-icon.svg" alt="View all" width={25} height={25} />
+              <button className="text-sm font-medium">Life events</button>
+            </div>
           </div>
         </div>
 
         <Feed feed={feed}></Feed>
       </main>
+
+      {/* rigt bar */}
       <RightSidebar></RightSidebar>
     </div>
   </>);
