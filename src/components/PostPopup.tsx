@@ -31,7 +31,7 @@ export function PostPopup() {
         },
         body: JSON.stringify(body),
       })
-      await Router.reload()
+      // await Router.reload()
     }
     catch (error) {
       console.log(error);
@@ -55,18 +55,10 @@ export function PostPopup() {
           </div>
           <select className="">
             <option>
-              <p className="font-bold">
-                {/* <span className="fa-solid">&#xf007;</span> */}
-                Only me
-                {/* <span className="float-right fa-solid">&#xf0d7;</span> */}
-              </p>
+              <p className="font-bold">Only me</p>
             </option>
             <option>
-              <p className="font-bold">
-                {/* <span className="fa-regular fa-globe">&#xf0ac;</span> */}
-                Public 
-                {/* <span className="float-right fa-solid">&#xf0d7;</span> */}
-              </p>
+              <p className="font-bold">Public</p>
             </option>
           </select>
         </div>

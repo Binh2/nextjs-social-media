@@ -2,21 +2,50 @@ import prisma from "@/lib/prisma";
 import { GetStaticProps } from "next";
 import Post from "./Post";
 import { PostProps } from "@/types/PostProps";
-// import { Post as PostProps } from "@prisma/client"
+import InfiniteScroll from 'react-infinite-scroll-component';
+import { useState } from "react";
 
 type Props = {
   feed: PostProps[] | undefined
 }
 
 export function Feed(props: Props) {
-  return (<ol className="flex flex-col gap-4">
+  const [feed, setFeed] = useState(props.feed);
+  const [skip, setSkip] = useState(0);
+  const [hasMore, setHasMore] = useState(true);
+
+  async function fetchMoreData() {
+    const res = await fetch(`/api/post?skip=${skip}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json"
+      }
+    });
+    const feedTemp = await res.json();
+    console.log(feedTemp);
+    if (feed) setFeed([...feed, ...feedTemp])
+    else setFeed(feedTemp);
+    if (feedTemp.length == 0) setHasMore(false);
+    setSkip(skip + feedTemp.length);
+  }
+
+  return (<>
     {
-      props.feed &&
-      props.feed.map(post => (
-        <li key={post.id} className="">
-          <Post post={post}></Post>
-        </li>
-      ))
+      feed &&
+      <InfiniteScroll
+        className="flex flex-col gap-4"
+        dataLength={feed.length}
+        next={fetchMoreData}
+        // style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
+        // inverse={true} 
+        hasMore={hasMore}
+        loader={<p>Loading...</p>}
+        // scrollableTarget="scrollableDiv"
+      >
+        {feed.map((post) => (
+          <Post key={post.id} post={post}></Post>
+        ))}
+      </InfiniteScroll>
     }
-  </ol>)
+  </>)
 }

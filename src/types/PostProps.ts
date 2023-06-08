@@ -1,10 +1,15 @@
 import { Post as PostProps_ } from "@prisma/client";
 import { CommentProps } from "./CommentProps";
+import { ReactionProps } from "./ReactionProps";
 
 export type PostProps = PostProps_ & {
   author: {
     name: string | null,
     image: string | null,
   } | null;
-  comments: Array<CommentProps>
+  comments: CommentProps[],
+  reactions: ReactionProps[],
+  _count: {
+    reactions: number | null
+  }
 }

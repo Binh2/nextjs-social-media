@@ -7,43 +7,34 @@ import { WriteComment } from "./WriteComment";
 import { CommentSection } from "./CommentSection";
 import prisma from "@/lib/prisma";
 import { PostProps } from "@/types/PostProps";
-
-
-// {
-//   id: string;
-//   title: string;
-//   author: {
-//     name: string;
-//     // email: string;
-//   } | null;
-//   content: string;
-//   published: boolean;
-// };
+import { CommentProps } from "@/types/CommentProps";
+import { ReactionPicker } from "./ReactionPicker";
+import { Reactions } from "./Reactions";
+import { useSession } from "next-auth/react";
+import { ReactionTypes } from "@/lib/reactionTypes";
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const authorName = post.author ? post.author.name : "Unknown author";
   const router = useRouter();
   const [ comments, setComments ] = useState(post.comments);
-  console.log(comments)
+  const [ reactions, setReactions ] = useState(post.reactions);
+  const { status, data: session } = useSession()
+  // console.log(reactions)
 
   async function reloadComments() {
-    console.log(prisma)
-    const commentsTemp = await prisma.comment.findMany({
-      where: {
-        postId: post.id
+    const res = await fetch(`api/comment/${post.id}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
       },
-      include: {
-        author: true,
-        // content: true,
-        // updatedAt: true,
-      }
-    });
+    })
+    const commentsTemp: CommentProps[] = await res.json()
     setComments(commentsTemp);
   }
 
   return (
     // <div onClick={() => router.push("/p/[id]", `/p/${post.id}`)}>
-    <div className="p-5 rounded-lg bg-white">
+    <div className="p-5 bg-white rounded-lg">
       <div className="flex">
         <div className="inline-grid grid-cols-[48px_1fr] grid-rows-2 row-gap-2">
           { 
@@ -59,14 +50,10 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           <Image src="/ellipsis-icon.svg" alt="More" width={0} height={0} style={{width: "32px", height: "auto"}} />
         </div>
       </div>
-      <p>{post.content}</p>
+      <p className="break-all whitespacing-pre-wrap">{post.content}</p>
       { post.image && <UploadedImage src={post.image} alt="Uploaded image" className="w-[50%]" /> }
       <div className="flex">
-        <div className="flex">
-          <Image src="like-icon.svg" alt="Like" width={16} height={16} />
-          <Image src="love-icon.svg" alt="Love" width={16} height={16} />
-          <p className="inline-block">Bạn và 100 người khác</p>
-        </div>
+        <Reactions reactions={reactions} count={post._count.reactions}></Reactions>
         <div className="flex ml-auto">
           <p className="inline-block">12</p>
           <Image src="comment-icon.svg" alt="Comment" width={16} height={16} />
@@ -75,10 +62,13 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
         </div>
       </div>
       <div className="flex content-between">
-        <div className="flex mx-auto">
+        {/* <div className="flex mx-auto">
           <Image src="like-icon--inside-filled.svg" alt="Like" width={16} height={16} />
           <p>Like</p>
-        </div>
+        </div> */}
+        <ReactionPicker postId={post.id} type={
+          reactions.filter(reaction => reaction.authorEmail == session?.user?.email)[0]?.type || ReactionTypes.NONE
+        } className="flex mx-auto items-center"></ReactionPicker>
         <div className="flex mx-auto">
           <Image src="comment-icon.svg" alt="Comment" width={16} height={16} />
           <p>Comment</p>

@@ -2,8 +2,9 @@
 import prisma from '../../../lib/prisma';
 import { getServerSession } from 'next-auth';
 import { options as authOptions } from '../auth/[...nextauth]';
+import { NextApiHandler } from 'next';
 
-export default async function handle(req: Request, res: Response) {
+const handle: NextApiHandler = async (req, res) => {
   const { content, image, postId } = req.body;
 
   const session = await getServerSession(req, res, authOptions);
@@ -21,3 +22,5 @@ export default async function handle(req: Request, res: Response) {
   });
   res.json(result);
 }
+
+export default handle;
