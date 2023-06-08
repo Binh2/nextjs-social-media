@@ -4,32 +4,63 @@ import { ProfileImage } from "./ProfileImage";
 
 export function LeftSidebar() {
   const { data: session, status } = useSession();
-  
+
   return (<>
-    <section className={`grid grid-cols-[32px_1fr] items-center`} style={{gridTemplateRows: "repeat(10, 32px)"}}>
-      <Image src="/homepage-icon.svg" alt="Go to Homepage" width="0" height="0" style={{width: 32, height: "auto"}} />
-      <p>Home</p>
-      
-      <ProfileImage size={32}></ProfileImage>
-      <p>{session?.user?.name}</p>
-
-      <hr></hr>
-      <hr></hr>
-    
-      <Image src="tv-icon.svg" alt="Watch videos" width="0" height="0" style={{width: 32, height: "auto"}} />
-      <p>Watch</p>
-    
-      <Image src="market-place-icon.svg" alt="Marketplace" width="0" height="0" style={{width: 32, height: "auto"}} />
-      <p>Marketplace</p>
-    
-      <Image src="game-controller-icon.svg" alt="Game" width="0" height="0" style={{width: 32, height: "auto"}} />
-      <p>Game</p>
-      
-      <Image src="news-icon.svg" alt="News" width="0" height="0" style={{width: 32, height: "auto"}} />
+    {/* <section className={`float-left`}>
+      <div className="flex">
+        <Image src="/homepage-icon.svg" alt="Go to Homepage" width="32" height="32" />
+        <p>Home</p>
+      </div> 
+      <div className="flex">
+        <ProfileImage size="32"></ProfileImage>
+        <p>{session?.user?.name}</p>
+      </div>
+      <div className="flex">
+        <Image src="tv-icon.svg" alt="Watch videos" width="32" height="32" />
+        <p>Watch</p>
+      </div>
+      <div>
+        <p>Marketplace</p>
+      </div>
+      <div>Game</div>
       <div>Users</div>
+      <div>View</div>
+    </section> */}
 
-      <Image src="see-all-icon.svg" alt="View all" width="0" height="0" style={{width: 32, height: "auto"}} />
-      <div>View all</div>
+    <section className="float-left w-80 bg-gray-200 p-4">
+      <div className="flex items-center space-x-2 mb-2 hover:bg-gray-300 rounded-lg">
+        <Image src="/homepage-icon.svg" alt="Go to Homepage" width="32" height="32" />
+        <p className="text-gray-600 text-sm">Home</p>
+      </div>
+      <div className="flex items-center space-x-2 mb-2 hover:bg-gray-300 rounded-lg">
+        <div className="w-8 h-8 rounded-full overflow-hidden">
+          <ProfileImage size="32" />
+        </div>
+        <p className="text-gray-600 text-sm">{session?.user?.name}</p>
+      </div>
+      <hr className="my-2 border-gray-300 " /> {/* Đường thẳng tách */}
+      <div className="flex items-center space-x-2 mb-2 hover:bg-gray-300 rounded-lg">
+        <Image src="/tv-icon.svg" alt="Watch videos" width="32" height="32" />
+        <p className="text-gray-600 text-sm">Watch</p>
+      </div>
+      <div className="mb-2 hover:bg-gray-300 rounded-lg">
+        <p className="text-gray-600 text-sm">Marketplace</p>
+      </div>
+      <div className="flex items-center space-x-2 mb-2 hover:bg-gray-300 rounded-lg">
+        <Image src="/game-controller-icon.svg" alt="Games" width="30" height="30" />
+        <p className="text-gray-600 text-sm">Game</p>
+      </div>
+      <div className="mb-2 hover:bg-gray-300 rounded-lg">
+        <p className="text-gray-600 text-sm">Users</p>
+      </div>
+      <div className="mb-2 hover:bg-gray-300 rounded-lg">
+        <p className="text-gray-600 text-sm">View</p>
+      </div>
     </section>
+
+
+
+
+
   </>)
 }

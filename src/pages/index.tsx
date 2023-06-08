@@ -92,9 +92,20 @@ const Home = (props: Props) => {
   }, [status, router]);
 
   return (<>
-    <Head>
-      <title>Homepage - SocialSphere</title>
-    </Head>
+    <LeftSidebar></LeftSidebar>
+    <main className='float-left'>
+      <div>
+        <div className='flex'>
+          <ProfileImage></ProfileImage>
+          
+          <PostPopup></PostPopup>
+        </div>
+        <div>
+          <button>Livestream</button>
+          <button>Photo/Video</button>
+          <button>Life events</button>
+        </div>
+      </div>
 
     <div className="min-h-[100vh] bg-[#eee]">
       <Header></Header>
