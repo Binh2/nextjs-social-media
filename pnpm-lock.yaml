@@ -14,6 +14,9 @@ dependencies:
   '@fortawesome/react-fontawesome':
     specifier: ^0.2.0
     version: 0.2.0(@fortawesome/fontawesome-svg-core@6.4.0)(react@18.2.0)
+  '@heroicons/react':
+    specifier: ^1.0.4
+    version: 1.0.4(react@18.2.0)
   '@next-auth/prisma-adapter':
     specifier: ^1.0.6
     version: 1.0.6(@prisma/client@4.14.1)(next-auth@4.22.1)
@@ -559,6 +562,14 @@ packages:
     dependencies:
       '@fortawesome/fontawesome-svg-core': 6.4.0
       prop-types: 15.8.1
+      react: 18.2.0
+    dev: false
+
+  /@heroicons/react@1.0.4(react@18.2.0):
+    resolution: {integrity: sha512-3kOrTmo8+Z8o6AL0rzN82MOf8J5CuxhRLFhpI8mrn+3OqekA6d5eb1GYO3EYYo1Vn6mYQSMNTzCWbEwUInb0cQ==}
+    peerDependencies:
+      react: '>= 16'
+    dependencies:
       react: 18.2.0
     dev: false
 

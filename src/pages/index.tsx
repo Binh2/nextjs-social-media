@@ -132,6 +132,7 @@ const Home = (props: Props) => {
         <RightSidebar></RightSidebar>
       </div>
     </div>
+    </main>
   </>);
 }
 

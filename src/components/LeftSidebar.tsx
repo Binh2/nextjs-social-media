@@ -6,27 +6,6 @@ export function LeftSidebar() {
   const { data: session, status } = useSession();
 
   return (<>
-    {/* <section className={`float-left`}>
-      <div className="flex">
-        <Image src="/homepage-icon.svg" alt="Go to Homepage" width="32" height="32" />
-        <p>Home</p>
-      </div> 
-      <div className="flex">
-        <ProfileImage size="32"></ProfileImage>
-        <p>{session?.user?.name}</p>
-      </div>
-      <div className="flex">
-        <Image src="tv-icon.svg" alt="Watch videos" width="32" height="32" />
-        <p>Watch</p>
-      </div>
-      <div>
-        <p>Marketplace</p>
-      </div>
-      <div>Game</div>
-      <div>Users</div>
-      <div>View</div>
-    </section> */}
-
     <section className="float-left w-80 bg-gray-200 p-4">
       <div className="flex items-center space-x-2 mb-2 hover:bg-gray-300 rounded-lg">
         <Image src="/homepage-icon.svg" alt="Go to Homepage" width="32" height="32" />
@@ -34,7 +13,7 @@ export function LeftSidebar() {
       </div>
       <div className="flex items-center space-x-2 mb-2 hover:bg-gray-300 rounded-lg">
         <div className="w-8 h-8 rounded-full overflow-hidden">
-          <ProfileImage size="32" />
+          <ProfileImage size={32} />
         </div>
         <p className="text-gray-600 text-sm">{session?.user?.name}</p>
       </div>
@@ -57,10 +36,5 @@ export function LeftSidebar() {
         <p className="text-gray-600 text-sm">View</p>
       </div>
     </section>
-
-
-
-
-
   </>)
 }
