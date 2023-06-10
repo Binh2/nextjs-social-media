@@ -1,17 +1,17 @@
 // @refresh reset
-import { Header } from '@/components/Header';
-import { LeftSidebar } from '@/components/LeftSidebar';
-import { RightSidebar } from '@/components/RightSidebar';
+import { Header } from '@/components/common/Header';
+import { LeftSidebar } from '@/components/common/LeftSidebar';
+import { RightSidebar } from '@/components/common/RightSidebar';
 import { SessionProvider, useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
-import { ProfileImage } from '../components/ProfileImage';
+import { ProfileImage } from '../components/common/ProfileImage';
 import { GetServerSideProps, GetStaticProps, InferGetStaticPropsType, NextApiHandler } from 'next';
 import prisma from '../lib/prisma';
 import { PostProps } from '@/types/PostProps';
-import { Feed } from '@/components/Feed';
+import { Feed } from '@/components/posts/Feed';
 import Image from 'next/image';
-import { PostPopup } from '@/components/PostPopup';
+import { PostPopup } from '@/components/posts/PostPopup';
 import { PrismaClient } from '@prisma/client';
 import Head from 'next/head';
 import { options as authOptions } from './api/auth/[...nextauth]';
@@ -96,6 +96,7 @@ const Home = (props: Props) => {
       <title>Homepage - SocialSphere</title>
     </Head>
 
+    <Header />
     <div className="grid grid-cols-[27%_1fr_27%] bg-[#eee]">
 
       {/* Left bar */}

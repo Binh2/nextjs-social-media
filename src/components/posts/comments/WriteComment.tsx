@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { ProfileImage } from "./ProfileImage";
+import { ProfileImage } from "../../common/ProfileImage";
 import { useUpload } from "@/lib/useUpload";
 import Router from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";

@@ -4,7 +4,13 @@ import { AppLogo } from './AppLogo';
 import { ProfileImage } from './ProfileImage';
 import { SearchIcon } from '@heroicons/react/outline';
 
-export function Header() {
+type Props = {
+  className?: string;
+  style?: string;
+};
+
+
+export function Header({className = "", style = {}}: Props) {
   const { data: session, status } = useSession();
 
   return (<>
@@ -23,7 +29,7 @@ export function Header() {
       <button onClick={() => signOut()}>Log out</button>
     </header> */}
 
-    <header className="bg-white flex items-center justify-between px-4 py-2 sticky top-1 shadow-md  ">
+    <header className={`bg-white flex items-center justify-between px-4 py-2 sticky top-0 shadow-md z-[1] ${className}`} style={style}>
       <AppLogo />
       <div className='p-2 flex flex-row w-96 bg-gray-100 rounded-full  text-gray-600 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:bg-white w-96'>
         <span className="mr-1 ml-1 ">

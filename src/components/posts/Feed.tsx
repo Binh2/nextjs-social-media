@@ -34,12 +34,14 @@ export function Feed(props: Props) {
       feed &&
       <InfiniteScroll
         className="flex flex-col gap-4"
-        dataLength={feed.length}
+        dataLength={feed.length + 8}
+        pullDownToRefreshThreshold={50}
         next={fetchMoreData}
         // style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
         // inverse={true} 
         hasMore={hasMore}
         loader={<p>Loading...</p>}
+        // height={400}
         // scrollableTarget="scrollableDiv"
       >
         {feed.map((post) => (

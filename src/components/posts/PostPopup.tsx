@@ -2,13 +2,13 @@ import { useSession } from 'next-auth/react';
 import Popup from 'reactjs-popup';
 // const Popup = dynamic(import('reactjs-popup'), { ssr: false })
 import Image from 'next/image';
-import { ProfileImage } from './ProfileImage';
+import { ProfileImage } from '../common/ProfileImage';
 import 'reactjs-popup/dist/index.css';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { Loading } from './Loading';
+import { Loading } from '../common/Loading';
 import dynamic from 'next/dynamic';
-import UploadedImage from './UploadedImage';
+import UploadedImage from '../common/UploadedImage';
 import Router from 'next/router';
 import { UploadState, useUpload } from '@/lib/useUpload';
 import { json } from 'stream/consumers';

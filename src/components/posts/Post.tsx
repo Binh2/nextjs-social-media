@@ -1,15 +1,15 @@
 import Image from "next/image"
 import React, { useState } from "react";
 import Router, { useRouter } from "next/router";
-import UploadedImage from "./UploadedImage";
+import UploadedImage from "../common/UploadedImage";
 import { formatDate } from "@/lib/functions";
-import { WriteComment } from "./WriteComment";
-import { CommentSection } from "./CommentSection";
+import { WriteComment } from "./comments/WriteComment";
+import { CommentSection } from "./comments/CommentSection";
 import prisma from "@/lib/prisma";
 import { PostProps } from "@/types/PostProps";
 import { CommentProps } from "@/types/CommentProps";
-import { ReactionPicker } from "./ReactionPicker";
-import { Reactions } from "./Reactions";
+import { ReactionPicker } from "./reactions/ReactionPicker";
+import { Reactions } from "./reactions/Reactions";
 import { useSession } from "next-auth/react";
 import { ReactionTypes } from "@/lib/reactionTypes";
 

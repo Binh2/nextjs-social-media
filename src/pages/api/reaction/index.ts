@@ -9,7 +9,7 @@ const handle: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse)
     if (typeof(req.query.params) != 'string') return;
     const session = await getServerSession(req, res, authOptions);
     const authorEmail = session?.user?.email || '';
-    console.log(req.body)
+    // console.log(req.body)
     const { type, postId } = JSON.parse(req.body);
 
     const reaction = prisma.reaction.upsert({

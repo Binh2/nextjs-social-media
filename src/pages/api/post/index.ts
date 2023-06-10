@@ -60,7 +60,7 @@ const handle: NextApiHandler<PostProps[]> = async (req: NextApiRequest, res: Nex
 
     const session = await getServerSession(req, res, authOptions);
     // const session = await getSession({ req });
-    console.log(session)
+    // console.log(session)
     const result = await prisma.post.create({
       data: {
         content: content,
