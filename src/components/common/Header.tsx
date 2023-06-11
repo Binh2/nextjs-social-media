@@ -3,10 +3,11 @@ import Image from 'next/image';
 import { AppLogo } from './AppLogo';
 import { ProfileImage } from './ProfileImage';
 import { SearchIcon } from '@heroicons/react/outline';
+import { CSSProperties } from 'react';
 
 type Props = {
   className?: string;
-  style?: string;
+  style?: CSSProperties;
 };
 
 

@@ -86,9 +86,13 @@ model Session {
 model User {
   id            String    @id @default(cuid())
   name          String?
+  username      String?@unique
   email         String?@unique
   emailVerified DateTime?
+  hashedPassword  String?
   image         String?
+  isMale        Boolean?
+  birthday      DateTime? @db.Date
   posts         Post[]
   accounts      Account[]
   sessions      Session[]

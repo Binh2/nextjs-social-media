@@ -40,7 +40,7 @@ export function PostPopup() {
   }
 
   const [stateIcon, setStateIcon] = useState("Only me");
-  const handleSelectChange = (event) => {
+  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
     setStateIcon(event.target.value);
   };
 
