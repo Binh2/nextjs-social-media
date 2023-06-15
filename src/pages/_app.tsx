@@ -4,8 +4,6 @@ import './global.css';
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
-import Header from '@/components/common/Header';
-import LeftSidebar from '@/components//common/LeftSidebar';
 
 const App = ({ Component, pageProps }: AppProps) => {
   return (

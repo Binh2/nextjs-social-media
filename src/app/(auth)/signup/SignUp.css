@@ -12,11 +12,14 @@
     box-shadow: 0px 0px 9px;
     background: white;
     border-radius: 25px;
+    height: 680px;
 }
 
 h1.titile {
     text-align: center;
     display: block;
+    font-size: xx-large;
+    font-weight: bold;
 }
 
 .input-container {
@@ -34,9 +37,9 @@ label.form-label {
 .form-control {
     height: 30px;
     display: block;
-    width: 95%;
+    width: 100%;
     padding: 6px 12px;
-    border-radius: 10px
+    border-radius: 5px
 }
 
 .button-container {
@@ -92,11 +95,11 @@ a.linkdignin {
 }
 
 select.select-form {
-    border-radius: 10px;
+    border-radius: 5px;
     appearance: auto;
     width: 90px;
     height: 35px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.6);
+    box-shadow: 0 0px 1px rgba(0, 0, 0, 0.6);
 }
 
 .error-feedback {
@@ -110,9 +113,9 @@ input::placeholder {
   }
 
 svg.eye {
-    position: absolute;
-    right: 74px;
-    top: 68%;
+    position: fixed;
+    right: 10%;
+    top: 0;
     cursor: pointer;
     transform: translateY(-60%);
     max-width: 25px;

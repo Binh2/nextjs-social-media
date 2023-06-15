@@ -69,7 +69,7 @@ export const getStaticProps: GetServerSideProps<Props> = async () => {
 const Home = (props: Props) => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [ feed, setFeed ] = useState<PostProps[]>(JSON.parse(props.feed));
+  const [feed, setFeed] = useState<PostProps[]>(JSON.parse(props.feed));
   // const [ feed, setFeed ] = useState<PostProps[]>([]);
 
   // useEffect(() => {
@@ -134,7 +134,11 @@ const Home = (props: Props) => {
       <RightSidebar></RightSidebar>
     </div>
     {/* </main> */}
-  </>);
+  </>
+  
+  
+  
+  );
 }
 
 export default Home;
