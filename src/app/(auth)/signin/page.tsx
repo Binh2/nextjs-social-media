@@ -6,6 +6,9 @@ import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { AppLogo } from "@/components/common/AppLogo";
 import Head from 'next/head';
+// import * as argon2 from "argon2";
+// import jsCookie from 'js-cookie';
+import { NextRequest } from "next/server";
 
 export default function SessionProvided() {
   return (<>
@@ -15,7 +18,22 @@ export default function SessionProvided() {
   </>)
 }
 
-const saltRounds = 10;
+// SessionProvided.getInitialProps = async ({ req }: {req: NextRequest}) => {
+//   const initProps = {};
+
+//   if (req && req.headers) {
+//     const cookies = req.headers.cookie;
+
+//     if (typeof cookies === 'string') {
+//       const cookiesJSON = jsHttpCookie.parse(cookies);
+
+//       initProps.token = cookiesJSON.token;
+//     }
+//   }
+
+//   return initProps;
+// }
+
 function SignIn() {
   const session = useSession();
   const router = useRouter();
@@ -24,6 +42,8 @@ function SignIn() {
   const [ password, setPassword ] = useState("");
 
   useEffect(() => {
+    console.log("signin page")
+    console.log(session)
     if (session.status == 'authenticated') router.push('/');
   }, [router, session])
 
@@ -32,11 +52,44 @@ function SignIn() {
     const user = await signIn("credentials", {
       redirect: true,
       type: "signin",
-      username,
-      password
+      username: username,
+      email: username,
+      password: password,
     });
-    console.log(user)
-    if (user) router.push('/')
+
+    // if (!user) return;
+    // // const session = await res.json()
+    // if (user) {
+    //   jsCookie.set("sessionToken", user.sessionToken, {expires: session.expires})
+    // }
+    // const res = await fetch("/api/auth/verifypassword", {
+    //   method: "GET",
+    //   headers: {
+    //     "Content-Type": "application/json"
+    //   },
+    //   body: JSON.stringify({})
+    // });
+    // const user = await res.json();
+    // try {
+    //   if (await argon2.verify(user.hashedPassword, password)) {
+    //     const authUser = await signIn("credentials", {
+    //       redirect: true,
+    //       type: "signin",
+    //       id: user.id,
+    //       name: user.name,
+    //       email: user.email,
+    //       username,
+    //       passwordMatched: true,
+    //     });
+    //     console.log(authUser)
+    //     // if (authUser) router.push("/")
+    //   } else {
+    //     // password did not match
+    //     console.log('password did not match')
+    //   }
+    // } catch (err) {
+    //   console.log(err)
+    // }
   }
   const signInUserWithGitHub: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();

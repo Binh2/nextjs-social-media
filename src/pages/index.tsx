@@ -70,6 +70,9 @@ const Home = (props: Props) => {
   const router = useRouter();
   const { data: session, status } = useSession();
   const [ feed, setFeed ] = useState<PostProps[]>(JSON.parse(props.feed));
+  useEffect(() => {
+    console.log(session)
+  })
   // const [ feed, setFeed ] = useState<PostProps[]>([]);
 
   // useEffect(() => {

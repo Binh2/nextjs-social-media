@@ -1,3 +1,5 @@
+import { User } from "@prisma/client";
+
 export function formatDate(date: string | Date) {
   const options: Intl.DateTimeFormatOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
   return new Date(date).toLocaleDateString('en-US', options);
@@ -14,4 +16,12 @@ export function formatDateShort(date: string | Date): string {
   else if (now.getMinutes() > date.getMinutes()) return (now.getMinutes() - date.getMinutes()).toString() + 'min';
   else if (now.getSeconds() >= date.getSeconds()) return (now.getSeconds() - date.getSeconds()).toString() + 's';
   return '';
+}
+
+export function tomorrow() {
+  return new Date(Date.now() + 86400000);
+}
+
+export function verifyPassword(user: User) {
+  
 }

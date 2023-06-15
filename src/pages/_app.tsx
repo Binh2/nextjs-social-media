@@ -9,6 +9,7 @@ import LeftSidebar from '@/components//common/LeftSidebar';
 import { AuthGuard } from '@/components/common/AuthGuard';
 
 const App = ({ Component, pageProps }: AppProps & { Component: {requireAuth?: boolean}}) => {
+  // console.log(pageProps.session)
   return (
     <SessionProvider session={pageProps.session}>
       {

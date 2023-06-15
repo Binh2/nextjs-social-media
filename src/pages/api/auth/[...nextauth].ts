@@ -6,12 +6,17 @@ import EmailProvider from 'next-auth/providers/email';
 import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '../../../lib/prisma';
 import * as argon2 from "argon2";
+import * as jwt from 'jsonwebtoken'
 
 const authHandler: NextApiHandler = (req, res) => NextAuth(req, res, options);
 export default authHandler;
 
 export const options = {
   site: process.env.NEXTAUTH_URL,
+  session: {
+    strategy: "jwt",
+    maxAge: 1000 * 60 * 60 * 24
+  },
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID || '',
@@ -21,9 +26,11 @@ export const options = {
       name: "Credentials",
       credentials: {
         type: {},
+        // passwordMatched: {},
+        // id: {},
         email: { label: "Email", type: "email", placeholder: "jsmith@example.com" },
         username: { label: "Username", type: "text", placeholder: "jsmith" },
-        hashedPassword: { label: "Password", type: "password" },
+        password: { label: "Password", type: "password" },
 
         firstName: { label: "First name", type: "text", placeholder: "John" },
         lastName: { label: "Last name", type: "text", placeholder: "Smith" },
@@ -32,7 +39,6 @@ export const options = {
       },
       async authorize(credentials, req) {
         if (!credentials) return null;
-        console.log(credentials)
         
         if (credentials.type == "signin") {
           const user = await prisma.user.findFirst({
@@ -48,30 +54,41 @@ export const options = {
               email: true,
               hashedPassword: true,
             }
-          })
+          });
           if (!user) return null;
-          if (!user.hashedPassword) return null;
           try {
-            if (!await argon2.verify(user.hashedPassword, credentials.password)) return null;
-            return (({id, name, email}) => ({id, name, email}))(user);
+            if (!user?.hashedPassword) return null;
+            if (await argon2.verify(user.hashedPassword, credentials.password)) {
+              return (({id, name, email}) => ({id, name, email}))(user);
+            } else {
+              console.log('password did not match')
+              return null;
+            }
           } catch (err) {
             console.log(err)
           }
+          return user;
         } else if (credentials.type == "signup") {
-          const hashedPassword = await argon2.hash(credentials.password);
           let user;
           try {
+            let name = credentials.firstName + ' ' + credentials.lastName
+            if (name == ' ') name = 'Anonymous';
+            const hashedPassword = await argon2.hash(credentials.password);
             user = await prisma.user.create({
               data: {
-                name: credentials.firstName + ' ' + credentials.lastName,
+                name,
                 username: credentials.username,
                 email: credentials.email,
-                hashedPassword: hashedPassword,
-                birthday: new Date(credentials.birthday),
+                hashedPassword,
+                birthday: credentials.birthday ? new Date(credentials.birthday) : null,
+              },
+              select: {
+                id: true,
+                email: true,
+                name: true,
               }
             })
-            console.log(user);
-            return user;
+            return (({id, name, email}) => ({id, name, email}))(user);
           } catch (err) {
             console.log(err);
           }
