@@ -73,7 +73,8 @@ export default function SignUpPage() {
               Your name
             </label>
             <div className="flex">
-              <input id="first-name" className="w-[50%] py-1 px-2 border border-soid border-black rounded-lg rounded-r" type="text" placeholder="John"
+              <input id="first-name" className="w-[50%] py-1 px-2 border border-soid border-black rounded-lg rounded-r disabled:opacity-20" type="text" placeholder="John"
+                disabled={isSubmitting}
                 {...register("firstName")}
               />
               <input type="text" className="w-[50%] py-1 px-2 border border-soid border-black rounded-lg rounded-l disabled:opacity-20" placeholder="Smith"
@@ -134,8 +135,8 @@ export default function SignUpPage() {
                 control={control}
                 name='birthday'
                 render={({ field }) => (
-                  <DatePicker className="w-full px-2 py-1 border border-black rounded-lg border-soid" 
-                    // selected={birthday} onChange={date => setBirthday(date)}
+                  <DatePicker className="w-full px-2 py-1 border border-black border-solid rounded-lg disabled:opacity-20" 
+                    disabled={isSubmitting}
                     selected={field.value} onChange={(date) => field.onChange(date)}
                     peekNextMonth
                     showMonthDropdown
@@ -170,11 +171,11 @@ export default function SignUpPage() {
         </div>
 
         <div className="">
-          <input id="term-and-condition" type="checkbox" className="mr-1" {...register('termsAndConditions')} />
+          <input id="term-and-condition" type="checkbox" className="mr-1 disabled:opacity-20" {...register('termsAndConditions')} disabled={isSubmitting} />
           <label htmlFor="term-and-condition" className="text-xs">Agree with Terms & Conditons</label>
         </div>
         { errors.termsAndConditions && <p className="text-red-500 text-xm">{errors.termsAndConditions.message || ''}</p>}
-        <button className="block px-8 py-1 mx-auto my-2 font-bold uppercase bg-teal-500 rounded-lg">
+        <button className="block px-8 py-1 mx-auto my-2 font-bold uppercase bg-teal-500 rounded-lg disabled:opacity-20" disabled={isSubmitting}>
           Sign Up
         </button>
 
