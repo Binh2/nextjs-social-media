@@ -57,51 +57,23 @@ export function PostPopup() {
       </button>
 
       <Popup modal open={open} onClose={() => setOpen(false)} contentStyle={{ width: "40%", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)" }}>
-        <form onSubmit={submit} className="flex flex-col items-center rounded-2xl" >
+        <form onSubmit={submit} className="flex flex-col items-center rounded-2xl m-2" >
           <div className="flex justify-between items-center w-full">
             <p className="text-xl font-bold text-center flex-1">Create post</p>
             <button className="p-2 rounded-full bg-gray-200 mr-2" onClick={e => { e.preventDefault(); setOpen(false) }}>
               <Image src="/close-icon.svg" alt="Close" width={25} height={25} />
             </button>
           </div>
-          {/* <select className="">
-            <option>
-              <p className="font-bold">Only me</p>
-            </option>
-            <option>
-              <p className="font-bold">Public</p>
-            </option>
-          </select>
-        </div>
-        <div className="overflow-y-auto max-h-[50vh]">
-          <textarea className="w-[100%]"
-            value={content} onChange={e => setContent(e.target.value)} placeholder={`What's on your mind, ${session?.user?.name}?`}
-          ></textarea>
-          { 
-            uploadState == UploadState.UPLOADED ?
-            <UploadedImage className="w-[100%]" src={imageUrl} alt="Uploaded image" /> :
-            <div className="bg-[#eee] flex flex-col items-center">
-              <label className="cursor-pointer">
-                <input type="file" onChange={handleFileInputChange} className="hidden"></input>
-                { 
-                  uploadState == UploadState.UPLOADING ? 
-                  <Loading></Loading> :
-                  <Image src="/add-photo-icon--big.svg" width="48" height="48" alt="Add Photo" />
-                }
-              </label>
-              <p className="text-[1.2em] font-bold">Add photos/videos</p>
-              <p className="text-[0.8em]">or drag and drop</p> */}
-              {/* { uploadState == UploadState.UPLOADED && <Image src={imageUrl} alt="Uploaded image" width={0} height={0} style={{width: "100%", height: "auto"}} /> }  */}
 
-          <div className="border-b border-gray-300 w-full mt-4"></div> {/* Separation line */}
+          <div className="border-b border-gray-300 w-full mt-4 m-0"></div> {/* Separation line */}
 
-          <div className="w-full mt-4 flex ml-5 rounded-xl">
+          <div className="w-full mt-4 flex rounded-xl items-center">
             <div className="flex items-center">
               <ProfileImage size={55} className="rounded-full" />
             </div>
-            <div className="ml-2">
-              <p className="ml-2 text-lg">{session?.user?.name}</p>
-              <div className='flex flex-row relative items-center'>
+            <div className="ml-2 ">
+              <p className="ml-2 text-lg font-semibold">{session?.user?.name}</p>
+              <div className='flex flex-row relative items-center  rounded-lg bg-gray-200'>
                 {
                   stateIcon === 'Only me' ? <Image src="/world.svg" alt="Add photo icon" width={15} height={15} className=" absolute left-3 z-0 " />
                     : <Image src="/lock-closed.svg" alt="Add photo icon" width={15} height={15} className=" absolute left-3 z-0 " />
@@ -114,7 +86,20 @@ export function PostPopup() {
                 </select>
               </div>
             </div>
+
+            <button className="bg-gray-200 border-2 border-gray-300 py-2 px-4 rounded-lg inline-flex items-center font-semibold ml-auto">
+              <p className='mr-3'>Artistic style photo processing</p>
+              <Image src='/upload-icon--sideway.svg' alt="Add style img" width={15} height={15} ></Image>
+            </button>
+
+            {/* <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
+              <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" /></svg>
+              <span>Download</span>
+            </button> */}
+
+
           </div>
+
           <div className="overflow-y-auto max-h-[50vh] w-full mt-4 rounded-md">
             <textarea
               className="w-full resize-none border border-gray-300 rounded-md px-3 py-2 text-base"
@@ -139,7 +124,6 @@ export function PostPopup() {
               </div>
             )}
           </div>
-
           <div className="flex items-center justify-between w-full mt-4 shadow rounded-md border-2 ">
             <p className="text-lg ml-4">Add to your post</p>
             <div className="flex items-center space-x-2">
@@ -178,10 +162,5 @@ export function PostPopup() {
           </button>
         </form>
       </Popup>
-
-
-
-
-
     </div>);
 }

@@ -23,7 +23,7 @@ async function main() {
         published: true,
         author: {
           connect: {
-            email: "hgqbinh2002@gmail.com",
+            email: "qua6a11999@gmail.com",
           }
         }
       }

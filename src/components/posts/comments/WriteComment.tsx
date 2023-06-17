@@ -41,14 +41,24 @@ export function WriteComment(props: Props) {
     }
   }
 
-  return (<form onSubmit={submit} className="flex">
-    <ProfileImage size={32} />
-    <textarea placeholder="Write a comment..." value={content} onChange={(e) => setContent(e.target.value)} 
-      className="h-5 focus:h-10 box-content w-[100%] outline-none transition-all" 
-      onKeyDown={e => handleKeyDown(e)}
-    />
-    <button className="h-auto" tabIndex={0}>
-      <FontAwesomeIcon icon={faPaperPlane} className="fa-solid fa-paper-plane text-teal-500" />
-    </button>
-  </form>);
+  return (
+    <div className="flex items-center">
+      <ProfileImage size={32} />
+      <form onSubmit={submit} className="flex items-center border rounded-lg px-2 py-1 bg-[#eee] ml-2 w-full">
+        <textarea
+          placeholder="Write a comment..."
+          value={content}
+          onChange={(e) => setContent(e.target.value)}
+          className="flex-grow h-8 px-2 py-1 outline-none resize-none bg-transparent"
+          onKeyDown={handleKeyDown} />
+        <button
+          className="flex items-center justify-center w-8 h-8 text-teal-500 hover:text-teal-600 focus:outline-none"
+          tabIndex={0}>
+          <FontAwesomeIcon icon={faPaperPlane} className="fa-solid fa-paper-plane" />
+        </button>
+      </form>
+    </div>
+
+
+  );
 }

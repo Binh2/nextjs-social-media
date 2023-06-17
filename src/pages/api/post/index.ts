@@ -1,7 +1,7 @@
 // import { getSession } from 'next-auth/react';
 import prisma from '../../../lib/prisma';
 import { getServerSession } from 'next-auth';
-import { options as authOptions } from '../auth/[...nextauth]';
+import { authOptions } from '../auth/[...nextauth]';
 import { NextApiHandler, NextApiRequest, NextApiResponse } from 'next';
 import { PostProps } from '@/types/PostProps';
 

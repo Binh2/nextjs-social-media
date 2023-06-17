@@ -9,6 +9,9 @@ import Head from 'next/head';
 // import * as argon2 from "argon2";
 // import jsCookie from 'js-cookie';
 import { NextRequest } from "next/server";
+import { z } from 'zod';
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
 
 export default function SessionProvided() {
   return (<>
@@ -18,28 +21,32 @@ export default function SessionProvided() {
   </>)
 }
 
-// SessionProvided.getInitialProps = async ({ req }: {req: NextRequest}) => {
-//   const initProps = {};
-
-//   if (req && req.headers) {
-//     const cookies = req.headers.cookie;
-
-//     if (typeof cookies === 'string') {
-//       const cookiesJSON = jsHttpCookie.parse(cookies);
-
-//       initProps.token = cookiesJSON.token;
-//     }
-//   }
-
-//   return initProps;
-// }
+const FormSchema = z.object({
+  username: z.union([
+    z.string({required_error: "Username is required"}).min(6, "Username must be at least 6 characters"),
+    z.string({required_error: "Email is required"}).email("This is not an email"),
+  ]),
+  password: z.string({required_error: "Password is required"}).min(6, "Password must be at least 6 characters"),
+});
+type FormSchemaType = z.infer<typeof FormSchema>;
 
 function SignIn() {
   const session = useSession();
   const router = useRouter();
 
-  const [ username, setUsername ] = useState("");
-  const [ password, setPassword ] = useState("");
+  const {
+    control,
+    register,
+    reset,
+    // watch,
+    handleSubmit: handleSubmitWrapper,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm<FormSchemaType>({
+    resolver: zodResolver(FormSchema),
+  });
+  // const [ username, setUsername ] = useState("");
+  // const [ password, setPassword ] = useState("");
 
   useEffect(() => {
     console.log("signin page")
@@ -47,8 +54,9 @@ function SignIn() {
     if (session.status == 'authenticated') router.push('/');
   }, [router, session])
 
-  const signInUserWithCredentials: FormEventHandler<HTMLFormElement> = async (event) => {
-    event.preventDefault();
+  const signInUserWithCredentials: FormEventHandler<HTMLFormElement> = handleSubmitWrapper(async (data) => {
+    // event.preventDefault(); 
+    const { username, password } = data;
     const user = await signIn("credentials", {
       redirect: true,
       type: "signin",
@@ -56,41 +64,7 @@ function SignIn() {
       email: username,
       password: password,
     });
-
-    // if (!user) return;
-    // // const session = await res.json()
-    // if (user) {
-    //   jsCookie.set("sessionToken", user.sessionToken, {expires: session.expires})
-    // }
-    // const res = await fetch("/api/auth/verifypassword", {
-    //   method: "GET",
-    //   headers: {
-    //     "Content-Type": "application/json"
-    //   },
-    //   body: JSON.stringify({})
-    // });
-    // const user = await res.json();
-    // try {
-    //   if (await argon2.verify(user.hashedPassword, password)) {
-    //     const authUser = await signIn("credentials", {
-    //       redirect: true,
-    //       type: "signin",
-    //       id: user.id,
-    //       name: user.name,
-    //       email: user.email,
-    //       username,
-    //       passwordMatched: true,
-    //     });
-    //     console.log(authUser)
-    //     // if (authUser) router.push("/")
-    //   } else {
-    //     // password did not match
-    //     console.log('password did not match')
-    //   }
-    // } catch (err) {
-    //   console.log(err)
-    // }
-  }
+  })
   const signInUserWithGitHub: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
     await signIn("github", {
@@ -115,32 +89,37 @@ function SignIn() {
           <label className="block mb-2">Username:</label>
           <input
             type="text"
-            value={username}
-            onChange={e => setUsername(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md"
+            {...register('username')}
+            disabled={isSubmitting}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md disabled:opacity-20"
           />
         </div>
+        { errors.username && <p className="text-red-500 text-xm">{errors.username.message || ''}</p>}
         <div className="mb-4">
           <label className="block mb-2">Password:</label>
           <input
             type="password"
-            value={password}
-            onChange={e => setPassword(e.target.value)}
-            className="w-full px-4 py-2 border border-gray-300 rounded-md"
+            {...register('password')}
+            disabled={isSubmitting}
+            className="w-full px-4 py-2 border border-gray-300 rounded-md disabled:opacity-20"
           />
         </div>
+        { errors.password && <p className="text-red-500 text-xm">{errors.password.message || ''}</p>}
         <div className="flex items-center mb-4">
           <span className="mr-1">Don&apos;t have an account?</span>
           <a href="/signup" className="text-blue-500">Sign up</a>
         </div>
         <div className="flex items-center justify-between mb-4">
           <div>
-            <button className="h-12 px-4 py-2 mr-2 text-white bg-blue-500 rounded-md">Submit</button>
+            <button className="h-12 px-4 py-2 mr-2 text-white bg-blue-500 rounded-md disabled:opacity-20" 
+              disabled={isSubmitting}
+            >Submit</button>
           </div>
           <div>
             <button
               onClick={signInUserWithGitHub}
-              className="h-12 px-4 py-2 text-gray-700 bg-gray-200 rounded-md" >Sign in with GitHub </button>
+              disabled={isSubmitting}
+              className="h-12 px-4 py-2 text-gray-700 bg-gray-200 rounded-md disabled:opacity-20" >Sign in with GitHub </button>
           </div>
         </div>
       </div>

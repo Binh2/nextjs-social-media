@@ -2,7 +2,7 @@ import prisma from "@/lib/prisma";
 import { Reaction } from "@prisma/client";
 import { NextApiHandler, NextApiRequest, NextApiResponse } from "next";
 import { getServerSession } from "next-auth";
-import { options as authOptions } from "../auth/[...nextauth]";
+import { authOptions } from "../auth/[...nextauth]";
 
 const handle: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == 'PUT' || req.method == 'POST') {

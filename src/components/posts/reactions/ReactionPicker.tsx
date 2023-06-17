@@ -14,8 +14,8 @@ const defaultProps = {
 }
 
 export function ReactionPicker({ postId, type, className }: Props) {
-  const [ open, setOpen ] = useState(false);
-  const [ opacity, setOpacity ] = useState(0.0);
+  const [open, setOpen] = useState(false);
+  const [opacity, setOpacity] = useState(0.0);
 
   function closePopup() {
     if (!open) return;
@@ -38,28 +38,45 @@ export function ReactionPicker({ postId, type, className }: Props) {
   }
   useEffect(closePopup, [open])
 
-  return (<div className={className}>
-    <Popup trigger={(
-      <button onClick={() => {openPopup(); reactToPost(ReactionTypes.LIKE)}} className="flex" 
-        onMouseEnter={openPopup}
-      >
-        <Reaction type={type}></Reaction>
-        <p>Like</p>
-      </button>
-    )} 
-      open={open} position="top center" onClose={closePopup} closeOnDocumentClick
-    >
-      <ol className="flex gap-2 transition-all duration-1000" style={{opacity}}
-        onMouseEnter={openPopup} onMouseLeave={closePopup}
-      >
-        {[1,2,3,4,5,6].map(reactionType => (<li key={reactionType}>
-          <button onClick={() => reactToPost(reactionType)}>
-            <Reaction type={reactionType} className="w-[32px] h-[32px]"></Reaction>
+  return (
+    <div className={className}>
+      <Popup
+        trigger={(
+          <button
+            onClick={() => {
+              openPopup();
+              reactToPost(ReactionTypes.LIKE);
+            }}
+            className="flex items-center focus:outline-none"
+            onMouseEnter={openPopup}
+          >
+            <Reaction type={type} className="w-6 h-6 mr-2"></Reaction>
+            <p className="text-sm font-medium">Like</p>
           </button>
-        </li>))}
-      </ol>
-    </Popup>
-  </div>)
+        )}
+        open={open}
+        position="top center"
+        onClose={closePopup}
+        closeOnDocumentClick
+      >
+        <ol
+          className="flex gap-2 transition-all duration-1000 opacity-100"
+          onMouseEnter={openPopup}
+          onMouseLeave={closePopup}
+        >
+          {[1, 2, 3, 4, 5, 6].map((reactionType) => (
+            <li key={reactionType}>
+              <button onClick={() => reactToPost(reactionType)} className="focus:outline-none">
+                <Reaction type={reactionType} className="w-6 h-6"></Reaction>
+              </button>
+            </li>
+          ))}
+        </ol>
+      </Popup>
+    </div>
+
+
+  )
 }
 
 ReactionPicker.defaultProps = defaultProps;

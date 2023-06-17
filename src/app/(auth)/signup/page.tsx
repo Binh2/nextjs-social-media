@@ -60,11 +60,11 @@ export default function SignUpPage() {
   return (<main className="flex bg-[#eee] min-h-[100vh] px-4 gap-x-4">
     <Intro className="w-[50%]"></Intro>
     <div className="w-[50%] my-auto">
-      <h1 className="text-2xl font-bold text-center mb-1">Create an Account</h1>
-      <form onSubmit={handleSubmit} className="bg-white px-6 py-2">
+      <h1 className="mb-1 text-2xl font-bold text-center">Create an Account</h1>
+      <form onSubmit={handleSubmit} className="px-6 py-2 bg-white">
         <div className="flex flex-col gap-3">
           <div>
-            <label htmlFor="first-name" className="text-md font-bold">
+            <label htmlFor="first-name" className="font-bold text-md">
               Your name
             </label>
             <div className="flex">
@@ -78,17 +78,17 @@ export default function SignUpPage() {
           </div>
 
           <div className="">
-            <label htmlFor="email" className="text-md font-bold">
+            <label htmlFor="email" className="font-bold text-md">
               Email Address
             </label>
             <div>
-              <input className="w-full py-1 px-2 border border-soid border-black rounded-lg"
+              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid"
                 id="email" type="text" placeholder="jsmith@example.com"
                 // value={email} onChange={e => setEmail(e.target.value)}
                 {...register("email")}
               />
             </div>
-            { errors.email && <p className="text-xm text-red-500">{errors.email.message || ''}</p>}
+            { errors.email && <p className="text-red-500 text-xm">{errors.email.message || ''}</p>}
           </div>
 
           <div className="">
@@ -96,24 +96,24 @@ export default function SignUpPage() {
               Username
             </label>
             <div>
-              <input className="w-full py-1 px-2 border border-soid border-black rounded-lg" 
+              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid" 
                 id="username" type="text" placeholder="jsmith" 
                 // value={username} onChange={e => setUsername(e.target.value)}
                 {...register("username")}
               />
             </div>
-            { errors.username && <p className="text-xm text-red-500">{errors.username.message || ''}</p>}
+            { errors.username && <p className="text-red-500 text-xm">{errors.username.message || ''}</p>}
           </div>
 
           <div className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto_auto]">
-            <label htmlFor="gender" className="text-md font-bold">
+            <label htmlFor="gender" className="font-bold text-md">
               Gender
             </label>
             <label htmlFor="birthday" className="font-bold text-md">
               Birthday
             </label>
             <div className="min-w-12">
-              <select className="w-full py-1 px-2 border border-soid border-black rounded-lg"
+              <select className="w-full px-2 py-1 border border-black rounded-lg border-soid"
                 id="gender" 
                 {...register("isMale")}
               >
@@ -127,7 +127,7 @@ export default function SignUpPage() {
                 control={control}
                 name='birthday'
                 render={({ field }) => (
-                  <DatePicker className="w-full py-1 px-2 border border-soid border-black rounded-lg" 
+                  <DatePicker className="w-full px-2 py-1 border border-black rounded-lg border-soid" 
                     // selected={birthday} onChange={date => setBirthday(date)}
                     selected={field.value} onChange={(date) => field.onChange(date)}
                     peekNextMonth
@@ -137,8 +137,8 @@ export default function SignUpPage() {
                 )}
               ></Controller>
             </div>
-            { errors.isMale && <p className="text-xm text-red-500">{errors.isMale.message || ''}</p>}
-            { errors.birthday && <p className="text-xm text-red-500">{errors.birthday.message || ''}</p>}
+            { errors.isMale && <p className="text-red-500 text-xm">{errors.isMale.message || ''}</p>}
+            { errors.birthday && <p className="text-red-500 text-xm">{errors.birthday.message || ''}</p>}
           </div>
 
           <div className="">
@@ -146,7 +146,7 @@ export default function SignUpPage() {
               Password
             </label>
             <div className="relative">
-              <input className="w-full py-1 px-2 border border-soid border-black rounded-lg"
+              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid"
                 id="password" placeholder="Password"
                 type={isPasswordVisible ? "text": "password"} 
                 // value={password} onChange={e => setPassword(e.target.value)}
@@ -154,11 +154,11 @@ export default function SignUpPage() {
               />
               {
                 isPasswordVisible ? 
-                <div className="absolute right-2 top-0 h-8"><Image className="relative top-[50%] -translate-y-[50%]" src="password-visible-icon.svg" alt="Password visible" width={0} height={0} style={{width: "1rem", height: "auto"}} onClick={() => setIsPasswordVisible(false)} /></div>:
-                <div className="absolute right-2 top-0 h-8"><Image className="relative top-[50%] -translate-y-[50%]" src="password-hidden-icon.svg" alt="Password hide" width={0} height={0} style={{width: "1rem", height: "auto"}} onClick={() => setIsPasswordVisible(true)} /></div>
+                <div className="absolute top-0 h-8 right-2"><Image className="relative top-[50%] -translate-y-[50%]" src="password-visible-icon.svg" alt="Password visible" width={0} height={0} style={{width: "1rem", height: "auto"}} onClick={() => setIsPasswordVisible(false)} /></div>:
+                <div className="absolute top-0 h-8 right-2"><Image className="relative top-[50%] -translate-y-[50%]" src="password-hidden-icon.svg" alt="Password hide" width={0} height={0} style={{width: "1rem", height: "auto"}} onClick={() => setIsPasswordVisible(true)} /></div>
               }
             </div>
-            { errors.password && <p className="text-xm text-red-500">{errors.password.message || ''}</p>}
+            { errors.password && <p className="text-red-500 text-xm">{errors.password.message || ''}</p>}
           </div>
         </div>
 
@@ -166,11 +166,12 @@ export default function SignUpPage() {
           <input id="term-and-condition" type="checkbox" className="mr-1" {...register('termsAndConditions')} />
           <label htmlFor="term-and-condition" className="text-xs">Agree with Terms & Conditons</label>
         </div>
-        <button className="bg-teal-500 mx-auto my-2 px-8 py-1 font-bold uppercase rounded-lg block">
+        { errors.termsAndConditions && <p className="text-red-500 text-xm">{errors.termsAndConditions.message || ''}</p>}
+        <button className="block px-8 py-1 mx-auto my-2 font-bold uppercase bg-teal-500 rounded-lg">
           Sign Up
         </button>
 
-        <p className="font-bold text-sm text-center">
+        <p className="text-sm font-bold text-center">
           <span className="">Already have account? {" "}</span>
           <Link className="text-teal-500" href="/signin">
             Sign in to account

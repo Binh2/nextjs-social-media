@@ -14,7 +14,7 @@ import Image from 'next/image';
 import { PostPopup } from '@/components/posts/PostPopup';
 import { PrismaClient } from '@prisma/client';
 import Head from 'next/head';
-import { options as authOptions } from './api/auth/[...nextauth]';
+import { authOptions } from './api/auth/[...nextauth]';
 import { getServerSession } from 'next-auth';
 
 type Props = {
@@ -137,7 +137,11 @@ const Home = (props: Props) => {
       <RightSidebar></RightSidebar>
     </div>
     {/* </main> */}
-  </>);
+  </>
+  
+  
+  
+  );
 }
 
 Home.requiredAuth = true;
