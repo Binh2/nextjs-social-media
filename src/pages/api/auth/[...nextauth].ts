@@ -15,7 +15,7 @@ export const options = {
   site: process.env.NEXTAUTH_URL,
   session: {
     strategy: "jwt",
-    maxAge: 1000 * 60 * 60 * 24
+    maxAge: 60 * 60 * 24 // A day
   },
   providers: [
     GitHubProvider({
