@@ -1,4 +1,5 @@
 import { PrismaClient } from '@prisma/client'
+import * as argon2 from 'argon2';
 const prisma = new PrismaClient()
 
 function makeRandomString(length: number) {
@@ -14,6 +15,16 @@ function makeRandomString(length: number) {
 }
 
 async function main() {
+  const email = "testuser@gmail.com";
+  const password = "123456";
+  const hashedPassword = await argon2.hash(password);
+  const user = await prisma.user.create({
+    data: {
+      username: "testuser",
+      email: email,
+      hashedPassword: hashedPassword, // 123456
+    }
+  });
   const feed = []
   for (let i = 0; i < 20; i++) {
     const post = await prisma.post.create({
@@ -23,7 +34,7 @@ async function main() {
         published: true,
         author: {
           connect: {
-            email: "qua6a11999@gmail.com",
+            email: email,
           }
         }
       }

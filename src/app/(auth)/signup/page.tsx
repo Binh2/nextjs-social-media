@@ -1,11 +1,11 @@
 "use client"
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Image from 'next/image';
 import DatePicker from "react-datepicker";
 import { Intro } from "@/components/common/Intro"
 import Link from "next/link";
 import "react-datepicker/dist/react-datepicker.css";
-import { signIn } from "next-auth/react";
+import { signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
@@ -38,7 +38,12 @@ export default function SignUpPage() {
     resolver: zodResolver(FormSchema),
   });
   const [ isPasswordVisible, setIsPasswordVisible ] = useState(false);
-  const router = useRouter()
+  const router = useRouter();
+  const { status, data: session } = useSession();
+
+  useEffect(() => {
+    if (status == "authenticated") router.push("/")
+  })
 
   const handleSubmit = handleSubmitWrapper( async (data) => {
     // e.preventDefault();
@@ -71,7 +76,8 @@ export default function SignUpPage() {
               <input id="first-name" className="w-[50%] py-1 px-2 border border-soid border-black rounded-lg rounded-r" type="text" placeholder="John"
                 {...register("firstName")}
               />
-              <input type="text" className="w-[50%] py-1 px-2 border border-soid border-black rounded-lg rounded-l" placeholder="Smith"
+              <input type="text" className="w-[50%] py-1 px-2 border border-soid border-black rounded-lg rounded-l disabled:opacity-20" placeholder="Smith"
+                disabled={isSubmitting}
                 {...register("lastName")}
               />
             </div>
@@ -82,9 +88,9 @@ export default function SignUpPage() {
               Email Address
             </label>
             <div>
-              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid"
+              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid disabled:opacity-20"
                 id="email" type="text" placeholder="jsmith@example.com"
-                // value={email} onChange={e => setEmail(e.target.value)}
+                disabled={isSubmitting}
                 {...register("email")}
               />
             </div>
@@ -96,9 +102,9 @@ export default function SignUpPage() {
               Username
             </label>
             <div>
-              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid" 
+              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid disabled:opacity-20" 
                 id="username" type="text" placeholder="jsmith" 
-                // value={username} onChange={e => setUsername(e.target.value)}
+                disabled={isSubmitting}
                 {...register("username")}
               />
             </div>
@@ -113,8 +119,9 @@ export default function SignUpPage() {
               Birthday
             </label>
             <div className="min-w-12">
-              <select className="w-full px-2 py-1 border border-black rounded-lg border-soid"
+              <select className="w-full px-2 py-1 border border-black rounded-lg border-soid disabled:opacity-20"
                 id="gender" 
+                disabled={isSubmitting}
                 {...register("isMale")}
               >
                 <option value="true">Female</option>
@@ -146,10 +153,10 @@ export default function SignUpPage() {
               Password
             </label>
             <div className="relative">
-              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid"
+              <input className="w-full px-2 py-1 border border-black rounded-lg border-soid disabled:opacity-20"
                 id="password" placeholder="Password"
                 type={isPasswordVisible ? "text": "password"} 
-                // value={password} onChange={e => setPassword(e.target.value)}
+                disabled={isSubmitting}
                 {...register("password")}
               />
               {
