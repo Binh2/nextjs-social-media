@@ -12,6 +12,7 @@ import { ReactionPicker } from "./reactions/ReactionPicker";
 import { Reactions } from "./reactions/Reactions";
 import { useSession } from "next-auth/react";
 import { ReactionTypes } from "@/lib/reactionTypes";
+import UploadedImage1 from "../common/UploadedImageView";
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const authorName = post.author ? post.author.name : "Unknown author";
@@ -19,7 +20,6 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const [comments, setComments] = useState(post.comments);
   const [reactions, setReactions] = useState(post.reactions);
   const { status, data: session } = useSession()
-
   return (
     // <div onClick={() => router.push("/p/[id]", `/p/${post.id}`)}>
 
@@ -36,13 +36,14 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           <p className="ml-2 text-xs">{formatDate(post.createdAt)}</p>
         </div>
         <div className="flex ml-auto items-center">
-          <Image src="/save-post-icon.svg" alt="Save post" width={0} height={0} style={{ width: "auto", height: "18px" }} className="mr-2"/>
+          <Image src="/save-post-icon.svg" alt="Save post" width={0} height={0} style={{ width: "auto", height: "18px" }} className="mr-2" />
           <Image src="/ellipsis-icon.svg" alt="More" width={0} height={0} style={{ width: "18px", height: "auto" }} />
         </div>
       </div>
 
       <p className="break-all whitespacing-pre-wrap mt-2">{post.content}</p>
-      {post.image && <UploadedImage src={post.image} alt="Uploaded image" className="w-[50%] mt-2" />}
+      {post.image && <UploadedImage1 data={post} src={post.image} alt="Uploaded image" className="object-cover w-full h-[500px] mt-2 cursor-pointer" />}
+
       <div className="flex">
         <Reactions postId={post.id} reactions={reactions} count={post._count.reactions}></Reactions>
         <div className="flex ml-auto">

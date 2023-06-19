@@ -23,10 +23,6 @@ const App = ({ Component, pageProps }: AppProps & { Component: {requireAuth?: bo
       </SessionProvider>
     </QueryClientProvider>
 
-    // <SessionProvider session={pageProps.session}>
-    //   <Component {...pageProps} />
-    // </SessionProvider>
-
 
   );
 };
