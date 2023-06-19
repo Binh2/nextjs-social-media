@@ -5,7 +5,7 @@ import DatePicker from "react-datepicker";
 import { Intro } from "@/components/common/Intro"
 import Link from "next/link";
 import "react-datepicker/dist/react-datepicker.css";
-import { signIn, useSession } from "next-auth/react";
+import { SessionProvider, signIn, useSession } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
@@ -25,7 +25,7 @@ const FormSchema = z.object({
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-export default function SignUpPage() {
+function SignUpPage() {
   const {
     control,
     register,
@@ -188,4 +188,10 @@ export default function SignUpPage() {
       </form>
     </div>
   </main>);
+}
+
+export default function SessionProvided() {
+  return <SessionProvider>
+    <SignUpPage></SignUpPage>
+  </SessionProvider>
 }

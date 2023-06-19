@@ -18,13 +18,17 @@ async function main() {
   const email = "testuser@gmail.com";
   const password = "123456";
   const hashedPassword = await argon2.hash(password);
-  const user = await prisma.user.create({
-    data: {
-      username: "testuser",
-      email: email,
-      hashedPassword: hashedPassword, // 123456
-    }
-  });
+  try {
+    const user = await prisma.user.create({
+      data: {
+        username: "testuser",
+        email: email,
+        hashedPassword: hashedPassword, // 123456
+      }
+    });
+  } catch (err) {
+    console.log(err)
+  }
   const feed = []
   for (let i = 0; i < 20; i++) {
     const post = await prisma.post.create({

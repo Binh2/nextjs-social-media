@@ -5,39 +5,13 @@ import { useState } from 'react';
 import { CommentSection } from './CommentSection';
 
 type Props = {
-  children?: JSX.Element,
   comment: CommentProps,
-}
-const defaultProps = {
-  children: (<></>)
 }
 export function Comment(props: Props) {
   const comment = props.comment;
   const [isReplyVisible, setIsReplyVisible] = useState(false)
 
   return (
-    // <div className="flex">
-    //   {comment.author.image && <Image className="rounded-[100%]"
-    //     src={comment.author.image} alt="Commenter's profile image" width={32} height={32} style={{ height: "auto" }}
-    //   />}
-    //   <div>
-    //     <div className="px-3 py-1">
-    //       <p>{comment.author.name}</p>
-    //       <p>{comment.content}</p>
-    //     </div>
-    //     <div className="flex">
-    //       <button>Like</button>
-    //       <button>Reply</button>
-    //       <p>{formatDateShort(comment.updatedAt)}</p>
-    //     </div>
-    //     {
-    //       isReplyVisible ?
-    //         <CommentSection comments={comment.comments}></CommentSection> :
-    //         <button onClick={() => setIsReplyVisible(true)}>View more reply</button>
-    //     }
-    //   </div>
-    // </div>
-
     <div className="flex items-start space-x-2">
       <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
         {comment.author.image ? (
@@ -57,7 +31,8 @@ export function Comment(props: Props) {
           <p className="text-gray-500 text-sm">{formatDateShort(comment.updatedAt)}</p>
         </div>
         {isReplyVisible ? (
-          <CommentSection comments={comment.comments} />
+          // <CommentSection postId={postId} />
+          <></>
         ) : (
           <button
             className="text-gray-500 hover:text-gray-700 mt-1"
@@ -72,5 +47,3 @@ export function Comment(props: Props) {
 
   )
 }
-
-Comment.defaultProps = defaultProps

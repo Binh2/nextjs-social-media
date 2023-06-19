@@ -1,7 +1,9 @@
 import Popup from "reactjs-popup";
 import { Reaction } from "./Reaction";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { ReactionTypes } from "@/lib/reactionTypes";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 type Props = {
   postId: string,
@@ -9,74 +11,64 @@ type Props = {
   className?: string,
 }
 
-const defaultProps = {
-  className: ''
-}
-
-export function ReactionPicker({ postId, type, className }: Props) {
+export function ReactionPicker({ postId, type, className = ''}: Props) {
   const [open, setOpen] = useState(false);
   const [opacity, setOpacity] = useState(0.0);
+  const queryClient = useQueryClient();
 
-  function closePopup() {
+  const mutation = useMutation({
+    mutationKey: ['post', postId, 'reaction'],
+    mutationFn: (type: number) => {
+      return axios.post(`/api/post/${postId}/reaction`, {
+        type: type
+      }).then(res => res.data)
+    },
+    onSuccess: () => {
+      queryClient.refetchQueries(['post', postId, 'reaction'])
+    }
+  })
+
+  const closePopup = useCallback(function () {
     if (!open) return;
     setOpacity(0.0);
-    const timeout = setTimeout(() => setOpen(false), 1000);
-    return clearTimeout(timeout);
-  }
+    const timeout = setTimeout(() => setOpen(false), 800);
+    return () => clearTimeout(timeout);
+  }, [open, setOpacity])
   function openPopup() {
     setOpacity(1.0);
     setOpen(true);
   }
-  function reactToPost(type: number) {
-    fetch(`/api/reaction/${postId}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ type })
-    })
-  }
-  useEffect(closePopup, [open])
+  useEffect(() => {
+    closePopup()
+  }, [open, closePopup])
 
   return (
     <div className={className}>
-      <Popup
-        trigger={(
-          <button
-            onClick={() => {
-              openPopup();
-              reactToPost(ReactionTypes.LIKE);
-            }}
-            className="flex items-center focus:outline-none"
-            onMouseEnter={openPopup}
-          >
-            <Reaction type={type} className="w-6 h-6 mr-2"></Reaction>
-            <p className="text-sm font-medium">Like</p>
-          </button>
-        )}
-        open={open}
-        position="top center"
-        onClose={closePopup}
-        closeOnDocumentClick
-      >
-        <ol
-          className="flex gap-2 transition-all duration-1000 opacity-100"
+      <div className="relative">
+        <button
+          onClick={() => mutation.mutate(ReactionTypes.LIKE)}
+          className="flex items-center focus:outline-none"
+          onMouseEnter={openPopup}
+        >
+          <Reaction type={type} className="w-6 h-6 mr-2"></Reaction>
+          <p className="text-sm font-medium">Like</p>
+        </button>
+        { open && <ol
+          className="absolute bottom-5 -left-10 flex gap-2 transition-all duration-1000 opacity-100 px-2 py-1 bg-[#eee]"
           onMouseEnter={openPopup}
           onMouseLeave={closePopup}
         >
           {[1, 2, 3, 4, 5, 6].map((reactionType) => (
             <li key={reactionType}>
-              <button onClick={() => reactToPost(reactionType)} className="focus:outline-none">
+              <button onClick={() => mutation.mutate(reactionType)} className="focus:outline-none">
                 <Reaction type={reactionType} className="w-6 h-6"></Reaction>
               </button>
             </li>
           ))}
-        </ol>
-      </Popup>
+        </ol>}
+      </div>
     </div>
 
 
   )
 }
-
-ReactionPicker.defaultProps = defaultProps;

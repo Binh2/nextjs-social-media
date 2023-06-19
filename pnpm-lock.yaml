@@ -26,6 +26,9 @@ dependencies:
   '@prisma/client':
     specifier: ^4.14.1
     version: 4.14.1(prisma@4.14.1)
+  '@tanstack/react-query':
+    specifier: ^4.29.14
+    version: 4.29.14(react-dom@18.2.0)(react@18.2.0)
   '@types/cookies':
     specifier: ^0.7.7
     version: 0.7.7
@@ -65,12 +68,12 @@ dependencies:
   eslint-config-next:
     specifier: 13.4.3
     version: 13.4.3(eslint@8.40.0)(typescript@5.0.4)
-  evento-react:
-    specifier: ^0.2.2
-    version: 0.2.2(react@18.2.0)
   express:
     specifier: ^4.18.2
     version: 4.18.2
+  http-status-codes:
+    specifier: ^2.2.0
+    version: 2.2.0
   multer:
     specifier: 1.4.5-lts.1
     version: 1.4.5-lts.1
@@ -118,6 +121,9 @@ dependencies:
     version: 3.21.4
 
 devDependencies:
+  '@tanstack/eslint-plugin-query':
+    specifier: ^4.29.9
+    version: 4.29.9
   '@types/jest':
     specifier: ^29.5.2
     version: 29.5.2
@@ -1091,6 +1097,32 @@ packages:
     resolution: {integrity: sha512-sJ902EfIzn1Fa+qYmjdQqh8tPsoxyBz+8yBKC2HKUxyezKJFwPGOn7pv4WY6QuQW//ySQi5lJjA/ZT9sNWWNTg==}
     dependencies:
       tslib: 2.5.2
+    dev: false
+
+  /@tanstack/eslint-plugin-query@4.29.9:
+    resolution: {integrity: sha512-JlIZcs+zhl/ihta49iIbMCf3E8tSvGDqMIH+oItnYLOzWI7oiujXu7FYgna2E1V79KhR0PaxkPX6jHZLpvacgw==}
+    dev: true
+
+  /@tanstack/query-core@4.29.14:
+    resolution: {integrity: sha512-ElEAahtLWA7Y7c2Haw10KdEf2tx+XZl/Z8dmyWxZehxWK3TPL5qtXtb7kUEhvt/8u2cSP62fLxgh2qqzMMGnDQ==}
+    dev: false
+
+  /@tanstack/react-query@4.29.14(react-dom@18.2.0)(react@18.2.0):
+    resolution: {integrity: sha512-wh4bd/QIy85YgTDBtj/7/9ZkpRX41QdZuUL8xKoSzuMCukXvAE1/oJ4p0F15lqQq9W3g2pgcbr2Aa+CNvqABhg==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0
+      react-native: '*'
+    peerDependenciesMeta:
+      react-dom:
+        optional: true
+      react-native:
+        optional: true
+    dependencies:
+      '@tanstack/query-core': 4.29.14
+      react: 18.2.0
+      react-dom: 18.2.0(react@18.2.0)
+      use-sync-external-store: 1.2.0(react@18.2.0)
     dev: false
 
   /@tootallnate/once@1.1.2:
@@ -2908,15 +2940,6 @@ packages:
     resolution: {integrity: sha512-tYUSVOGeQPKt/eC1ABfhHy5Xd96N3oIijJvN3O9+TsC28T5V9yX9oEfEK5faP0EFSNVOG97qtAS68GBrQB2hDg==}
     dev: true
 
-  /evento-react@0.2.2(react@18.2.0):
-    resolution: {integrity: sha512-5OG2SqgpbtYBR77wDfuqAoePeBMRqdIWM/GdXQEp3ypRNdA0ZUPhUmZBYJNIWBQv063Gdh9a5npf0a6JJkfhOA==}
-    engines: {node: '>=12'}
-    peerDependencies:
-      react: '>=16'
-    dependencies:
-      react: 18.2.0
-    dev: false
-
   /execa@4.1.0:
     resolution: {integrity: sha512-j5W0//W7f8UxAn8hXVnwG8tLwdiUy4FJLcSupCg6maBYZDpyBvTApK7KyuI4bKj8KOh1r2YH+6ucuYtJv1bTZA==}
     engines: {node: '>=10'}
@@ -3544,6 +3567,10 @@ packages:
       jsprim: 2.0.2
       sshpk: 1.17.0
     dev: true
+
+  /http-status-codes@2.2.0:
+    resolution: {integrity: sha512-feERVo9iWxvnejp3SEfm/+oNG517npqL2/PIA8ORjyOZjGC7TwCRQsZylciLS64i6pJ0wRYz3rkXLRwbtFa8Ng==}
+    dev: false
 
   /https-proxy-agent@5.0.1:
     resolution: {integrity: sha512-dFcAjpTQFgoLMzC2VwU+C/CbS7uRL0lWmxDITmqm7C+7F0Odmj6s9l6alZc6AELXhrnggM2CeWSXHGOdX2YtwA==}
@@ -6381,6 +6408,14 @@ packages:
     resolution: {integrity: sha512-7rKUyy33Q1yc98pQ1DAmLtwX109F7TIfWlW1Ydo8Wl1ii1SeHieeh0HHfPeL2fMXK6z0s8ecKs9frCuLJvndBg==}
     dependencies:
       punycode: 2.3.0
+    dev: false
+
+  /use-sync-external-store@1.2.0(react@18.2.0):
+    resolution: {integrity: sha512-eEgnFxGQ1Ife9bzYs6VLi8/4X6CObHMw9Qr9tPY43iKwsPw8xE8+EFsf/2cFZ5S3esXgpWgtSCtLNS41F+sKPA==}
+    peerDependencies:
+      react: ^16.8.0 || ^17.0.0 || ^18.0.0
+    dependencies:
+      react: 18.2.0
     dev: false
 
   /util-deprecate@1.0.2:

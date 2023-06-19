@@ -4,36 +4,33 @@ import { useUpload } from "@/lib/useUpload";
 import Router from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
+import { useMutation, useQueryClient } from "@tanstack/react-query";
+import axios from "axios";
 
 type Props = {
   postId: string;
-  onReloadComments: any;
 }
 
 export function WriteComment(props: Props) {
   const [content, setContent] = useState('');
   const postId = props.postId;
   // const { uploadState, imageUrl, handleFileInputChange } = useUpload()
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: () => {
+      return axios.post(`/api/post/${postId}/comment`, {
+        content,
+        image: ''
+      })
+    },
+    onSuccess: (data) => {
+      queryClient.refetchQueries(['post', postId, 'comment'])
+    }
+  })
 
   async function submit(e: React.SyntheticEvent | null = null) {
     if (e) e.preventDefault();
-
-    try {
-      const body = { content, imageUrl: '', postId }
-      const res = await fetch('/api/comment', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      })
-      const comment = await res.json();
-      console.log(comment)
-      props.onReloadComments();
-    }
-    catch (error) {
-      console.log(error);
-    }
+    mutation.mutate()
   }
   function handleKeyDown(event: React.KeyboardEvent<HTMLTextAreaElement>) {
     if (event.key === 'Enter' && event.ctrlKey) {

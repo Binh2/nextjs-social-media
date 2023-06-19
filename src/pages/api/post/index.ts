@@ -9,7 +9,7 @@ const handle: NextApiHandler<PostProps[]> = async (req: NextApiRequest, res: Nex
   if (req.method == 'GET') {
     if (typeof req.query.skip != 'string') return;
     // const session = await getServerSession(req, res, authOptions);
-    const skip = parseInt(req.query.skip) || 0;
+    const skip = parseInt(req.query.skip as string || '0');
     const feed = await prisma.post.findMany({
       skip,
       take: 4,

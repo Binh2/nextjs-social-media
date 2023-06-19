@@ -3,40 +3,38 @@ import { GetStaticProps } from "next";
 import Post from "./Post";
 import { PostProps } from "@/types/PostProps";
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
+import React from "react";
+import axios from "axios";
+// import { PostProps } from "@/types/PostProps"
 
 type Props = {
   feed: PostProps[] | undefined
 }
 
 export function Feed(props: Props) {
-  const [feed, setFeed] = useState(props.feed);
-  const [skip, setSkip] = useState(0);
-  const [hasMore, setHasMore] = useState(true);
-
-  async function fetchMoreData() {
-    const res = await fetch(`/api/post?skip=${skip}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json"
-      }
-    });
-    const feedTemp = await res.json();
-    console.log(feedTemp);
-    if (feed) setFeed([...feed, ...feedTemp])
-    else setFeed(feedTemp);
-    if (feedTemp.length == 0) setHasMore(false);
-    setSkip(skip + feedTemp.length);
-  }
+  const [ hasMore, setHasMore ] = useState(true);
+  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } = 
+  useInfiniteQuery({
+    queryKey: ['feed'],
+    queryFn: fetchMoreData,
+    getNextPageParam: (lastPage, pages) => {
+      return pages.reduce((count, group) => count + group.length, 0);
+    }
+  });
+  useEffect(() => {
+    fetchNextPage();
+  }, [])
 
   return (<>
     {
-      feed &&
+      data?.pages &&
       <InfiniteScroll
         className="flex flex-col gap-4"
-        dataLength={feed.length + 8}
+        dataLength={data?.pages.length * 4 + 8}
         pullDownToRefreshThreshold={50}
-        next={fetchMoreData}
+        next={() => fetchNextPage()}
         // style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
         // inverse={true} 
         hasMore={hasMore}
@@ -44,10 +42,25 @@ export function Feed(props: Props) {
         // height={400}
         // scrollableTarget="scrollableDiv"
       >
-        {feed.map((post) => (
-          <Post key={post.id} post={post}></Post>
+        {data?.pages.map((group, i) => (
+          <React.Fragment key={i}>
+            {group.map((post: PostProps) => 
+              <Post key={post.id} post={post}></Post>
+            )}
+          </React.Fragment>
         ))}
       </InfiniteScroll>
+      
     }
   </>)
+}
+
+function fetchMoreData({pageParam = 0}) {
+  // console.log(pageParam)
+  const data = axios.get(`/api/post`, {
+    params: {
+      skip: pageParam
+    }
+  }).then(res => res.data)
+  return data;
 }

@@ -19,19 +19,6 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const [comments, setComments] = useState(post.comments);
   const [reactions, setReactions] = useState(post.reactions);
   const { status, data: session } = useSession()
-  // console.log(reactions)
-  
-
-  async function reloadComments() {
-    const res = await fetch(`api/comment/${post.id}`, {
-      method: "GET",
-      headers: {
-        "Content-Type": "application/json",
-      },
-    })
-    const commentsTemp: CommentProps[] = await res.json()
-    setComments(commentsTemp);
-  }
 
   return (
     // <div onClick={() => router.push("/p/[id]", `/p/${post.id}`)}>
@@ -57,7 +44,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       <p className="break-all whitespacing-pre-wrap mt-2">{post.content}</p>
       {post.image && <UploadedImage src={post.image} alt="Uploaded image" className="w-[50%] mt-2" />}
       <div className="flex">
-        <Reactions reactions={reactions} count={post._count.reactions}></Reactions>
+        <Reactions postId={post.id} reactions={reactions} count={post._count.reactions}></Reactions>
         <div className="flex ml-auto">
           <p className="inline-block">12</p>
           <Image src="comment-icon.svg" alt="Comment" width={16} height={16} />
@@ -86,14 +73,9 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           <p>Share</p>
         </div>
       </div>
-      <CommentSection comments={comments}></CommentSection>
-      <WriteComment postId={post.id} onReloadComments={reloadComments}></WriteComment>
+      <CommentSection postId={post.id}></CommentSection>
+      <WriteComment postId={post.id}></WriteComment>
     </div>
-
-
-
-
-
   );
 };
 

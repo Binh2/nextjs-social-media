@@ -1,30 +1,64 @@
 import { CommentProps } from "@/types/CommentProps"
 import { Comment } from "./Comment"
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { WriteComment } from "./WriteComment"
+import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
+import axios from "axios"
 
 type Props = {
-  comments: CommentProps[]
+  postId: string;
 }
 
-export function CommentSection({ comments }: Props) {
-  // console.log(comments)
-  const [isCommentSectionVisible, setIsCommentSectionVisible] = useState(true);
-  return (comments.length != 0 ?
-    <div>
+export function CommentSection({ postId }: Props) {
+  const queryClient = useQueryClient();
+  const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status, refetch } = 
+  useInfiniteQuery({
+    queryKey: ['post', postId, 'comment'],
+    queryFn: ({pageParam}) => fetchComments({postId},{pageParam}),
+    getNextPageParam(lastPage, allPages) {
+      return allPages.reduce((count, group) => count + group.length, 0);
+    }
+  })
+  
+  queryClient.prefetchQuery(['post', postId, 'comment'])
+
+  const [isVisible, setVisible] = useState(true);
+  // console.log(data?.pages)
+  return ( data && data.pages ? 
+    (<div>
       {
-        isCommentSectionVisible ?
-          <button className="block" onClick={() => setIsCommentSectionVisible(false)}>Hide comment section</button> :
-          <button className="block" onClick={() => setIsCommentSectionVisible(true)}>Show comment section</button>
+        isVisible ?
+          <button className="block" onClick={() => setVisible(false)}>Hide comment section</button> :
+          <button className="block" onClick={() => setVisible(true)}>Show comment section</button>
       }
       {
-        isCommentSectionVisible &&
+        isVisible &&
         <ol>
-          {comments.map(comment => <li key={comment.id}>
-            <Comment comment={comment}></Comment>
-          </li>)}
+          {data.pages.map((group, i) => <React.Fragment key={i}>
+            {group.map((comment: CommentProps) => <li key={comment.id}>
+              <Comment comment={comment}></Comment>
+            </li>)}
+          </React.Fragment>)}
         </ol>
         
       }
-    </div> : <></>)
+      <button onClick={() => fetchNextPage()}>View more comments</button>
+      {
+        isVisible ?
+          <button className="block" onClick={() => setVisible(false)}>Hide comment section</button> :
+          <button className="block" onClick={() => setVisible(true)}>Show comment section</button>
+      }
+    </div>) : 
+    <></>)
+}
+
+function fetchComments({postId}: {postId:string}, { pageParam = 0 }) {
+  return axios.get(`/api/post/${postId}/comment`, {
+    params: {
+      skip: pageParam
+    }
+  }).then(res => {
+    // console.log(res.data)
+    return res.data;
+  });
 }
