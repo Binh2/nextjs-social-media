@@ -12,6 +12,7 @@ import { ReactionPicker } from "./reactions/ReactionPicker";
 import { Reactions } from "./reactions/Reactions";
 import { useSession } from "next-auth/react";
 import { ReactionTypes } from "@/lib/reactionTypes";
+import UploadedImage1 from "../common/UploadedImageView";
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const authorName = post.author ? post.author.name : "Unknown author";
@@ -32,7 +33,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
     const commentsTemp: CommentProps[] = await res.json()
     setComments(commentsTemp);
   }
-  // console.log(authorName)
+  // console.log('post', post)
   return (
     // <div onClick={() => router.push("/p/[id]", `/p/${post.id}`)}>
 
@@ -55,16 +56,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       </div>
 
       <p className="break-all whitespacing-pre-wrap mt-2">{post.content}</p>
-      {post.image && <UploadedImage post={post} src={post.image} alt="Uploaded image" className="object-cover w-full h-[500px] mt-2 cursor-pointer" />}
-      {/* {post.image &&
-        <div className="relative">
-          <img
-            src={post.image}
-            alt="Uploaded image"
-            className="object-cover w-full h-[500px]  w-[50%] mt-2"
-          />
-        </div>
-      } */}
+      {post.image && <UploadedImage1 data={post} src={post.image} alt="Uploaded image" className="object-cover w-full h-[500px] mt-2 cursor-pointer" />}
 
       <div className="flex">
         <Reactions reactions={reactions} count={post._count.reactions}></Reactions>
