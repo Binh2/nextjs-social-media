@@ -34,8 +34,8 @@ export function Feed(props: Props) {
       feed &&
       <InfiniteScroll
         className="flex flex-col gap-4"
-        dataLength={feed.length + 8}
-        pullDownToRefreshThreshold={50}
+        dataLength={feed.length +20} //+8
+        pullDownToRefreshThreshold={10} //50
         next={fetchMoreData}
         // style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
         // inverse={true} 

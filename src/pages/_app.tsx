@@ -19,10 +19,6 @@ const App = ({ Component, pageProps }: AppProps & { Component: {requireAuth?: bo
       }
     </SessionProvider>
 
-    // <SessionProvider session={pageProps.session}>
-    //   <Component {...pageProps} />
-    // </SessionProvider>
-
 
   );
 };
