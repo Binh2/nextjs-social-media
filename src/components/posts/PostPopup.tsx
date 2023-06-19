@@ -13,7 +13,7 @@ import Router from 'next/router';
 import { UploadState, useUpload } from '@/lib/useUpload';
 import { json } from 'stream/consumers';
 import { useEffect } from 'react';
-
+import Modal from 'react-modal';
 
 export function PostPopup() {
   const { data: session, status } = useSession();
@@ -21,22 +21,23 @@ export function PostPopup() {
   const router = useRouter();
   const { uploadState, imageUrl, handleFileInputChange, } = useUpload();
   const [open, setOpen] = useState(false);
+  const [successModal, setSuccessModal] = useState(false);
 
   async function submit(e: React.SyntheticEvent) {
     e.preventDefault();
 
     try {
-      const body = { content, image: imageUrl }
+      const body = { content, image: imageUrl };
       await fetch('/api/post', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify(body),
-      })
-      // await Router.reload()
-    }
-    catch (error) {
+      });
+      setShowSuccessModal(true);
+      setFormReset(true);
+    } catch (error) {
       console.log(error);
     }
   }
@@ -47,15 +48,24 @@ export function PostPopup() {
   };
 
   const [openStyle, setopenStyle] = useState(false);
-
-  const handleButtonClick = () => {
-    setopenStyle(true);
-    console.log('open')
-  };
   const handleGoToStylePage = () => {
     router.push('http://localhost:9966/');
   };
+  const [showSuccessModal, setShowSuccessModal] = useState(false);
 
+
+  const [formReset, setFormReset] = useState(false);
+
+  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
+  const handlePostClick = () => {
+    setOpen(false);
+    setSuccessModal(true);
+    setTimeout(() => {
+      setShowSuccessMessage(false);
+    }, 3000); 
+  };
+  
   return (
     <div className='flex flex-1'>
       <button onClick={() => setOpen(true)} className='flex-1'>
@@ -63,12 +73,14 @@ export function PostPopup() {
           <input
             className="ml-2 w-full md:w-96 lg:max-w-full flex-1 xl:w-144 px-4 py-2 rounded-full bg-gray-100 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
+            onChange={(e) => setContent(e.target.value)}
             placeholder={`What are you thinking, ${session?.user?.name}?`}
           />
         </div>
       </button>
 
-      <Popup modal open={open} onClose={() => setOpen(false)} contentStyle={{ width: "40%", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)" }}>
+      <Popup modal open={open} onClose={() => setOpen(false)}
+        contentStyle={{ width: "40%", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)" }}>
         <form onSubmit={submit} className="flex flex-col items-center rounded-2xl m-2" >
           <div className="flex justify-between items-center w-full">
             <p className="text-xl font-bold text-center flex-1">Create post</p>
@@ -98,7 +110,7 @@ export function PostPopup() {
                 </select>
               </div>
             </div>
-            
+
             {/* move the Model folder and run npm start - not still working*/}
             <button className="bg-gray-200 border-2 border-gray-300 py-2 px-4 rounded-lg inline-flex items-center font-semibold ml-auto" onClick={handleGoToStylePage}>
               <p className="mr-3">Artistic style photo processing</p>
@@ -173,10 +185,25 @@ export function PostPopup() {
               </div>
             </div>
           </div>
-          <button className="bg-teal-500 text-white font-bold w-full mt-4 py-2 rounded-md shadow">
+
+          <button
+            className="bg-teal-500 text-white font-bold w-full mt-4 py-2 rounded-md shadow"
+            onClick={handlePostClick}
+          >
             Post
           </button>
+
         </form>
+      </Popup>
+      {/* Notification of successful posting */}
+      <Popup modal open={successModal} onClose={() => setSuccessModal(false)}
+       contentStyle={{ width: "33%",height: "35%" ,borderRadius: "8px", backgroundColor: 'white', borderStyle: "2px solid" , borderColor: "teal-600"  }}
+      >
+        <div className='flex flex-col items-center justify-center w-full h-full bg-white border-solid border-2 border-x-teal-600 rounded-md ' >
+          <img src='/check-mark-circle-2.svg' alt='check' className='h-32 w-32'></img>
+            <span className='text-2xl text-teal-600'>Successful Post</span>
+         
+        </div>
       </Popup>
     </div>);
 }
