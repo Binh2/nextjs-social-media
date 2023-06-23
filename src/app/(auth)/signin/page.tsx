@@ -31,17 +31,14 @@ const FormSchema = z.object({
 type FormSchemaType = z.infer<typeof FormSchema>;
 
 function SignIn() {
-  const session = useSession();
+  const { status, data: session } = useSession();
   const router = useRouter();
 
-  const {
-    control,
-    register,
-    reset,
+  const { 
+    control, register, reset,
     // watch,
     handleSubmit: handleSubmitWrapper,
-    getValues,
-    formState: { errors, isSubmitting },
+    getValues, formState: { errors, isSubmitting },
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   });
@@ -49,10 +46,8 @@ function SignIn() {
   // const [ password, setPassword ] = useState("");
 
   useEffect(() => {
-    console.log("signin page")
-    console.log(session)
-    if (session.status == 'authenticated') router.push('/');
-  }, [router, session])
+    if (status == 'authenticated') router.push('/');
+  }, [router, status])
 
   const signInUserWithCredentials: FormEventHandler<HTMLFormElement> = handleSubmitWrapper(async (data) => {
     // event.preventDefault(); 
@@ -71,6 +66,7 @@ function SignIn() {
       redirect: true,
     });
   }
+  const isLoading = isSubmitting || status == 'loading'
 
   return (<>
     <div className="flex justify-center pt-10 mb-6">
@@ -90,7 +86,7 @@ function SignIn() {
           <input
             type="text"
             {...register('username')}
-            disabled={isSubmitting}
+            disabled={isLoading}
             className="w-full px-4 py-2 border border-gray-300 rounded-md disabled:opacity-20"
           />
         </div>
@@ -100,7 +96,7 @@ function SignIn() {
           <input
             type="password"
             {...register('password')}
-            disabled={isSubmitting}
+            disabled={isLoading}
             className="w-full px-4 py-2 border border-gray-300 rounded-md disabled:opacity-20"
           />
         </div>
@@ -112,13 +108,13 @@ function SignIn() {
         <div className="flex items-center justify-between mb-4">
           <div>
             <button className="h-12 px-4 py-2 mr-2 text-white bg-blue-500 rounded-md disabled:opacity-20" 
-              disabled={isSubmitting}
+              disabled={isLoading}
             >Submit</button>
           </div>
           <div>
             <button
               onClick={signInUserWithGitHub}
-              disabled={isSubmitting}
+              disabled={isLoading}
               className="h-12 px-4 py-2 text-gray-700 bg-gray-200 rounded-md disabled:opacity-20" >Sign in with GitHub </button>
           </div>
         </div>

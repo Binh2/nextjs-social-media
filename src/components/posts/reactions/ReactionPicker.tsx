@@ -56,7 +56,6 @@ export function ReactionPicker({ postId, type, className = ''}: Props) {
         { open && <ol
           className="absolute bottom-5 -left-10 flex gap-2 transition-all duration-1000 opacity-100 px-2 py-1 bg-[#eee]"
           onMouseEnter={openPopup}
-          onMouseLeave={closePopup}
         >
           {[1, 2, 3, 4, 5, 6].map((reactionType) => (
             <li key={reactionType}>

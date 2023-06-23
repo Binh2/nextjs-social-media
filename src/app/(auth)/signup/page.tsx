@@ -46,9 +46,6 @@ function SignUpPage() {
   })
 
   const handleSubmit = handleSubmitWrapper( async (data) => {
-    // e.preventDefault();
-    // const data = getValues();
-    console.log(data)
     const { username, password, birthday, email, isMale, firstName, lastName } = data;
     const user = await signIn("credentials", {
       type: "signup",
@@ -62,6 +59,8 @@ function SignUpPage() {
     })
   })
 
+  const isLoading = isSubmitting || status == 'loading'
+
   return (<main className="flex bg-[#eee] min-h-[100vh] px-4 gap-x-4">
     <Intro className="w-[50%]"></Intro>
     <div className="w-[50%] my-auto">
@@ -74,11 +73,11 @@ function SignUpPage() {
             </label>
             <div className="flex">
               <input id="first-name" className="w-[50%] py-1 px-2 border border-soid border-black rounded-lg rounded-r disabled:opacity-20" type="text" placeholder="John"
-                disabled={isSubmitting}
+                disabled={isLoading}
                 {...register("firstName")}
               />
               <input type="text" className="w-[50%] py-1 px-2 border border-soid border-black rounded-lg rounded-l disabled:opacity-20" placeholder="Smith"
-                disabled={isSubmitting}
+                disabled={isLoading}
                 {...register("lastName")}
               />
             </div>
@@ -91,7 +90,7 @@ function SignUpPage() {
             <div>
               <input className="w-full px-2 py-1 border border-black rounded-lg border-soid disabled:opacity-20"
                 id="email" type="text" placeholder="jsmith@example.com"
-                disabled={isSubmitting}
+                disabled={isLoading}
                 {...register("email")}
               />
             </div>
@@ -105,7 +104,7 @@ function SignUpPage() {
             <div>
               <input className="w-full px-2 py-1 border border-black rounded-lg border-soid disabled:opacity-20" 
                 id="username" type="text" placeholder="jsmith" 
-                disabled={isSubmitting}
+                disabled={isLoading}
                 {...register("username")}
               />
             </div>
@@ -122,7 +121,7 @@ function SignUpPage() {
             <div className="min-w-12">
               <select className="w-full px-2 py-1 border border-black rounded-lg border-soid disabled:opacity-20"
                 id="gender" 
-                disabled={isSubmitting}
+                disabled={isLoading}
                 {...register("isMale")}
               >
                 <option value="true">Female</option>
@@ -136,7 +135,7 @@ function SignUpPage() {
                 name='birthday'
                 render={({ field }) => (
                   <DatePicker className="w-full px-2 py-1 border border-black border-solid rounded-lg disabled:opacity-20" 
-                    disabled={isSubmitting}
+                    disabled={isLoading}
                     selected={field.value} onChange={(date) => field.onChange(date)}
                     peekNextMonth
                     showMonthDropdown
@@ -157,7 +156,7 @@ function SignUpPage() {
               <input className="w-full px-2 py-1 border border-black rounded-lg border-soid disabled:opacity-20"
                 id="password" placeholder="Password"
                 type={isPasswordVisible ? "text": "password"} 
-                disabled={isSubmitting}
+                disabled={isLoading}
                 {...register("password")}
               />
               {
@@ -171,11 +170,11 @@ function SignUpPage() {
         </div>
 
         <div className="">
-          <input id="term-and-condition" type="checkbox" className="mr-1 disabled:opacity-20" {...register('termsAndConditions')} disabled={isSubmitting} />
+          <input id="term-and-condition" type="checkbox" className="mr-1 disabled:opacity-20" {...register('termsAndConditions')} disabled={isLoading} />
           <label htmlFor="term-and-condition" className="text-xs">Agree with Terms & Conditons</label>
         </div>
         { errors.termsAndConditions && <p className="text-red-500 text-xm">{errors.termsAndConditions.message || ''}</p>}
-        <button className="block px-8 py-1 mx-auto my-2 font-bold uppercase bg-teal-500 rounded-lg disabled:opacity-20" disabled={isSubmitting}>
+        <button className="block px-8 py-1 mx-auto my-2 font-bold uppercase bg-teal-500 rounded-lg disabled:opacity-20" disabled={isLoading}>
           Sign Up
         </button>
 

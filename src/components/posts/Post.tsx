@@ -42,7 +42,9 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
       </div>
 
       <p className="break-all whitespacing-pre-wrap mt-2">{post.content}</p>
-      {post.image && <UploadedImage1 data={post} src={post.image} alt="Uploaded image" className="object-cover w-full h-[500px] mt-2 cursor-pointer" />}
+      <button onClick={() => router.push(`/post/${post.id}`)}>
+        {post.image && <UploadedImage src={post.image} alt="Uploaded image" className="object-cover w-full h-[500px] mt-2 cursor-pointer" />}
+      </button>
 
       <div className="flex">
         <Reactions postId={post.id} reactions={reactions} count={post._count.reactions}></Reactions>

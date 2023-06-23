@@ -72,20 +72,6 @@ const Home = (props: Props) => {
   // const [ feed, setFeed ] = useState<PostProps[]>(JSON.parse(props.feed));
   const [ feed, setFeed ] = useState<PostProps[]>([]);
 
-  // useEffect(() => {
-  //   (async function () {
-  //     const res = await fetch(`/api/post?skip=${0}`, {
-  //       method: "GET",
-  //       headers: {
-  //         "Content-Type": "application/json"
-  //       }
-  //     });
-  //     const feedTemp = await res.json()
-  //     setFeed(feedTemp);
-  //   })()
-  // }, [])
-  // console.log(feed)
-
   // Navigate to sign in page when user is not signed in
   useEffect(() => {
     if (status == 'unauthenticated') router.push('/signin')
@@ -103,7 +89,7 @@ const Home = (props: Props) => {
       <LeftSidebar></LeftSidebar>
 
       {/* body */}
-      <main className=''>
+      <main className='min-h-[100vh]'>
         <div className="my-4 bg-white rounded-lg shadow">
           <div className="flex items-center flex-1 p-4">
             <ProfileImage />

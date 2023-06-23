@@ -7,8 +7,8 @@ import axios from "axios";
 import { useEffect } from "react";
 
 type Props = {
-  reactions: ReactionProps[];
-  count: number | null;
+  reactions?: ReactionProps[];
+  count?: number | null;
   postId: string;
 }
 
