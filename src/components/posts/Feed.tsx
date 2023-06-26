@@ -14,18 +14,26 @@ type Props = {
 }
 
 export function Feed(props: Props) {
-  const [ hasMore, setHasMore ] = useState(true);
+  // const [ hasMore, setHasMore ] = useState(true);
   const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } = 
-  useInfiniteQuery({
-    queryKey: ['feed'],
-    queryFn: fetchMoreData,
+  useInfiniteQuery<PostProps[], Error, PostProps[]>(['post'], {
+    initialData: () => {
+      if (!props.feed) return;
+      return {
+        pages: [props.feed],
+        pageParams: [undefined, props.feed.length]
+      }
+    },
+    queryFn: ({pageParam}) => fetchMoreData({pageParam}),
     getNextPageParam: (lastPage, pages) => {
       return pages.reduce((count, group) => count + group.length, 0);
     }
   });
   useEffect(() => {
+    if (data && data.pages.length != 0) return;
     fetchNextPage();
   }, [])
+  // console.log(data)
 
   return (<>
     {
@@ -35,12 +43,8 @@ export function Feed(props: Props) {
         dataLength={data?.pages.length * 4 + 8}
         pullDownToRefreshThreshold={50}
         next={() => fetchNextPage()}
-        // style={{ display: 'flex', flexDirection: 'column-reverse' }} //To put endMessage and loader to the top.
-        // inverse={true} 
-        hasMore={hasMore}
+        hasMore={hasNextPage || true}
         loader={<p>Loading...</p>}
-        // height={400}
-        // scrollableTarget="scrollableDiv"
       >
         {data?.pages.map((group, i) => (
           <React.Fragment key={i}>
@@ -56,7 +60,6 @@ export function Feed(props: Props) {
 }
 
 function fetchMoreData({pageParam = 0}) {
-  // console.log(pageParam)
   const data = axios.get(`/api/post`, {
     params: {
       skip: pageParam

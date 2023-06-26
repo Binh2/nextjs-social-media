@@ -4,12 +4,19 @@ import { ReactionProps } from "./ReactionProps";
 
 export type PostProps = PostProps_ & {
   author: {
+    id: string,
     name: string | null,
     image: string | null,
-  } | null;
-  comments: CommentProps[],
-  reactions: ReactionProps[],
-  _count: {
-    reactions: number | null
   }
 }
+// & {
+//   author: {
+//     name: string | null,
+//     image: string | null,
+//   } | null;
+//   comments: CommentProps[],
+//   reactions: ReactionProps[],
+//   _count: {
+//     reactions: number | null
+//   }
+// }

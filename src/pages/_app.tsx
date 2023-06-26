@@ -11,7 +11,6 @@ import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider
 
 const queryClient = new QueryClient()
 const App = ({ Component, pageProps }: AppProps & { Component: {requireAuth?: boolean}}) => {
-  // console.log(pageProps.session)
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={pageProps.session}>

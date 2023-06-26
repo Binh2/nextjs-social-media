@@ -12,13 +12,11 @@ import { ReactionPicker } from "./reactions/ReactionPicker";
 import { Reactions } from "./reactions/Reactions";
 import { useSession } from "next-auth/react";
 import { ReactionTypes } from "@/lib/reactionTypes";
-import UploadedImage1 from "../common/UploadedImageView";
+import { CommentCount } from "./comments/CommentCount";
 
 const Post: React.FC<{ post: PostProps }> = ({ post }) => {
   const authorName = post.author ? post.author.name : "Unknown author";
   const router = useRouter();
-  const [comments, setComments] = useState(post.comments);
-  const [reactions, setReactions] = useState(post.reactions);
   const { status, data: session } = useSession()
   return (
     // <div onClick={() => router.push("/p/[id]", `/p/${post.id}`)}>
@@ -35,37 +33,35 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
           <p className="ml-2">{authorName}</p>
           <p className="ml-2 text-xs">{formatDate(post.createdAt)}</p>
         </div>
-        <div className="flex ml-auto items-center">
+        <div className="flex items-center ml-auto">
           <Image src="/save-post-icon.svg" alt="Save post" width={0} height={0} style={{ width: "auto", height: "18px" }} className="mr-2" />
           <Image src="/ellipsis-icon.svg" alt="More" width={0} height={0} style={{ width: "18px", height: "auto" }} />
         </div>
       </div>
 
-      <p className="break-all whitespacing-pre-wrap mt-2">{post.content}</p>
+      <p className="mt-2 break-all whitespacing-pre-wrap">{post.content}</p>
       <button onClick={() => router.push(`/post/${post.id}`)}>
         {post.image && <UploadedImage src={post.image} alt="Uploaded image" className="object-cover w-full h-[500px] mt-2 cursor-pointer" />}
       </button>
 
       <div className="flex">
-        <Reactions postId={post.id} reactions={reactions} count={post._count.reactions}></Reactions>
+        <Reactions postId={post.id}></Reactions>
         <div className="flex ml-auto">
-          <p className="inline-block">12</p>
+          <p className="inline-block"><CommentCount postId={post.id}></CommentCount></p>
           <Image src="comment-icon.svg" alt="Comment" width={16} height={16} />
           <p className="inline-block">1</p>
           <Image src="share-icon.svg" alt="Share" width={16} height={16} />
         </div>
       </div>
 
-      <hr className="border-gray-300 pb-2 mt-2" />
+      <hr className="pb-2 mt-2 border-gray-300" />
 
       <div className="flex content-between">
         {/* <div className="flex mx-auto">
           <Image src="like-icon--inside-filled.svg" alt="Like" width={16} height={16} />
           <p>Like</p>
         </div> */}
-        <ReactionPicker postId={post.id} type={
-          reactions.filter(reaction => reaction.authorEmail == session?.user?.email)[0]?.type || ReactionTypes.NONE
-        } className="flex mx-auto items-center"></ReactionPicker>
+        <ReactionPicker postId={post.id} className="flex items-center mx-auto"></ReactionPicker>
 
         <div className="flex mx-auto" >
           <Image src="comment-icon.svg" alt="Comment" width={16} height={16} />

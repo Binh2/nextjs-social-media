@@ -12,7 +12,7 @@ type Props = {
 export function CommentSection({ postId }: Props) {
   const queryClient = useQueryClient();
   const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status, refetch } = 
-  useInfiniteQuery({
+  useInfiniteQuery<CommentProps[]>({
     queryKey: ['post', postId, 'comment'],
     queryFn: ({pageParam}) => fetchComments({postId},{pageParam}),
     getNextPageParam(lastPage, allPages) {
@@ -23,7 +23,6 @@ export function CommentSection({ postId }: Props) {
   queryClient.prefetchQuery(['post', postId, 'comment'])
 
   const [isVisible, setVisible] = useState(true);
-  // console.log(data?.pages)
   return ( data && data.pages ? 
     (<div>
       {
@@ -35,7 +34,7 @@ export function CommentSection({ postId }: Props) {
         isVisible &&
         <ol>
           {data.pages.map((group, i) => <React.Fragment key={i}>
-            {group.map((comment: CommentProps) => <li key={comment.id}>
+            {group.map((comment) => <li key={comment.id}>
               <Comment comment={comment}></Comment>
             </li>)}
           </React.Fragment>)}
@@ -58,7 +57,6 @@ function fetchComments({postId}: {postId:string}, { pageParam = 0 }) {
       skip: pageParam
     }
   }).then(res => {
-    // console.log(res.data)
     return res.data;
   });
 }

@@ -13,7 +13,10 @@ import Router from 'next/router';
 import { UploadState, useUpload } from '@/lib/useUpload';
 import { json } from 'stream/consumers';
 import { useEffect } from 'react';
-import Modal from 'react-modal';
+import axios from 'axios';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { PostSuccessPopup } from './PostSuccessPopup';
+import { useCloseAfter } from '../common/useCloseAfter';
 
 export function PostPopup() {
   const { data: session, status } = useSession();
@@ -21,25 +24,21 @@ export function PostPopup() {
   const router = useRouter();
   const { uploadState, imageUrl, handleFileInputChange, } = useUpload();
   const [open, setOpen] = useState(false);
-  const [successModal, setSuccessModal] = useState(false);
+  const [successModal, setSuccessModal] = useCloseAfter(false, 3000);
+  const queryClient = useQueryClient();
+  const mutation = useMutation({
+    mutationFn: (post: {content: string, image: string}) => {
+      return axios.post('/api/post', post);
+    },
+    onSuccess: async () => {
+      queryClient.refetchQueries(['post'])
+      setContent('')
+    }
+  })
 
   async function submit(e: React.SyntheticEvent) {
     e.preventDefault();
-
-    try {
-      const body = { content, image: imageUrl };
-      await fetch('/api/post', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(body),
-      });
-      setShowSuccessModal(true);
-      setFormReset(true);
-    } catch (error) {
-      console.log(error);
-    }
+    mutation.mutate({content, image: imageUrl})
   }
 
   const [stateIcon, setStateIcon] = useState("Only me");
@@ -47,31 +46,21 @@ export function PostPopup() {
     setStateIcon(event.target.value);
   };
 
-  const [openStyle, setopenStyle] = useState(false);
   const handleGoToStylePage = () => {
-    router.push('http://localhost:9966/');
+    router.push('/combineImage');
   };
-  const [showSuccessModal, setShowSuccessModal] = useState(false);
-
-
-  const [formReset, setFormReset] = useState(false);
-
-  const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   const handlePostClick = () => {
     setOpen(false);
     setSuccessModal(true);
-    setTimeout(() => {
-      setShowSuccessMessage(false);
-    }, 3000); 
   };
   
   return (
     <div className='flex flex-1'>
       <button onClick={() => setOpen(true)} className='flex-1'>
-        <div className="relative ml-3 flex flex-1">
+        <div className="relative flex flex-1 ml-3">
           <input
-            className="ml-2 w-full md:w-96 lg:max-w-full flex-1 xl:w-144 px-4 py-2 rounded-full bg-gray-100 text-gray-700 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="flex-1 w-full px-4 py-2 ml-2 text-gray-700 placeholder-gray-500 bg-gray-100 rounded-full md:w-96 lg:max-w-full xl:w-144 focus:outline-none focus:ring-2 focus:ring-blue-500"
             type="text"
             onChange={(e) => setContent(e.target.value)}
             placeholder={`What are you thinking, ${session?.user?.name}?`}
@@ -80,31 +69,32 @@ export function PostPopup() {
       </button>
 
       <Popup modal open={open} onClose={() => setOpen(false)}
-        contentStyle={{ width: "40%", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)" }}>
-        <form onSubmit={submit} className="flex flex-col items-center rounded-2xl m-2" >
-          <div className="flex justify-between items-center w-full">
-            <p className="text-xl font-bold text-center flex-1">Create post</p>
-            <button className="p-2 rounded-full bg-gray-200 mr-2" onClick={e => { e.preventDefault(); setOpen(false) }}>
+        contentStyle={{ width: "40%", borderRadius: "8px", boxShadow: "0 2px 4px rgba(0, 0, 0, 0.2)" }}
+      >
+        <form onSubmit={submit} className="flex flex-col items-center m-2 rounded-2xl" >
+          <div className="flex items-center justify-between w-full">
+            <p className="flex-1 text-xl font-bold text-center">Create post</p>
+            <button className="p-2 mr-2 bg-gray-200 rounded-full" onClick={e => { e.preventDefault(); setOpen(false) }}>
               <Image src="/close-icon.svg" alt="Close" width={25} height={25} />
             </button>
           </div>
 
-          <div className="border-b border-gray-300 w-full mt-4 m-0"></div> {/* Separation line */}
+          <div className="w-full m-0 mt-4 border-b border-gray-300"></div> {/* Separation line */}
 
-          <div className="w-full mt-4 flex rounded-xl items-center">
+          <div className="flex items-center w-full mt-4 rounded-xl">
             <div className="flex items-center">
               <ProfileImage size={55} className="rounded-full" />
             </div>
             <div className="ml-2 ">
               <p className="ml-2 text-lg font-semibold">{session?.user?.name}</p>
-              <div className='flex flex-row relative items-center  rounded-lg bg-gray-200'>
+              <div className='relative flex flex-row items-center bg-gray-200 rounded-lg'>
                 {
-                  stateIcon === 'Only me' ? <Image src="/world.svg" alt="Add photo icon" width={15} height={15} className=" absolute left-3 z-0 " />
-                    : <Image src="/lock-closed.svg" alt="Add photo icon" width={15} height={15} className=" absolute left-3 z-0 " />
+                  stateIcon === 'Only me' ? <Image src="/world.svg" alt="Add photo icon" width={15} height={15} className="absolute z-0 left-3" />
+                    : <Image src="/lock-closed.svg" alt="Add photo icon" width={15} height={15} className="absolute z-0 left-3" />
                 }
                 <select
                   onChange={handleSelectChange}
-                  className="pl-6  w-full border rounded-md text-sm outline-0 focus:outline-0 z-50 bg-transparent">
+                  className="z-50 w-full pl-6 text-sm bg-transparent border rounded-md outline-0 focus:outline-0">
                   <option value="Only me"> <p>Public</p> </option>
                   <option value="Only medd"> <p>Only me</p> </option>
                 </select>
@@ -112,12 +102,12 @@ export function PostPopup() {
             </div>
 
             {/* move the Model folder and run npm start - not still working*/}
-            <button className="bg-gray-200 border-2 border-gray-300 py-2 px-4 rounded-lg inline-flex items-center font-semibold ml-auto" onClick={handleGoToStylePage}>
-              <p className="mr-3">Artistic style photo processing</p>
+            <button className="inline-flex items-center px-4 py-2 ml-auto font-semibold bg-gray-200 border-2 border-gray-300 rounded-lg" onClick={handleGoToStylePage}>
+              <p className="mr-3">Add style</p>
               <Image src="/upload-icon--sideway.svg" alt="Add style img" width={15} height={15} />
             </button>
 
-            {/* <button className="bg-gray-200 border-2 border-gray-300 py-2 px-4 rounded-lg inline-flex items-center font-semibold ml-auto">
+            {/* <button className="inline-flex items-center px-4 py-2 ml-auto font-semibold bg-gray-200 border-2 border-gray-300 rounded-lg">
               <p className='mr-3'>Artistic style photo processing</p>
               <Image src='/upload-icon--sideway.svg' alt="Add style img" width={15} height={15} ></Image>
             </button> */}
@@ -130,7 +120,7 @@ export function PostPopup() {
 
           <div className="overflow-y-auto max-h-[50vh] w-full mt-4 rounded-md">
             <textarea
-              className="w-full resize-none border border-gray-300 rounded-md px-3 py-2 text-base"
+              className="w-full px-3 py-2 text-base border border-gray-300 rounded-md resize-none"
               value={content}
               onChange={e => setContent(e.target.value)}
               placeholder={`What's on your mind, ${session?.user?.name}?`}
@@ -138,7 +128,7 @@ export function PostPopup() {
             {uploadState === UploadState.UPLOADED ? (
               <UploadedImage className="w-full mt-2" src={imageUrl} alt="Uploaded image" />
             ) : (
-              <div className="bg-gray-200 flex flex-col items-center px-4 py-6 mt-2">
+              <div className="flex flex-col items-center px-4 py-6 mt-2 bg-gray-200">
                 <label className="cursor-pointer">
                   <input type="file" onChange={handleFileInputChange} className="hidden" />
                   {uploadState === UploadState.UPLOADING ? (
@@ -147,47 +137,47 @@ export function PostPopup() {
                     <Image src="/add-photo-icon--big.svg" width={48} height={48} alt="Add Photo" />
                   )}
                 </label>
-                <p className="text-lg font-bold mt-2">Add photos/videos</p>
+                <p className="mt-2 text-lg font-bold">Add photos/videos</p>
                 <p className="text-sm">or drag and drop</p>
               </div>
             )}
           </div>
-          <div className="flex items-center justify-between w-full mt-4 shadow rounded-md border-2 ">
-            <p className="text-lg ml-4">Add to your post</p>
+          <div className="flex items-center justify-between w-full mt-4 border-2 rounded-md shadow ">
+            <p className="ml-4 text-lg">Add to your post</p>
             <div className="flex items-center space-x-2">
-              <div className="group relative flex justify-center items-center">
-                <button className="hover:bg-blue-100 rounded-full p-2">
-                  <Image src="/add-photo-icon.svg" alt="Add photo icon" width={32} height={32} className="h-8 w-8" />
+              <div className="relative flex items-center justify-center group">
+                <button className="p-2 rounded-full hover:bg-blue-100">
+                  <Image src="/add-photo-icon.svg" alt="Add photo icon" width={32} height={32} className="w-8 h-8" />
                 </button>
-                <span className="absolute bottom-10 left-1/2 transform -translate-x-1/2 scale-0 bg-blue-100 text-xs text-center rounded-md px-2 py-1 whitespace-nowrap opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-200">
+                <span className="absolute px-2 py-1 text-xs text-center transition-all duration-200 transform scale-0 -translate-x-1/2 bg-blue-100 rounded-md opacity-0 bottom-10 left-1/2 whitespace-nowrap group-hover:scale-100 group-hover:opacity-100">
                   Add Photo </span>
               </div>
-              <div className="group relative flex justify-center items-center">
-                <button className="hover:bg-blue-100 rounded-full p-2">
-                  <Image src="/location-icon.svg" alt="Add location icon" width={32} height={32} className="h-8 w-8" />
+              <div className="relative flex items-center justify-center group">
+                <button className="p-2 rounded-full hover:bg-blue-100">
+                  <Image src="/location-icon.svg" alt="Add location icon" width={32} height={32} className="w-8 h-8" />
                 </button>
-                <span className="absolute bottom-10 left-1/2 transform -translate-x-1/2 scale-0 bg-blue-100 text-xs text-center rounded-md px-2 py-1 whitespace-nowrap opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-200">
+                <span className="absolute px-2 py-1 text-xs text-center transition-all duration-200 transform scale-0 -translate-x-1/2 bg-blue-100 rounded-md opacity-0 bottom-10 left-1/2 whitespace-nowrap group-hover:scale-100 group-hover:opacity-100">
                   Add Location </span>
               </div>
-              <div className="group relative flex justify-center items-center">
-                <button className="hover:bg-blue-100 rounded-full p-2">
-                  <Image src="/add-user-icon.svg" alt="Add others icon" width={32} height={32} className="h-8 w-8" />
+              <div className="relative flex items-center justify-center group">
+                <button className="p-2 rounded-full hover:bg-blue-100">
+                  <Image src="/add-user-icon.svg" alt="Add others icon" width={32} height={32} className="w-8 h-8" />
                 </button>
-                <span className="absolute bottom-10 left-1/2 transform -translate-x-1/2 scale-0 bg-blue-100 text-xs text-center rounded-md px-2 py-1 whitespace-nowrap opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-200">
+                <span className="absolute px-2 py-1 text-xs text-center transition-all duration-200 transform scale-0 -translate-x-1/2 bg-blue-100 rounded-md opacity-0 bottom-10 left-1/2 whitespace-nowrap group-hover:scale-100 group-hover:opacity-100">
                   Tag Friends </span>
               </div>
-              <div className="group relative flex justify-center items-center">
-                <button className="hover:bg-blue-100 rounded-full p-2">
-                  <Image src="/add-music-icon.svg" alt="Add music icon" width={32} height={32} className="h-8 w-8" />
+              <div className="relative flex items-center justify-center group">
+                <button className="p-2 rounded-full hover:bg-blue-100">
+                  <Image src="/add-music-icon.svg" alt="Add music icon" width={32} height={32} className="w-8 h-8" />
                 </button>
-                <span className="absolute bottom-10 left-1/2 transform -translate-x-1/2 scale-0 bg-blue-100 text-xs text-center rounded-md px-2 py-1 whitespace-nowrap opacity-0 group-hover:scale-100 group-hover:opacity-100 transition-all duration-200">
+                <span className="absolute px-2 py-1 text-xs text-center transition-all duration-200 transform scale-0 -translate-x-1/2 bg-blue-100 rounded-md opacity-0 bottom-10 left-1/2 whitespace-nowrap group-hover:scale-100 group-hover:opacity-100">
                   Add Music </span>
               </div>
             </div>
           </div>
 
           <button
-            className="bg-teal-500 text-white font-bold w-full mt-4 py-2 rounded-md shadow"
+            className="w-full py-2 mt-4 font-bold text-white bg-teal-500 rounded-md shadow"
             onClick={handlePostClick}
           >
             Post
@@ -196,14 +186,6 @@ export function PostPopup() {
         </form>
       </Popup>
       {/* Notification of successful posting */}
-      <Popup modal open={successModal} onClose={() => setSuccessModal(false)}
-       contentStyle={{ width: "33%",height: "35%" ,borderRadius: "8px", backgroundColor: 'white', borderStyle: "2px solid" , borderColor: "teal-600"  }}
-      >
-        <div className='flex flex-col items-center justify-center w-full h-full bg-white border-solid border-2 border-x-teal-600 rounded-md ' >
-          <img src='/check-mark-circle-2.svg' alt='check' className='h-32 w-32'></img>
-            <span className='text-2xl text-teal-600'>Successful Post</span>
-         
-        </div>
-      </Popup>
+      <PostSuccessPopup open={successModal} setOpen={setSuccessModal}></PostSuccessPopup>
     </div>);
 }

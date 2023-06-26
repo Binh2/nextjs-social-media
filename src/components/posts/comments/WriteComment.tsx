@@ -25,6 +25,8 @@ export function WriteComment(props: Props) {
     },
     onSuccess: (data) => {
       queryClient.refetchQueries(['post', postId, 'comment'])
+      queryClient.refetchQueries(['post', postId, 'comment', 'count'])
+      setContent('')
     }
   })
 
@@ -46,10 +48,11 @@ export function WriteComment(props: Props) {
           placeholder="Write a comment..."
           value={content}
           onChange={(e) => setContent(e.target.value)}
-          className="flex-grow h-8 px-2 py-1 outline-none resize-none bg-transparent"
+          className="flex-grow h-8 px-2 py-1 bg-transparent outline-none resize-none"
           onKeyDown={handleKeyDown} />
         <button
-          className="flex items-center justify-center w-8 h-8 text-teal-500 hover:text-teal-600 focus:outline-none"
+          className={`flex items-center justify-center w-8 h-8 text-teal-500 disabled:opacity-20 hover:text-teal-600 focus:outline-none`}
+          disabled={mutation.isLoading}
           tabIndex={0}>
           <FontAwesomeIcon icon={faPaperPlane} className="fa-solid fa-paper-plane" />
         </button>

@@ -69,6 +69,24 @@ async function main() {
     }
   }
   
+  const feed = []
+  const email = "testuser@gmail.com"
+  for (let i = 0; i < 20; i++) {
+    const post = await prisma.post.create({
+      data: {
+        content: makeRandomString(100),
+        image: '',
+        published: true,
+        author: {
+          connect: {
+            email: email,
+          }
+        }
+      }
+    })
+    feed.push(post);
+  } 
+
   for (let i = 0; i < posts.length; i++) {
     const { content, image, authorEmail: email } = posts[i];
     try {
@@ -87,24 +105,6 @@ async function main() {
     } catch (err) {
       console.log(err)
     }
-  }
-
-  const feed = []
-  const email = "testuser@gmail.com"
-  for (let i = 0; i < 20; i++) {
-    const post = await prisma.post.create({
-      data: {
-        content: makeRandomString(100),
-        image: '',
-        published: true,
-        author: {
-          connect: {
-            email: email,
-          }
-        }
-      }
-    })
-    feed.push(post);
   }
 }
 main()

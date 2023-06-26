@@ -24,6 +24,11 @@ const handle: NextApiHandler = async (req, res) => {
         }
       }
     })
+    const count = await prisma.comment.count({
+      where: {
+        postId
+      }
+    })
     res.json(result);
   } else if (req.method == "POST" || req.method == "PUT") {
     const postId = req.query.postid as string;

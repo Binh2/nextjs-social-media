@@ -32,23 +32,23 @@ model Post {
 }
 model Comment {
   id          String  @id @default(cuid())
-  post        Post@relation(fields:[postId], references:[id], onUpdate: NoAction)
+  post        Post@relation(fields:[postId], references:[id], onDelete: Cascade)
   postId      String
-  author      User@relation(fields:[authorId], references:[id])
+  author      User@relation(fields:[authorId], references:[id], onUpdate: NoAction)
   authorId    String
   content     String
   image       String?
-  parent      Comment?@relation("commentChildren", fields:[parentId], references:[id], onUpdate: NoAction, onDelete: NoAction)
+  parent      Comment?@relation("comment_parent", fields:[parentId], references:[id], onUpdate: NoAction, onDelete: NoAction)
   parentId    String?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
-  comments    Comment[]@relation("commentChildren")
+  comments    Comment[]@relation("comment_parent")
 }
 
 model Reaction {
-  post        Post@relation(fields:[postId], references:[id], onUpdate: NoAction)
+  post        Post@relation(fields:[postId], references:[id], onDelete: Cascade)
   postId      String
-  author      User@relation(fields:[authorEmail], references:[email])
+  author      User@relation(fields:[authorEmail], references:[email], onUpdate: NoAction)
   authorEmail String
   type        Int
   @@id([postId, authorEmail])
@@ -93,11 +93,37 @@ model User {
   image         String?
   isMale        Boolean?
   birthday      DateTime? @db.Date
+  schools       UserSchool[]
   posts         Post[]
   accounts      Account[]
   sessions      Session[]
   comments      Comment[]
   reactions     Reaction[]
+  friend1       Friend? @relation("friend_user1")
+  friend2       Friend? @relation("friend_user2")
+}
+model UserSchool {
+  id        String @id @default(cuid())
+  name      String @unique
+  image     String
+  users     User[]
+  roleId    String?
+  role      UserSchoolRole? @relation(fields:[roleId], references:[id]) 
+}
+model UserSchoolRole {
+  id        String @id @default(cuid())
+  name      String
+  schools   UserSchool[]
+}
+
+model Friend {
+  id      String  @id @default(cuid())
+  user1Id String  @unique
+  user2Id String  @unique
+  user1   User    @relation("friend_user1", fields:[user1Id], references:[id], onUpdate: NoAction)
+  user2   User    @relation("friend_user2", fields:[user2Id], references:[id], onUpdate: NoAction)
+  type    Int
+  @@unique([user1Id, user2Id])
 }
 
 model VerificationToken {

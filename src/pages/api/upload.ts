@@ -2,6 +2,7 @@ import multer from "multer";
 import { UploadApiErrorResponse, UploadApiResponse, v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
 import streamifier from "streamifier";
+import { NextApiRequest, NextApiResponse } from "next";
 
 dotenv.config();
 const storage = multer.memoryStorage();
@@ -14,7 +15,7 @@ cloudinary.config({
   secure: true,
 });
 
-function runMiddleware(req, res, fn) {
+function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: CallableFunction) {
   return new Promise((resolve, reject) => {
     fn(req, res, (result) => {
       if (result instanceof Error) {
@@ -24,7 +25,7 @@ function runMiddleware(req, res, fn) {
     });
   });
 }
-export default async function handler(req, res) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
   await runMiddleware(req, res, uploadMiddleware);
   console.log(req.file.buffer);
   const stream = await cloudinary.uploader.upload_stream(

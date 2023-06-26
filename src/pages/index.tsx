@@ -22,44 +22,7 @@ type Props = {
 }
 
 export const getStaticProps: GetStaticProps<Props> = async () => {
-  // const session = await getServerSession(req, authOptions);
-  let feed = await prisma.post.findMany({
-    take: 4,
-    where: { published: true },
-    include: {
-      author: {
-        select: {
-          name: true,
-          image: true,
-        },
-      },
-      comments: {
-        select: {
-          author: true,
-          content: true,
-          updatedAt: true,
-        }
-      },
-      _count: {
-        select: {
-          reactions: true,
-        }
-      },
-      reactions: {
-        // where: {
-        //   author: {
-        //     // email: session?.user?.email || ''
-        //     email: 'hgqbinh2002@gmail.com'
-        //   }
-        // },
-        take: 100,
-        select: {
-          type: true,
-        },
-      }
-    },
-  });
-
+  const feed = await fetchFeed();
   return {
     props: { feed: JSON.stringify(feed) },
     revalidate: 10,
@@ -69,8 +32,7 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 const Home = (props: Props) => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  // const [ feed, setFeed ] = useState<PostProps[]>(JSON.parse(props.feed));
-  const [ feed, setFeed ] = useState<PostProps[]>([]);
+  const [ feed, setFeed ] = useState<PostProps[]>(JSON.parse(props.feed));
 
   // Navigate to sign in page when user is not signed in
   useEffect(() => {
@@ -127,5 +89,24 @@ const Home = (props: Props) => {
   );
 }
 
+async function fetchFeed() {
+  let feed = await prisma.post.findMany({
+    take: 4,
+    where: { published: true },
+    orderBy: {
+      updatedAt: "desc"
+    },
+    include: {
+      author: {
+        select: {
+          id: true,
+          name: true,
+          image: true,
+        },
+      },
+    },
+  });
+  return feed;
+}
 Home.requiredAuth = true;
 export default Home;

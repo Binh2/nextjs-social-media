@@ -1,34 +1,58 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Social media - The ripoff of Facebook
 
-## Getting Started
+This is a school's project. Pretty fun. Learn a lot. Done with some of my friends
 
-First, run the development server:
+## Demo
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-```
+https://github.com/Binh2/nextjs-social-media/assets/53990204/9587ff38-4b9c-4827-bb37-dbd102d3e274
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Features
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+- Sign in/Sign up with password
+- Sign in with GitHub
+- Create/update post/comment/reaction
 
-This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
+### Missing features
 
-## Learn More
+- Friends and friend suggestion algorithm.
 
-To learn more about Next.js, take a look at the following resources:
+## Built with
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- Typescript + NextJS + Nextauth
+- TailwindCSS
+- Prisma + React query
+- SQL server/PostgreSQL
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
+## Setup
 
-## Deploy on Vercel
+1. Install all the packages `pnpm install`
+2. Configure the .env correctly. There is a sample .env.sample at the root directory
+3. Push the Prisma model to database that you configure in the .env file `npx prisma db push`
+4. Generate Prisma Client `npx prisma generate`
+5. Check if Prisma is connected with database correctly by starting a Prisma Studio `npx prisma studio`
+6. Visit [http://localhost:5555](http://localhost:5555) to see the Prisma Studio
+7. Start the local dev server `pnpm run fastdev`
+8. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## Author
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+- Frontend Mentor - [@Binh2](https://www.frontendmentor.io/profile/Binh2)
+- Twitter - [@hgqbinh2002](https://twitter.com/hgqbinh2002)
+- LinkedIn - [hgqbinh2002](https://www.linkedin.com/in/hgqbinh2002/)
+
+## My recent works
+
+### Chat app (Gave up because Firebase's not suitable for relationship-typed data)
+
+- Source code: [View my code](https://github.com/Binh2/chat-app)
+- Live site: [My live site](https://chat-app-binh2.vercel.app/)
+
+### My portfolio
+
+- Source URL: [See my source code](https://github.com/Binh2/portfolio/)
+- Live Site URL: [Visit my live site](https://portfolio-binh2.vercel.app)
+
+### A blog template
+
+- The source code: [Checkout my source code](https://github.com/Binh2/brother-blog)
+- Live Site URL: [My live webpage](https://binh2.github.io/brother-blog/)

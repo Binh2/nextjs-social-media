@@ -23,35 +23,9 @@ const handle: NextApiHandler<PostProps[]> = async (req: NextApiRequest, res: Nex
             image: true,
           }
         },
-        comments: {
-          take: 4,
-          select: {
-            author: true,
-            content: true,
-            updatedAt: true,
-          }
-        },
-        _count: {
-          select: {
-            reactions: true,
-          }
-        },
-        reactions: {
-          // where: {
-          //   author: {
-          //     email: session?.user?.email || ''
-          //   }
-          // },
-          take: 100,
-          select: {
-            type: true,
-            author: {
-              select: {
-                email: true
-              }
-            },
-          },
-        }
+      },
+      orderBy: {
+        updatedAt: 'desc'
       }
     });
     res.json(feed);
@@ -59,8 +33,6 @@ const handle: NextApiHandler<PostProps[]> = async (req: NextApiRequest, res: Nex
     const { content, image } = req.body;
 
     const session = await getServerSession(req, res, authOptions);
-    // const session = await getSession({ req });
-    // console.log(session)
     const result = await prisma.post.create({
       data: {
         content: content,

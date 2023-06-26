@@ -15,6 +15,7 @@ export function useUpload(defaultImageUrl: string = '') {
     setUploadState(UploadState.UPLOADING);
     const file = e.target.files[0];
     const formData = new FormData();
+    console.log(file, formData)
     formData.append("file", file);
     const res = await fetch("/api/upload", {
       method: "POST",

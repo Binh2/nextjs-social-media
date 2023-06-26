@@ -7,6 +7,7 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '../../../lib/prisma';
 import * as argon2 from "argon2";
 import Cookies from 'cookies';
+import { encode, decode } from 'next-auth/jwt';
 
 let req: NextApiRequest, res: NextApiResponse;
 
@@ -54,7 +55,7 @@ export const authOptions: AuthOptions = {
           try {
             if (!user?.hashedPassword) return null;
             if (await argon2.verify(user.hashedPassword, credentials.password)) {
-              return (({id, name, email}) => ({id, name, email}))(user);
+              return (({id, name, email, image}) => ({id, name, email, image}))(user);
             } else {
               console.log('password did not match')
               return null;
@@ -66,7 +67,7 @@ export const authOptions: AuthOptions = {
           try {
             const user = await createUser(credentials);
             if (!user) return null;
-            return (({id, name, email}) => ({id, name, email}))(user);
+            return (({id, name, email, image}) => ({id, name, email, image}))(user);
           } catch (err) {
             console.log(err);
           }
@@ -104,6 +105,7 @@ export const authOptions: AuthOptions = {
   jwt: {
     // Customize the JWT encode and decode functions to overwrite the default behaviour of storing the JWT token in the session cookie when using credentials providers. Instead we will store the session token reference to the session in the database.
     encode: async ({token, secret, maxAge}) => {
+      console.log(token)
       if (req.query.nextauth && req.query.nextauth.includes('callback') && req.query.nextauth.includes('credentials') && req.method === 'POST') {
         const cookies = new Cookies(req,res)
         const cookie = cookies.get('next-auth.session-token')
@@ -140,6 +142,7 @@ async function getUser(username: string, email: string) {
       id: true,
       name: true,
       email: true,
+      image: true,
       hashedPassword: true,
     }
   });
@@ -161,6 +164,7 @@ async function createUser(credentials: Record<"type" | "email" | "username" | "p
       id: true,
       email: true,
       name: true,
+      image: true,
     }
   })
 }

@@ -1,4 +1,4 @@
-import { isPropertySignature } from "typescript";
+import Image from 'next/image';
 
 type Props = {
   className?: string;
@@ -7,7 +7,8 @@ type Props = {
 }
 
 export default function UploadedImage(props: Props) {
-  return <img className={props.className} src={props.src} alt={props.alt} />;
+  // return <Image className={props.className} src={props.src} alt={props.alt || ''} width={512} height={0} style={{width: "auto", height: "auto"}} />;
+  return <img className={props.className} src={props.src} alt={props.alt || ''} />
 }
 
 UploadedImage.defaultProps = {

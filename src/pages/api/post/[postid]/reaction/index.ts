@@ -15,22 +15,9 @@ const handle: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse)
       where: {
         postId
       },
-      select: {
-        type: true,
-        author: {
-          select: {
-            email: true
-          }
-        },
-      },
-    })
-    const reactionCount = await prisma.reaction.count({
-      where: {
-        postId
-      }
     })
 
-    res.json({ reactions, count: reactionCount});
+    res.json(reactions);
   }
   else if (req.method == 'PUT' || req.method == 'POST') {
     const session = await getServerSession(req, res, authOptions);
