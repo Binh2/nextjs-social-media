@@ -4,9 +4,9 @@
   "private": true,
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "dev": "next dev && vitest watch",
+    "dev": "concurrently --kill-others \"next dev\" \"vitest watch\"",
     "httpsdev": "node server.js",
-    "build": "next build",
+    "build": "prisma db push && prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest"
@@ -62,6 +62,7 @@
     "@types/react-datepicker": "^4.11.2",
     "@types/react-test-renderer": "^18.0.0",
     "@types/streamifier": "^0.1.0",
+    "concurrently": "^8.2.0",
     "cypress": "^12.13.0",
     "prisma": "^4.14.1",
     "vitest": "^0.32.2"
