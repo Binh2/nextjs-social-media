@@ -31,8 +31,14 @@ https://github.com/Binh2/nextjs-social-media/assets/53990204/9587ff38-4b9c-4827-
 4. Generate Prisma Client `npx prisma generate`
 5. Check if Prisma is connected with database correctly by starting a Prisma Studio `npx prisma studio`
 6. Visit [http://localhost:5555](http://localhost:5555) to see the Prisma Studio
-7. Start the local dev server `pnpm run fastdev`
+7. Start the local dev server `pnpm run dev`
 8. Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+If you want to use https dev server for GitHub login (Slower than `pnpm run dev` btw) 
+
+7. You will need to configure the SSL for localhost in the ssl-certificates folder you will need to make localhost.key and localhost.crt files (It will still display unsecured message but you can skip it)
+8. Start the local https dev server with `pnpm run httpsdev`
+9. Open [https://localhost:3000](https://localhost:3000) with your browser to see the result
 
 ## Author
 

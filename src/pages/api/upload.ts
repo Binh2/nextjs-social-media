@@ -17,7 +17,7 @@ cloudinary.config({
 
 function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: CallableFunction) {
   return new Promise((resolve, reject) => {
-    fn(req, res, (result) => {
+    fn(req, res, (result: any) => {
       if (result instanceof Error) {
         return reject(result);
       }
@@ -25,14 +25,14 @@ function runMiddleware(req: NextApiRequest, res: NextApiResponse, fn: CallableFu
     });
   });
 }
-export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+export default async function handler(req: NextApiRequest & { file: any }, res: NextApiResponse) {
   await runMiddleware(req, res, uploadMiddleware);
   console.log(req.file.buffer);
   const stream = await cloudinary.uploader.upload_stream(
     {
       folder: "social-media",
     },
-    (error: UploadApiErrorResponse | undefined, result: UploadApiResponse) => {
+    (error: UploadApiErrorResponse | undefined, result?: UploadApiResponse) => {
       if (error) return console.error(error);
       res.status(200).json(result);
     }

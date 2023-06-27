@@ -1,10 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
-    // domains: [
-    //   'avatars.githubusercontent.com',
-    //   'res.cloudinary.com',
-    // ],
     // loader: 'custom',
     // loaderFile: '/src/lib/imageLoader.ts',
     remotePatterns: [
@@ -28,14 +24,17 @@ const nextConfig = {
       }
     ],
   },
-  async rewrites() {
-    return [
-      {  
-        source: "/combine",
-        destination: "/combineImage"
-      }
-    ]
-  }
+  // async rewrites() {
+  //   return [
+  //     {  
+  //       source: "/combineImage",
+  //       destination: "/combine"
+  //     }
+  //   ]
+  // },
+  eslint: {
+    ignoreDuringBuilds: true
+  },
 }
 
 module.exports = nextConfig

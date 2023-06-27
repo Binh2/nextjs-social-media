@@ -3,8 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "node server.js",
-    "fastdev": "npx next dev",
+    "preinstall": "npx only-allow pnpm",
+    "dev": "next dev && vitest watch",
+    "httpsdev": "node server.js",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",

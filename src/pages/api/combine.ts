@@ -1,6 +1,6 @@
-import { combineImage } from "@/pages/combineImage";
 import { NextApiHandler } from "next";
 import * as tf from '@tensorflow/tfjs';
+import { combineImage } from "@/lib/combineImage";
 
 const handle: NextApiHandler = async (req, res) => {
   try {

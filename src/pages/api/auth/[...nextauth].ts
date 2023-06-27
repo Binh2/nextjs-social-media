@@ -20,7 +20,7 @@ const authHandler: NextApiHandler = (req_, res_) => {
 export default authHandler;
 
 export const authOptions: AuthOptions = {
-  site: process.env.NEXTAUTH_URL,
+  // site: process.env.NEXTAUTH_URL,
   // session: {
   //   strategy: "jwt",
   //   // secret: process.env.JWT_TOKEN, 

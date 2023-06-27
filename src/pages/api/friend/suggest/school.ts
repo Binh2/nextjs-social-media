@@ -2,6 +2,7 @@ import prisma from "@/lib/prisma";
 import { NextApiHandler } from "next";
 import { getServerSession } from 'next-auth';
 import { authOptions } from "../../auth/[...nextauth]";
+import { truncate } from "fs/promises";
 
 const handle: NextApiHandler = async (req, res) => {
   const session = await getServerSession(authOptions)
@@ -13,9 +14,9 @@ const handle: NextApiHandler = async (req, res) => {
       ]
     },
     include: {
-      user1: { email: true },
-      user2: { email: true }
+      user1: true,
+      user2: true
     }
   })
-  const friendEmails = friends.map()
+  // const friendEmails = friends.map()
 }
