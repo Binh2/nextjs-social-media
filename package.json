@@ -6,7 +6,7 @@
     "preinstall": "npx only-allow pnpm",
     "dev": "concurrently --kill-others \"next dev\" \"vitest watch\"",
     "httpsdev": "node server.js",
-    "build": "dotenv -e .env && prisma db push && prisma generate && next build",
+    "build": "dotenv -e .env -- prisma db push && dotenv -e .env -- prisma generate && next build",
     "start": "next start",
     "lint": "next lint",
     "test": "vitest"
