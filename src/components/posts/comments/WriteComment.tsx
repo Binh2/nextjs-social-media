@@ -24,8 +24,8 @@ export function WriteComment(props: Props) {
       })
     },
     onSuccess: (data) => {
-      queryClient.refetchQueries(['post', postId, 'comment'])
-      queryClient.refetchQueries(['post', postId, 'comment', 'count'])
+      queryClient.invalidateQueries(['post', postId, 'comment'])
+      queryClient.invalidateQueries(['post', postId, 'comment', 'count'])
       setContent('')
     }
   })

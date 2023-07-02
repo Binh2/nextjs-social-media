@@ -10,8 +10,6 @@ import Cookies from 'cookies';
 import { encode, decode } from 'next-auth/jwt';
 
 let req: NextApiRequest, res: NextApiResponse;
-
-
 const authHandler: NextApiHandler = (req_, res_) => {
   req = req_;
   res = res_;
@@ -20,12 +18,6 @@ const authHandler: NextApiHandler = (req_, res_) => {
 export default authHandler;
 
 export const authOptions: AuthOptions = {
-  // site: process.env.NEXTAUTH_URL,
-  // session: {
-  //   strategy: "jwt",
-  //   // secret: process.env.JWT_TOKEN, 
-  //   maxAge: 60 * 60 * 24 * 30, // A month
-  // },
   providers: [
     GitHubProvider({
       clientId: process.env.GITHUB_ID || '',
@@ -89,7 +81,6 @@ export const authOptions: AuthOptions = {
             userId: user.id,
             expires: sessionExpiry
           })
-          console.log(session)
 
           const cookies = new Cookies(req, res)
 
@@ -100,12 +91,19 @@ export const authOptions: AuthOptions = {
       }
  
       return true;
-    }
+    },
+    session: async ({session, user, token}) => {
+      if (session?.user) session.user.id = user.id;
+      return session;
+    },
+    // jwt: async ({user, token}) => {
+    //   if (user) token.uid = user.id;
+    //   return token;
+    // }
   },
   jwt: {
     // Customize the JWT encode and decode functions to overwrite the default behaviour of storing the JWT token in the session cookie when using credentials providers. Instead we will store the session token reference to the session in the database.
     encode: async ({token, secret, maxAge}) => {
-      console.log(token)
       if (req.query.nextauth && req.query.nextauth.includes('callback') && req.query.nextauth.includes('credentials') && req.method === 'POST') {
         const cookies = new Cookies(req,res)
         const cookie = cookies.get('next-auth.session-token')
@@ -118,7 +116,6 @@ export const authOptions: AuthOptions = {
       if (req.query.nextauth && req.query.nextauth.includes('callback') && req.query.nextauth.includes('credentials') && req.method === 'POST') {
         return null
       }
-
       // Revert to default behaviour when not in the credentials provider callback flow
       return decode({token, secret})
     }

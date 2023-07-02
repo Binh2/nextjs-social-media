@@ -7,11 +7,7 @@ type Props = {
   className?: string
 }
 
-const defaultProps = {
-  className: ''
-}
-
-export function Reaction({ type, className }: Props) {
+export function Reaction({ type, className = "" }: Props) {
   const defaultReturn = <FontAwesomeIcon icon={faThumbsUp} className={`${className} fa-solid fa-thumbs-up text-[#bbb]`} />;
   if (type == ReactionTypes.NONE) return defaultReturn;
   else if (type == ReactionTypes.LIKE) return <FontAwesomeIcon icon={faThumbsUp} className={`${className} text-teal-500 fa-solid fa-thumbs-up`} />
@@ -22,5 +18,3 @@ export function Reaction({ type, className }: Props) {
   else if (type == ReactionTypes.ANGRY) return (<FontAwesomeIcon icon={faFaceAngry} className={`${className} text-red-500 fa-solid fa-face-angry`} />)
   return defaultReturn;
 }
-
-Reaction.defaultProps = defaultProps

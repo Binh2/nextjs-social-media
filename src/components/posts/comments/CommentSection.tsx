@@ -1,4 +1,4 @@
-import { CommentProps } from "@/types/CommentProps"
+import { CommentType } from "@/types/CommentType"
 import { Comment } from "./Comment"
 import React, { useEffect, useState } from 'react'
 import { WriteComment } from "./WriteComment"
@@ -12,7 +12,7 @@ type Props = {
 export function CommentSection({ postId }: Props) {
   const queryClient = useQueryClient();
   const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status, refetch } = 
-  useInfiniteQuery<CommentProps[]>({
+  useInfiniteQuery<CommentType[]>({
     queryKey: ['post', postId, 'comment'],
     queryFn: ({pageParam}) => fetchComments({postId},{pageParam}),
     getNextPageParam(lastPage, allPages) {

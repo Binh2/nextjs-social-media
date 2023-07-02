@@ -1,9 +1,7 @@
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { AppLogo } from '../AppLogo';
-import { ProfileImage } from '../ProfileImage';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
-import { MenuUser } from '../MenuUser';
+import { MenuUser } from './MenuUser';
 import { AppIcon } from './AppIcon';
 import { SearchBar } from './SearchBar';
 import { TabBar } from './TabBar';
@@ -23,13 +21,13 @@ export function Header({ className = "", style = {} }: Props) {
   };
 
   return (<>
-    <header className={`bg-white flex items-center justify-between px-4 sticky top-0 shadow-md z-[1] ${className}`} style={style}>
-      <div className='flex'>
+    <header className={`bg-white grid grid-cols-[35%_1fr_35%] grid-rows-[auto] items-center justify-center px-4 sticky top-0 shadow-md z-[1] ${className}`} style={style}>
+      <div className='flex justify-self-start'>
         <AppIcon />
         <SearchBar></SearchBar> 
       </div>
       <TabBar></TabBar>
-      <div className="flex items-center">
+      <div className="flex items-center justify-self-end">
         <button className="p-2 ml-2 text-gray-700 bg-gray-200 rounded-full">
           <Image src="/messenger-icon.svg" alt="Messenger icon" width={24} height={24} />
         </button>

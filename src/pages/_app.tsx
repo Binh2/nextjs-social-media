@@ -4,12 +4,18 @@ import './global.css';
 import "@fortawesome/fontawesome-svg-core/styles.css";
 import { config } from "@fortawesome/fontawesome-svg-core";
 config.autoAddCss = false;
-import Header from '@/components/common/Header';
-import LeftSidebar from '@/components//common/LeftSidebar';
 import { AuthGuard } from '@/components/common/AuthGuard';
-import { useQuery, useMutation, useQueryClient, QueryClient, QueryClientProvider } from '@tanstack/react-query'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient(
+  // {
+  //   defaultOptions: {
+  //     queries: {
+  //       suspense: true
+  //     }
+  //   }
+  // }
+)
 const App = ({ Component, pageProps }: AppProps & { Component: {requireAuth?: boolean}}) => {
   return (
     <QueryClientProvider client={queryClient}>

@@ -21,7 +21,7 @@ CREATE TABLE [dbo].[Comment] (
     [authorId] NVARCHAR(1000) NOT NULL,
     [content] NVARCHAR(1000) NOT NULL,
     [image] NVARCHAR(1000),
-    [parentId] NVARCHAR(1000) NOT NULL,
+    [parentId] NVARCHAR(1000),
     [createdAt] DATETIME2 NOT NULL CONSTRAINT [Comment_createdAt_df] DEFAULT CURRENT_TIMESTAMP,
     [updatedAt] DATETIME2 NOT NULL CONSTRAINT [Comment_updatedAt_df] DEFAULT CURRENT_TIMESTAMP,
     CONSTRAINT [Comment_pkey] PRIMARY KEY CLUSTERED ([id])
@@ -60,7 +60,7 @@ CREATE TABLE [dbo].[Session] (
     [id] NVARCHAR(1000) NOT NULL,
     [session_token] NVARCHAR(1000) NOT NULL,
     [user_id] NVARCHAR(1000) NOT NULL,
-    [expires] DATETIME2 NOT NULL,
+    [expires] DATE NOT NULL,
     CONSTRAINT [Session_pkey] PRIMARY KEY CLUSTERED ([id]),
     CONSTRAINT [Session_session_token_key] UNIQUE NONCLUSTERED ([session_token])
 );
@@ -69,11 +69,45 @@ CREATE TABLE [dbo].[Session] (
 CREATE TABLE [dbo].[User] (
     [id] NVARCHAR(1000) NOT NULL,
     [name] NVARCHAR(1000),
+    [username] NVARCHAR(1000),
     [email] NVARCHAR(1000),
     [emailVerified] DATETIME2,
+    [hashedPassword] NVARCHAR(1000),
     [image] NVARCHAR(1000),
+    [isMale] BIT,
+    [birthday] DATE,
     CONSTRAINT [User_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [User_username_key] UNIQUE NONCLUSTERED ([username]),
     CONSTRAINT [User_email_key] UNIQUE NONCLUSTERED ([email])
+);
+
+-- CreateTable
+CREATE TABLE [dbo].[UserSchool] (
+    [id] NVARCHAR(1000) NOT NULL,
+    [name] NVARCHAR(1000) NOT NULL,
+    [image] NVARCHAR(1000) NOT NULL,
+    [roleId] NVARCHAR(1000),
+    CONSTRAINT [UserSchool_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [UserSchool_name_key] UNIQUE NONCLUSTERED ([name])
+);
+
+-- CreateTable
+CREATE TABLE [dbo].[UserSchoolRole] (
+    [id] NVARCHAR(1000) NOT NULL,
+    [name] NVARCHAR(1000) NOT NULL,
+    CONSTRAINT [UserSchoolRole_pkey] PRIMARY KEY CLUSTERED ([id])
+);
+
+-- CreateTable
+CREATE TABLE [dbo].[Friend] (
+    [id] NVARCHAR(1000) NOT NULL,
+    [user1Id] NVARCHAR(1000) NOT NULL,
+    [user2Id] NVARCHAR(1000) NOT NULL,
+    [type] INT NOT NULL,
+    CONSTRAINT [Friend_pkey] PRIMARY KEY CLUSTERED ([id]),
+    CONSTRAINT [Friend_user1Id_key] UNIQUE NONCLUSTERED ([user1Id]),
+    CONSTRAINT [Friend_user2Id_key] UNIQUE NONCLUSTERED ([user2Id]),
+    CONSTRAINT [Friend_user1Id_user2Id_key] UNIQUE NONCLUSTERED ([user1Id],[user2Id])
 );
 
 -- CreateTable
@@ -87,29 +121,54 @@ CREATE TABLE [dbo].[VerificationToken] (
     CONSTRAINT [VerificationToken_identifier_token_key] UNIQUE NONCLUSTERED ([identifier],[token])
 );
 
+-- CreateTable
+CREATE TABLE [dbo].[_UserToUserSchool] (
+    [A] NVARCHAR(1000) NOT NULL,
+    [B] NVARCHAR(1000) NOT NULL,
+    CONSTRAINT [_UserToUserSchool_AB_unique] UNIQUE NONCLUSTERED ([A],[B])
+);
+
+-- CreateIndex
+CREATE NONCLUSTERED INDEX [_UserToUserSchool_B_index] ON [dbo].[_UserToUserSchool]([B]);
+
 -- AddForeignKey
 ALTER TABLE [dbo].[Post] ADD CONSTRAINT [Post_authorId_fkey] FOREIGN KEY ([authorId]) REFERENCES [dbo].[User]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE [dbo].[Comment] ADD CONSTRAINT [Comment_postId_fkey] FOREIGN KEY ([postId]) REFERENCES [dbo].[Post]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[Comment] ADD CONSTRAINT [Comment_postId_fkey] FOREIGN KEY ([postId]) REFERENCES [dbo].[Post]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE [dbo].[Comment] ADD CONSTRAINT [Comment_authorId_fkey] FOREIGN KEY ([authorId]) REFERENCES [dbo].[User]([id]) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [dbo].[Comment] ADD CONSTRAINT [Comment_authorId_fkey] FOREIGN KEY ([authorId]) REFERENCES [dbo].[User]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE [dbo].[Comment] ADD CONSTRAINT [Comment_parentId_fkey] FOREIGN KEY ([parentId]) REFERENCES [dbo].[Comment]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
-ALTER TABLE [dbo].[Reaction] ADD CONSTRAINT [Reaction_postId_fkey] FOREIGN KEY ([postId]) REFERENCES [dbo].[Post]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+ALTER TABLE [dbo].[Reaction] ADD CONSTRAINT [Reaction_postId_fkey] FOREIGN KEY ([postId]) REFERENCES [dbo].[Post]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE [dbo].[Reaction] ADD CONSTRAINT [Reaction_authorEmail_fkey] FOREIGN KEY ([authorEmail]) REFERENCES [dbo].[User]([email]) ON DELETE NO ACTION ON UPDATE CASCADE;
+ALTER TABLE [dbo].[Reaction] ADD CONSTRAINT [Reaction_authorEmail_fkey] FOREIGN KEY ([authorEmail]) REFERENCES [dbo].[User]([email]) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 -- AddForeignKey
 ALTER TABLE [dbo].[Account] ADD CONSTRAINT [Account_user_id_fkey] FOREIGN KEY ([user_id]) REFERENCES [dbo].[User]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE [dbo].[Session] ADD CONSTRAINT [Session_user_id_fkey] FOREIGN KEY ([user_id]) REFERENCES [dbo].[User]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE [dbo].[UserSchool] ADD CONSTRAINT [UserSchool_roleId_fkey] FOREIGN KEY ([roleId]) REFERENCES [dbo].[UserSchoolRole]([id]) ON DELETE SET NULL ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE [dbo].[Friend] ADD CONSTRAINT [Friend_user1Id_fkey] FOREIGN KEY ([user1Id]) REFERENCES [dbo].[User]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE [dbo].[Friend] ADD CONSTRAINT [Friend_user2Id_fkey] FOREIGN KEY ([user2Id]) REFERENCES [dbo].[User]([id]) ON DELETE NO ACTION ON UPDATE NO ACTION;
+
+-- AddForeignKey
+ALTER TABLE [dbo].[_UserToUserSchool] ADD CONSTRAINT [_UserToUserSchool_A_fkey] FOREIGN KEY ([A]) REFERENCES [dbo].[User]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE [dbo].[_UserToUserSchool] ADD CONSTRAINT [_UserToUserSchool_B_fkey] FOREIGN KEY ([B]) REFERENCES [dbo].[UserSchool]([id]) ON DELETE CASCADE ON UPDATE CASCADE;
 
 COMMIT TRAN;
 

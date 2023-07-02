@@ -1,35 +1,25 @@
 import Image from "next/image"
 import React, { useState } from "react";
-import Router, { useRouter } from "next/router";
+import { useRouter } from "next/router";
 import UploadedImage from "../common/UploadedImage";
 import { formatDate } from "@/lib/functions";
 import { WriteComment } from "./comments/WriteComment";
 import { CommentSection } from "./comments/CommentSection";
-import prisma from "@/lib/prisma";
-import { PostProps } from "@/types/PostProps";
-import { CommentProps } from "@/types/CommentProps";
+import { PostType } from "@/types/PostType";
 import { ReactionPicker } from "./reactions/ReactionPicker";
 import { Reactions } from "./reactions/Reactions";
 import { useSession } from "next-auth/react";
-import { ReactionTypes } from "@/lib/reactionTypes";
 import { CommentCount } from "./comments/CommentCount";
+import { ProfileImage } from '@/components/common/ProfileImage'
 
-const Post: React.FC<{ post: PostProps }> = ({ post }) => {
+const Post: React.FC<{ post: PostType }> = ({ post }) => {
   const authorName = post.author ? post.author.name : "Unknown author";
   const router = useRouter();
-  const { status, data: session } = useSession()
   return (
-    // <div onClick={() => router.push("/p/[id]", `/p/${post.id}`)}>
-
-
     <div className="p-5 bg-white rounded-lg">
       <div className="flex">
         <div className="inline-grid grid-cols-[48px_1fr] grid-rows-2 row-gap-2">
-          {
-            post.author?.image ?
-              <Image src={post.author?.image} alt="Author's image" width={48} height={48} className="rounded-[100%] row-span-2" /> :
-              <Image src="/blank-profile.svg" alt="Blank profile pic" width={48} height={48} className='rounded-[100%] row-span-2'></Image>
-          }
+          <ProfileImage className="row-span-2"></ProfileImage>
           <p className="ml-2">{authorName}</p>
           <p className="ml-2 text-xs">{formatDate(post.createdAt)}</p>
         </div>
@@ -41,7 +31,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
 
       <p className="mt-2 break-all whitespacing-pre-wrap">{post.content}</p>
       <button onClick={() => router.push(`/post/${post.id}`)}>
-        {post.image && <UploadedImage src={post.image} alt="Uploaded image" className="object-cover w-full h-[500px] mt-2 cursor-pointer" />}
+        {post.image && <UploadedImage src={post.image} alt="Uploaded image" className="object-contain w-full mt-2 cursor-pointer" />}
       </button>
 
       <div className="flex">
@@ -63,7 +53,7 @@ const Post: React.FC<{ post: PostProps }> = ({ post }) => {
         </div> */}
         <ReactionPicker postId={post.id} className="flex items-center mx-auto"></ReactionPicker>
 
-        <div className="flex mx-auto" >
+        <div className="flex mx-auto">
           <Image src="comment-icon.svg" alt="Comment" width={16} height={16} />
           <p>Comment</p>
         </div>

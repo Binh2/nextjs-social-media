@@ -6,13 +6,7 @@ type Props = {
   alt?: string;
 }
 
-export default function UploadedImage(props: Props) {
+export default function UploadedImage({className = "", src = "", alt = ""}: Props) {
   // return <Image className={props.className} src={props.src} alt={props.alt || ''} width={512} height={0} style={{width: "auto", height: "auto"}} />;
-  return <img className={props.className} src={props.src} alt={props.alt || ''} />
+  return <img className={className} src={src} alt={alt || ''} />
 }
-
-UploadedImage.defaultProps = {
-  className: "",
-  src: "",
-  alt: "",
-};

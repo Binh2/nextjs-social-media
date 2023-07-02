@@ -1,14 +1,13 @@
 import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
-import { AppLogo } from './AppLogo';
-import { ProfileImage } from './ProfileImage';
-import React, { CSSProperties, useState } from 'react';
+import { ProfileImage } from '../ProfileImage';
+import React, { useState } from 'react';
+import { useRouter } from 'next/router';
 
 export function MenuUser() {
   const { data: session, status } = useSession();
-
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-
+  const router = useRouter();
   const toggleMenu = () => {
     setIsMenuOpen(!isMenuOpen)
   }
@@ -24,10 +23,11 @@ export function MenuUser() {
         <div className="absolute right-0 h-auto mt-2 rounded-md shadow-lg bg-slate-50 w-80">
           <ul className="p-2">
             <li className='px-2'>
-              <div className="flex items-center pt-3 pb-3 pl-2 bg-gray-100 rounded shadow-md cursor-pointer hover:bg-slate-300 hover:rounded">
+              <button className="flex items-center pt-3 pb-3 pl-2 bg-gray-100 rounded shadow-md cursor-pointer hover:bg-slate-300 hover:rounded"
+                onClick={() => router.push(`/user`)}>
                 <ProfileImage size={32} />
                 <p className="ml-2 text-base font-semibold">{session?.user?.name}</p>
-              </div>
+              </button>
             </li>
             <li className="flex items-center px-2 py-2 mt-2 rounded hover:bg-slate-300">
               <div className="flex items-center justify-center w-10 h-10 mr-3 rounded-full bg-slate-300">
@@ -69,10 +69,4 @@ export function MenuUser() {
       )}
     </div>
   )
-}
-
-function SearchIcon() {
-  return (<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-    <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-  </svg>)
 }

@@ -24,17 +24,21 @@ const nextConfig = {
       }
     ],
   },
-  // async rewrites() {
-  //   return [
-  //     {  
-  //       source: "/combineImage",
-  //       destination: "/combine"
-  //     }
-  //   ]
-  // },
-  eslint: {
-    ignoreDuringBuilds: true
+  async rewrites() {
+    return [
+      // {  
+      //   source: "/combineImage",
+      //   destination: "/combine"
+      // }
+      // {
+      //   destination: "http://localhost:80/api",
+      //   source: "/api"
+      // }
+    ]
   },
+  // eslint: {
+  //   ignoreDuringBuilds: true
+  // },
 }
 
 module.exports = nextConfig

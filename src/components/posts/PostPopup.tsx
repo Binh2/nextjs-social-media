@@ -7,16 +7,13 @@ import 'reactjs-popup/dist/index.css';
 import { ChangeEvent, useRef, useState } from 'react';
 import { useRouter } from 'next/navigation';
 import { Loading } from '../common/Loading';
-import dynamic from 'next/dynamic';
 import UploadedImage from '../common/UploadedImage';
-import Router from 'next/router';
 import { UploadState, useUpload } from '@/lib/useUpload';
-import { json } from 'stream/consumers';
-import { useEffect } from 'react';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PostSuccessPopup } from './PostSuccessPopup';
 import { useCloseAfter } from '../common/useCloseAfter';
+import { PublicitySelect } from '../common/PublicitySelect';
 
 export function PostPopup() {
   const { data: session, status } = useSession();
@@ -31,7 +28,7 @@ export function PostPopup() {
       return axios.post('/api/post', post);
     },
     onSuccess: async () => {
-      queryClient.refetchQueries(['post'])
+      queryClient.invalidateQueries(['post'])
       setContent('')
     }
   })
@@ -41,14 +38,7 @@ export function PostPopup() {
     mutation.mutate({content, image: imageUrl})
   }
 
-  const [stateIcon, setStateIcon] = useState("Only me");
-  const handleSelectChange = (event: ChangeEvent<HTMLSelectElement>) => {
-    setStateIcon(event.target.value);
-  };
-
-  const handleGoToStylePage = () => {
-    router.push('/combineImage');
-  };
+  const handleGoToStylePage = () => { router.push('/combine'); };
 
   const handlePostClick = () => {
     setOpen(false);
@@ -87,35 +77,12 @@ export function PostPopup() {
             </div>
             <div className="ml-2 ">
               <p className="ml-2 text-lg font-semibold">{session?.user?.name}</p>
-              <div className='relative flex flex-row items-center bg-gray-200 rounded-lg'>
-                {
-                  stateIcon === 'Only me' ? <Image src="/world.svg" alt="Add photo icon" width={15} height={15} className="absolute z-0 left-3" />
-                    : <Image src="/lock-closed.svg" alt="Add photo icon" width={15} height={15} className="absolute z-0 left-3" />
-                }
-                <select
-                  onChange={handleSelectChange}
-                  className="z-50 w-full pl-6 text-sm bg-transparent border rounded-md outline-0 focus:outline-0">
-                  <option value="Only me"> <p>Public</p> </option>
-                  <option value="Only medd"> <p>Only me</p> </option>
-                </select>
-              </div>
+              <PublicitySelect></PublicitySelect>
             </div>
-
-            {/* move the Model folder and run npm start - not still working*/}
             <button className="inline-flex items-center px-4 py-2 ml-auto font-semibold bg-gray-200 border-2 border-gray-300 rounded-lg" onClick={handleGoToStylePage}>
               <p className="mr-3">Add style</p>
               <Image src="/upload-icon--sideway.svg" alt="Add style img" width={15} height={15} />
             </button>
-
-            {/* <button className="inline-flex items-center px-4 py-2 ml-auto font-semibold bg-gray-200 border-2 border-gray-300 rounded-lg">
-              <p className='mr-3'>Artistic style photo processing</p>
-              <Image src='/upload-icon--sideway.svg' alt="Add style img" width={15} height={15} ></Image>
-            </button> */}
-
-            {/* <button class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-bold py-2 px-4 rounded inline-flex items-center">
-              <svg class="fill-current w-4 h-4 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20"><path d="M13 8V2H7v6H2l8 8 8-8h-5zM0 18h20v2H0v-2z" /></svg>
-              <span>Download</span>
-            </button> */}
           </div>
 
           <div className="overflow-y-auto max-h-[50vh] w-full mt-4 rounded-md">

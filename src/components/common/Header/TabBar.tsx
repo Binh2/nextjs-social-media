@@ -3,11 +3,15 @@ import { BuildingStorefrontIcon, HomeIcon, TvIcon, UserGroupIcon } from '@heroic
 import { UsersIcon } from "@heroicons/react/24/solid";
 import { useRouter } from 'next/router';
 
-export function TabBar() {
+type Props = {
+  className?: string
+}
+
+export function TabBar(props: Props) {
   const router = useRouter();
   const isActive = (route: string) => router.pathname == route;
   return (<>
-    <ol className={`flex flex-0 gap-2`}>
+    <ol className={`flex flex-0 gap-2 justify-center ${props.className}`}>
       <li className="w-8">
         <Link href="/" className={`list-non`}>
           <HomeIcon className={`text-black border-teal-500 ${isActive("/") && 'text-teal-500 border-b-4'}`}></HomeIcon>

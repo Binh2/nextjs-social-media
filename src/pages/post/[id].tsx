@@ -5,8 +5,8 @@ import Image from "next/image"
 import { useRouter } from "next/router";
 import { formatDate } from "@/lib/functions";
 import prisma from "@/lib/prisma";
-import { PostProps } from "@/types/PostProps";
-import { CommentProps } from "@/types/CommentProps";
+import { PostType } from "@/types/PostType";
+import { CommentType } from "@/types/CommentType";
 import { useSession } from "next-auth/react";
 import { ReactionTypes } from "@/lib/reactionTypes";
 import { useQuery } from "@tanstack/react-query";
@@ -15,20 +15,20 @@ import { Reactions } from "@/components/posts/reactions/Reactions";
 import { ReactionPicker } from "@/components/posts/reactions/ReactionPicker";
 import { CommentSection } from "@/components/posts/comments/CommentSection";
 import { WriteComment } from "@/components/posts/comments/WriteComment";
-import { MenuUser } from "@/components/common/MenuUser";
-import { ReactionProps } from '@/types/ReactionProps';
+import { MenuUser } from "@/components/common/Header/MenuUser";
+import { ReactionType } from '@/types/ReactionType';
 
 type Props = {
   className?: string;
   src: string;
   alt?: string;
-  post: PostProps;
+  post: PostType;
 }
 
 export default function Post() {
   const router = useRouter();
   const postId = router.query.id as string;
-  const { data: post }: {data: PostProps | undefined} = useQuery(['post', postId], {
+  const { data: post }: {data: PostType | undefined} = useQuery(['post', postId], {
     queryFn: () => {
       const result = axios.get(`/api/post/${postId}`).then(res => res.data);
       return result; 

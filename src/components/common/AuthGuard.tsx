@@ -10,7 +10,6 @@ type Props = {
 export function AuthGuard({children}: Props) {
   const { status, data: session } = useSession();
   const router = useRouter();
-
   useEffect(() => {
     if (status == "unauthenticated") router.push("/signin")
   }, [ status, router ]);

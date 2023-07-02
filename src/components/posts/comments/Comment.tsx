@@ -1,11 +1,11 @@
 import { formatDateShort } from '@/lib/functions';
-import { CommentProps } from '@/types/CommentProps';
+import { CommentType } from '@/types/CommentType';
 import Image from 'next/image'
 import { useState } from 'react';
 import { CommentSection } from './CommentSection';
 
 type Props = {
-  comment: CommentProps,
+  comment: CommentType,
 }
 export function Comment(props: Props) {
   const comment = props.comment;

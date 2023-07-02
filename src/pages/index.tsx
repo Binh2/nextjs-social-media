@@ -1,21 +1,15 @@
-// @refresh reset
 import { Header } from '@/components/common/Header';
 import { LeftSidebar } from '@/components/common/LeftSidebar';
 import { RightSidebar } from '@/components/common/RightSidebar';
-import { SessionProvider, useSession } from 'next-auth/react';
+import { useSession } from 'next-auth/react';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
 import { ProfileImage } from '../components/common/ProfileImage';
-import { GetServerSideProps, GetStaticProps, InferGetStaticPropsType, NextApiHandler } from 'next';
+import { GetStaticProps } from 'next';
 import prisma from '../lib/prisma';
-import { PostProps } from '@/types/PostProps';
 import { Feed } from '@/components/posts/Feed';
 import Image from 'next/image';
 import { PostPopup } from '@/components/posts/PostPopup';
-import { PrismaClient } from '@prisma/client';
 import Head from 'next/head';
-import { authOptions } from './api/auth/[...nextauth]';
-import { getServerSession } from 'next-auth';
 
 type Props = {
   feed: string;
@@ -32,25 +26,16 @@ export const getStaticProps: GetStaticProps<Props> = async () => {
 const Home = (props: Props) => {
   const router = useRouter();
   const { data: session, status } = useSession();
-  const [ feed, setFeed ] = useState<PostProps[]>(JSON.parse(props.feed));
-
-  // Navigate to sign in page when user is not signed in
-  useEffect(() => {
-    if (status == 'unauthenticated') router.push('/signin')
-  }, [status, router]);
+  const feed = JSON.parse(props.feed);
+  // const [ feed, setFeed ] = useState<PostType[]>(JSON.parse(props.feed));
 
   return (<>
     <Head>
       <title>Homepage - SocialSphere</title>
     </Head>
-
     <Header />
     <div className="grid grid-cols-[27%_1fr_27%] bg-[#eee]">
-
-      {/* Left bar */}
       <LeftSidebar></LeftSidebar>
-
-      {/* body */}
       <main className='min-h-[100vh]'>
         <div className="my-4 bg-white rounded-lg shadow">
           <div className="flex items-center flex-1 p-4">
@@ -78,15 +63,9 @@ const Home = (props: Props) => {
         <Feed feed={feed}></Feed>
       </main>
 
-      {/* rigt bar */}
       <RightSidebar></RightSidebar>
     </div>
-    {/* </main> */}
-  </>
-  
-  
-  
-  );
+  </>);
 }
 
 async function fetchFeed() {
@@ -108,5 +87,5 @@ async function fetchFeed() {
   });
   return feed;
 }
-Home.requiredAuth = true;
+Home.requireAuth = true;
 export default Home;

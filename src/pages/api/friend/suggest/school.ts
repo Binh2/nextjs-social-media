@@ -3,10 +3,11 @@ import { NextApiHandler } from "next";
 import { getServerSession } from 'next-auth';
 import { authOptions } from "../../auth/[...nextauth]";
 import { truncate } from "fs/promises";
+import { FriendType } from "@/types/FriendType";
 
 const handle: NextApiHandler = async (req, res) => {
   const session = await getServerSession(authOptions)
-  const friends = await prisma.friend.findMany({
+  const friends: FriendType[] = await prisma.friend.findMany({
     where: {
       OR: [
         { user1: { email: session?.user?.email || '' } },
@@ -18,5 +19,8 @@ const handle: NextApiHandler = async (req, res) => {
       user2: true
     }
   })
-  // const friendEmails = friends.map()
+  const friendUsers = friends.map(friend => {
+    return (session?.user?.email == friend.user1.email) ? friend.user2 : friend.user1;
+  })
+  res.json(friendUsers);
 }

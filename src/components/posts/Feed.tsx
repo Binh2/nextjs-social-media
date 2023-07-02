@@ -1,22 +1,22 @@
 import prisma from "@/lib/prisma";
 import { GetStaticProps } from "next";
 import Post from "./Post";
-import { PostProps } from "@/types/PostProps";
+import { PostType } from "@/types/PostType";
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { useEffect, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import React from "react";
 import axios from "axios";
-// import { PostProps } from "@/types/PostProps"
+// import { PostType } from "@/types/PostType"
 
 type Props = {
-  feed: PostProps[] | undefined
+  feed: PostType[] | undefined
 }
 
 export function Feed(props: Props) {
   // const [ hasMore, setHasMore ] = useState(true);
   const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } = 
-  useInfiniteQuery<PostProps[], Error, PostProps[]>(['post'], {
+  useInfiniteQuery<PostType[], Error, PostType[]>(['post'], {
     initialData: () => {
       if (!props.feed) return;
       return {
@@ -48,7 +48,7 @@ export function Feed(props: Props) {
       >
         {data?.pages.map((group, i) => (
           <React.Fragment key={i}>
-            {group.map((post: PostProps) => 
+            {group.map((post: PostType) => 
               <Post key={post.id} post={post}></Post>
             )}
           </React.Fragment>

@@ -18,7 +18,7 @@ const handle: NextApiHandler = async (req, res) => {
     }
   })
   
-  console.log(reaction)
+  // console.log(reaction)
   res.json(reaction)
 } 
 
