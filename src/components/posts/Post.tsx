@@ -19,7 +19,7 @@ const Post: React.FC<{ post: PostType }> = ({ post }) => {
     <div className="p-5 bg-white rounded-lg">
       <div className="flex">
         <div className="inline-grid grid-cols-[48px_1fr] grid-rows-2 row-gap-2">
-          <ProfileImage className="row-span-2"></ProfileImage>
+          <ProfileImage src={post.image} className="row-span-2"></ProfileImage>
           <p className="ml-2">{authorName}</p>
           <p className="ml-2 text-xs">{formatDate(post.createdAt)}</p>
         </div>
@@ -47,10 +47,6 @@ const Post: React.FC<{ post: PostType }> = ({ post }) => {
       <hr className="pb-2 mt-2 border-gray-300" />
 
       <div className="flex content-between">
-        {/* <div className="flex mx-auto">
-          <Image src="like-icon--inside-filled.svg" alt="Like" width={16} height={16} />
-          <p>Like</p>
-        </div> */}
         <ReactionPicker postId={post.id} className="flex items-center mx-auto"></ReactionPicker>
 
         <div className="flex mx-auto">

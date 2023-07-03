@@ -5,7 +5,7 @@ import { ReactionTypes } from "@/lib/reactionTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { ReactionType } from "@/types/ReactionType";
-import { useFadeAfter } from "@/components/common/useFadeAfter";
+import { useFadeAfter } from "@/hooks/useFadeAfter";
 
 type Props = {
   postId: string,

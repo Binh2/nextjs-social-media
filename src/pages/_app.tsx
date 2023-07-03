@@ -16,19 +16,17 @@ const queryClient = new QueryClient(
   //   }
   // }
 )
-const App = ({ Component, pageProps }: AppProps & { Component: {requireAuth?: boolean}}) => {
+const App = ({ Component, pageProps }: AppProps & { Component: {requireAuth?: boolean, getLayout: any}}) => {
+  const getLayout = Component.getLayout || ((page: any) => page);
+  const component = <Component {...pageProps}></Component>;
+  const authGuarded = Component?.requireAuth ? (<AuthGuard>{component}</AuthGuard>) : component;
+  const withLayout = getLayout(authGuarded);
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider session={pageProps.session}>
-        {
-          Component?.requireAuth ? 
-          (<AuthGuard><Component {...pageProps}></Component></AuthGuard>) :
-          (<Component {...pageProps}></Component>)
-        }
+        { withLayout }
       </SessionProvider>
     </QueryClientProvider>
-
-
   );
 };
 

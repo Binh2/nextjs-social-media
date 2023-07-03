@@ -2,16 +2,18 @@ import Image from 'next/image';
 import { useSession } from "next-auth/react";
 
 type Props = {
+  src?: string | null;
   size?: number;
   className?: string;
 }
 
-export const ProfileImage: React.FC<Props> = ({size = 48, className}) => {
+export const ProfileImage: React.FC<Props> = ({src, size = 48, className}) => {
   const { data: session, status } = useSession();
-  
-  return (<>{
-    session?.user?.image ?
-    <Image src={session?.user?.image} alt="Profile pic" width={size} height={size} className={`rounded-[100%] ${className}`} style={{width: size, height: size}}></Image> :
-    <Image src="/blank-profile.svg" alt="Blank profile pic" width={size} height={size} className={`rounded-[100%] ${className}`} style={{width: size, height: size}}></Image>
-  }</>);
+  const alt = "Profile pic";
+  const currentUserImage = session?.user?.image || '';
+  src = src ? src : currentUserImage;
+  src = src ? src : '/blank-profile.svg';
+  return (<>
+    <Image src={src} alt={alt} width={size} height={size} className={`rounded-[100%] ${className}`}></Image>
+  </>);
 }

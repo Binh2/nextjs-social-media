@@ -12,7 +12,7 @@ import { UploadState, useUpload } from '@/lib/useUpload';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PostSuccessPopup } from './PostSuccessPopup';
-import { useCloseAfter } from '../common/useCloseAfter';
+import { useCloseAfter } from '../../hooks/useCloseAfter';
 import { PublicitySelect } from '../common/PublicitySelect';
 
 export function PostPopup() {

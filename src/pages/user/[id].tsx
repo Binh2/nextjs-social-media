@@ -4,14 +4,15 @@ import { ProfileImage } from "@/components/common/ProfileImage";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Suspense, lazy } from "react";
+import { Suspense, lazy, useEffect } from "react";
 import { useLocation } from 'react-router-dom';
-const userComponents = lazy(() => import("@/components/common/user"))
+// const userComponents = lazy(() => import("@/components/common/user"))
 
-function User() {
+export default function User() {
   const { status, data: session } = useSession()
-  const { hash } = useLocation()
+  const router = useRouter();
   const friendsCount = 0;
+
   return (<>
     <CoverImage></CoverImage>
     <div>
@@ -32,7 +33,7 @@ function User() {
       </div>
     </div>
     <Suspense fallback={<Loading />}>
-      { hash == "posts" ? <userComponents.Posts />: <userComponents.About /> }
+      {/* { hash == "posts" ? <userComponents.Posts />: <userComponents.About /> } */}
     </Suspense>
   </>)
 }
