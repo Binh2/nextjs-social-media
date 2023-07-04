@@ -1,14 +1,10 @@
 import React, { useState, useEffect } from 'react';
-// import Modal from 'react-modal';
 import 'src/app/globals.css';
 import Image from "next/image"
 import { useRouter } from "next/router";
 import { formatDate } from "@/lib/functions";
-import prisma from "@/lib/prisma";
 import { PostType } from "@/types/PostType";
-import { CommentType } from "@/types/CommentType";
 import { useSession } from "next-auth/react";
-import { ReactionTypes } from "@/lib/reactionTypes";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 import { Reactions } from "@/components/posts/reactions/Reactions";
@@ -56,7 +52,6 @@ export default function Post() {
               alt={alt}
             />
           </div>
-
 
           {/* Comment section */}
           <div className="fixed top-0 right-0 w-1/4 h-full pl-2 pr-2 overflow-y-scroll modal-sidebar bg-slate-50">
@@ -112,14 +107,12 @@ export default function Post() {
             </div>
 
 
-
             <hr className="pb-2 mt-2 border-gray-300" />
             <CommentSection postId={postId}></CommentSection>
             <div className="sticky bottom-0 w-full pr-2 bg-gray-100 h-15">
             <WriteComment postId={postId}></WriteComment>
             </div>
           
-
           </div>
           <button onClick={() => router.push('/')} 
             className="absolute p-2 mr-2 text-gray-500 bg-gray-200 rounded-full modal-close top-4 left-4 hover:text-gray-700"

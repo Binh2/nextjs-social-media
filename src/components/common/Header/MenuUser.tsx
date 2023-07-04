@@ -24,7 +24,7 @@ export function MenuUser() {
           <ul className="p-2">
             <li className='px-2'>
               <button className="flex items-center pt-3 pb-3 pl-2 bg-gray-100 rounded shadow-md cursor-pointer hover:bg-slate-300 hover:rounded"
-                onClick={() => router.push(`/user`)}>
+                onClick={() => router.push(`/user/${session?.user?.id || ''}`)}>
                 <ProfileImage size={32} />
                 <p className="ml-2 text-base font-semibold">{session?.user?.name}</p>
               </button>

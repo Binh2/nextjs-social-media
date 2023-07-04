@@ -1,12 +1,8 @@
 import { CoverImage } from "@/components/common/CoverImage";
-import { Loading } from "@/components/common/Loading";
 import { ProfileImage } from "@/components/common/ProfileImage";
 import { useSession } from "next-auth/react";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { Suspense, lazy, useEffect } from "react";
-import { useLocation } from 'react-router-dom';
-// const userComponents = lazy(() => import("@/components/common/user"))
 
 export default function User() {
   const { status, data: session } = useSession()
@@ -32,8 +28,5 @@ export default function User() {
         </ol>
       </div>
     </div>
-    <Suspense fallback={<Loading />}>
-      {/* { hash == "posts" ? <userComponents.Posts />: <userComponents.About /> } */}
-    </Suspense>
   </>)
 }

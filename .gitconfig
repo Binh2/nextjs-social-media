@@ -1,2 +1,0 @@
-[filter "gitignore"]
-	smudge = cat
