@@ -6,14 +6,18 @@ import { ReactNode, useEffect } from "react";
 type Props = {
   children: ReactNode
 }
-
-export function AuthGuard({children}: Props) {
+export function useAuthGuard() {
   const { status, data: session } = useSession();
   const router = useRouter();
   useEffect(() => {
     if (status == "unauthenticated") router.push("/signin")
   }, [ status, router ]);
-  
+}
+
+export function AuthGuard({children}: Props) {
+  const {status} = useSession();
+  useAuthGuard();
+
   return (
     status == "loading" ?
       <p>Loading session...</p>:
