@@ -8,6 +8,8 @@ import prisma from '../../../lib/prisma';
 import * as argon2 from "argon2";
 import Cookies from 'cookies';
 import { encode, decode } from 'next-auth/jwt';
+import { User } from '@/types/next-auth';
+import { AdapterUser } from 'next-auth/adapters';
 
 let req: NextApiRequest, res: NextApiResponse;
 const authHandler: NextApiHandler = (req_, res_) => {
@@ -27,8 +29,6 @@ export const authOptions: AuthOptions = {
       name: "Credentials",
       credentials: {
         type: {},
-        // passwordMatched: {},
-        // id: {},
         email: { label: "Email", type: "email", placeholder: "jsmith@example.com" },
         username: { label: "Username", type: "text", placeholder: "jsmith" },
         password: { label: "Password", type: "password" },
@@ -47,7 +47,7 @@ export const authOptions: AuthOptions = {
           try {
             if (!user?.hashedPassword) return null;
             if (await argon2.verify(user.hashedPassword, credentials.password)) {
-              return (({id, name, email, image}) => ({id, name, email, image}))(user);
+              return (({id, handle, name, email, image}) => ({id, handle, name, email, image}))(user);
             } else {
               console.log('password did not match')
               return null;
@@ -59,7 +59,7 @@ export const authOptions: AuthOptions = {
           try {
             const user = await createUser(credentials);
             if (!user) return null;
-            return (({id, name, email, image}) => ({id, name, email, image}))(user);
+            return (({id, handle, name, email, image}) => ({id, handle, name, email, image}))(user);
           } catch (err) {
             console.log(err);
           }
@@ -93,13 +93,13 @@ export const authOptions: AuthOptions = {
       return true;
     },
     session: async ({session, user, token}) => {
-      if (session?.user) session.user.id = user.id;
+      if (session?.user) {
+        session.user.id = user.id;
+        session.user.handle = (<User & AdapterUser>user).handle;
+      }
+      
       return session;
     },
-    // jwt: async ({user, token}) => {
-    //   if (user) token.uid = user.id;
-    //   return token;
-    // }
   },
   jwt: {
     // Customize the JWT encode and decode functions to overwrite the default behaviour of storing the JWT token in the session cookie when using credentials providers. Instead we will store the session token reference to the session in the database.
@@ -137,6 +137,7 @@ async function getUser(username: string, email: string) {
     },
     select: {
       id: true,
+      handle: true,
       name: true,
       email: true,
       image: true,
@@ -159,6 +160,7 @@ async function createUser(credentials: Record<"type" | "email" | "username" | "p
     },
     select: {
       id: true,
+      handle: true,
       email: true,
       name: true,
       image: true,
