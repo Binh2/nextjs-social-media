@@ -1,8 +1,7 @@
+import * as JSONbig from 'json-bigint'
 import { Header } from '@/components/common/Header';
 import { LeftSidebar } from '@/components/common/LeftSidebar';
 import { RightSidebar } from '@/components/common/RightSidebar';
-import { useSession } from 'next-auth/react';
-import { useRouter } from 'next/navigation';
 import { GetStaticProps } from 'next';
 import prisma from '../lib/prisma';
 import { Feed } from '@/components/posts/Feed';
@@ -16,13 +15,13 @@ type Props = {
 export const getStaticProps: GetStaticProps<Props> = async () => {
   const feed = await fetchFeed();
   return {
-    props: { feed: JSON.stringify(feed) },
+    props: { feed: JSONbig.stringify(feed) },
     revalidate: 10,
   };
 };
 
 const Home = (props: Props) => {
-  const feed = JSON.parse(props.feed);
+  const feed = JSONbig.parse(props.feed);
 
   return (<>
     <Head>
