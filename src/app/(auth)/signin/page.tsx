@@ -26,7 +26,6 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 
 function SignIn() {
   const { status, data: session } = useSession();
-  console.log(status, session)
   const router = useRouter();
 
   const { 
