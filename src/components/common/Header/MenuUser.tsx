@@ -16,14 +16,14 @@ export function MenuUser() {
       <button className="relative" onClick={toggleMenu}>
         <ProfileImage />
         <div className="absolute bottom-0 right-0 text-gray-600 rounded-full bg-gray-50">
-          <img src="/dropdown-icon.svg" alt="Option" className="w-4 h-4" />
+          <Image src="/dropdown-icon.svg" alt="Option" width={16} height={16} unoptimized />
         </div>
       </button>
       {isMenuOpen && (
         <div className="absolute right-0 h-auto mt-2 rounded-md shadow-lg bg-slate-50 w-80">
           <ul className="p-2">
             <li className='px-2'>
-              <button className="flex items-center pt-3 pb-3 pl-2 bg-gray-100 rounded shadow-md cursor-pointer hover:bg-slate-300 hover:rounded"
+              <button className="w-[100%] flex items-center pt-3 pb-3 pl-2 bg-gray-100 rounded shadow-md cursor-pointer hover:bg-slate-300 hover:rounded"
                 onClick={() => router.push(`/user/${session?.user?.id || ''}`)}>
                 <ProfileImage size={32} />
                 <p className="ml-2 text-base font-semibold">{session?.user?.name}</p>
@@ -51,10 +51,12 @@ export function MenuUser() {
               <Image src="/option-dropdown-icon.svg" alt='opt' width={20} height={20} className='ml-auto transform -rotate-90' />
             </li>
             <li className="flex items-center px-2 py-2 rounded hover:bg-slate-300">
-              <div className="flex items-center justify-center w-10 h-10 mr-3 rounded-full bg-slate-300">
-                <Image src="/logout-svgrepo-com.svg" alt="log out" height={20} width={20} />
-              </div>
-              <button className="font-medium text-black hover:underline" onClick={() => signOut()}>Log out</button>
+              <button className="flex w-[100%] items-center font-medium text-black hover:underline" onClick={() => signOut()}>
+                <div className="flex items-center justify-center w-10 h-10 mr-3 rounded-full bg-slate-300">
+                  <Image src="/logout-svgrepo-com.svg" alt="log out" height={20} width={20} />
+                </div>
+                <span>Log out</span>
+              </button>
             </li>
 
             <li className='flex items-center ml-5 text-sm font-light underline'>
