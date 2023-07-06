@@ -92,6 +92,9 @@ export const authOptions: AuthOptions = {
  
       return true;
     },
+    redirect: ({url, baseUrl}) => {
+      return url;
+    },
     session: async ({session, user, token}) => {
       if (session?.user) {
         session.user.id = user.id;

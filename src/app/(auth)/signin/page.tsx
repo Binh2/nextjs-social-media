@@ -1,14 +1,8 @@
 "use client";
 import { SessionProvider, signIn, useSession } from "next-auth/react";
 import { FormEvent, FormEventHandler, MouseEventHandler, useEffect, useState } from "react";
-import { Intro } from "../../../components/common/Intro"
 import { useRouter } from "next/navigation";
-import Link from "next/link";
-import { AppLogo } from "@/components/common/AppLogo";
-import Head from 'next/head';
-// import * as argon2 from "argon2";
-// import jsCookie from 'js-cookie';
-import { NextRequest } from "next/server";
+import { AppLogo } from "@/components/common";
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -43,15 +37,8 @@ function SignIn() {
   } = useForm<FormSchemaType>({
     resolver: zodResolver(FormSchema),
   });
-  // const [ username, setUsername ] = useState("");
-  // const [ password, setPassword ] = useState("");
-
-  useEffect(() => {
-    if (status == 'authenticated') router.push('/');
-  }, [router, status])
 
   const signInUserWithCredentials: FormEventHandler<HTMLFormElement> = handleSubmitWrapper(async (data) => {
-    // event.preventDefault(); 
     const { username, password } = data;
     const user = await signIn("credentials", {
       redirect: true,
@@ -59,12 +46,14 @@ function SignIn() {
       username: username,
       email: username,
       password: password,
+      callbackUrl: '/', 
     });
   })
   const signInUserWithGitHub: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
     await signIn("github", {
       redirect: true,
+      callBackUrl: '/',
     });
   }
   const isLoading = isSubmitting || status == 'loading'
