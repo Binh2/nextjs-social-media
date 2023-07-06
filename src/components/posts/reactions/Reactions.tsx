@@ -1,11 +1,9 @@
-import Popup from "reactjs-popup";
 import { Reaction } from "./Reaction";
 import { ReactionType } from "@/types/ReactionType";
 import { useSession } from "next-auth/react";
 import { useInfiniteQuery, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
-import { Suspense, useEffect } from "react";
-import { Loading } from "@/components/common/Loading";
+import { transformResponse } from "@/lib/axiosBigint";
 
 type Props = {
   postId: string;
@@ -16,14 +14,14 @@ export function Reactions({ postId }: Props) {
   const { data: session, status: sessionStatus } = useSession();
   const { isLoading, isError, data: reactions, error } = useQuery<ReactionType[]>(['post', postId, 'reaction'], {
     queryFn: () => {
-      const result = fetchReactions(postId);
+      const result = axios.get(`/api/post/${postId}/reaction`, {transformResponse}).then(res => res.data); 
       return result;
     },
   })
   // console.log(reactions);
   const { data: count } = useQuery<number>(['post', postId, 'reaction', 'count'], {
     queryFn: () => {
-      return axios.get(`/api/post/${postId}/reaction/count`).then(res => res.data)
+      return axios.get(`/api/post/${postId}/reaction/count`, {transformResponse}).then(res => res.data)
     }
   })
   
@@ -33,7 +31,7 @@ export function Reactions({ postId }: Props) {
   if (count) othersCount = Math.max(count - (didSelfReact ? 1 : 0), 0);
   // console.log(othersCount)
   
-  return (<div>
+  return (<div className="flex">
     {/* <Suspense fallback={<Loading />}> */}
       <ol>
         { !isLoading && reactions && reactions.filter((reaction, index, self) => {
@@ -48,13 +46,9 @@ export function Reactions({ postId }: Props) {
         othersCount && (othersCount > 0) &&
         <p>
           { didSelfReact && <span>Bạn và </span> }
-          { othersCount && (othersCount > 0) && <span>{othersCount} người khác</span> }
+          <span>{othersCount} người khác</span>
         </p>
       }
     {/* </Suspense> */}
   </div>)
-}
-
-function fetchReactions(postId: string) {
-  return axios.get(`/api/post/${postId}/reaction`).then(res => res.data)
 }

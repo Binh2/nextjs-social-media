@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query"
 import React from "react";
 import axios from "axios";
+import { transformResponse } from "@/lib/axiosBigint";
 
 type Props = {
   feed?: PostType[]
@@ -58,7 +59,8 @@ function fetchMoreData({pageParam = 0}) {
   const data = axios.get(`/api/post`, {
     params: {
       skip: pageParam
-    }
+    },
+    transformResponse
   }).then(res => res.data)
   return data;
 }

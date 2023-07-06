@@ -13,6 +13,7 @@ import { CommentSection } from "@/components/posts/comments/CommentSection";
 import { WriteComment } from "@/components/posts/comments/WriteComment";
 import { MenuUser } from "@/components/common/Header/MenuUser";
 import { ReactionType } from '@/types/ReactionType';
+import { transformResponse } from '@/lib/axiosBigint';
 
 type Props = {
   className?: string;
@@ -26,7 +27,7 @@ export default function Post() {
   const postId = router.query.id as string;
   const { data: post }: {data: PostType | undefined} = useQuery(['post', postId], {
     queryFn: () => {
-      const result = axios.get(`/api/post/${postId}`).then(res => res.data);
+      const result = axios.get(`/api/post/${postId}`, {transformResponse}).then(res => res.data);
       return result; 
     },
   })

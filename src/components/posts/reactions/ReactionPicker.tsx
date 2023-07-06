@@ -6,6 +6,7 @@ import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { ReactionType } from "@/types/ReactionType";
 import { useFadeAfter } from "@/hooks/useFadeAfter";
+import { transformResponse } from "@/lib/axiosBigint";
 
 type Props = {
   postId: string,
@@ -17,7 +18,7 @@ export function ReactionPicker({ postId, className = ''}: Props) {
   const {open, setOpen, opacity} = useFadeAfter(false, 1000)
   const { data: reaction } = useQuery<ReactionType>(['post', postId, 'reaction', 'self'], {
     queryFn: () => {
-      const result = axios.get(`/api/post/${postId}/reaction/self`).then(res => res.data)
+      const result = axios.get(`/api/post/${postId}/reaction/self`, {transformResponse}).then(res => res.data)
       return result
     }
   })
