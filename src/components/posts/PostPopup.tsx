@@ -1,24 +1,19 @@
+import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import Popup from 'reactjs-popup';
-// const Popup = dynamic(import('reactjs-popup'), { ssr: false })
 import Image from 'next/image';
-import { ProfileImage } from '../common/ProfileImage';
+import { CloseButton, Loading, ProfileImage, PublicitySelect, UploadedImage } from '../common';
 import 'reactjs-popup/dist/index.css';
 import { ChangeEvent, useRef, useState } from 'react';
-import { useRouter } from 'next/navigation';
-import { Loading } from '../common/Loading';
-import UploadedImage from '../common/UploadedImage';
-import { UploadState, useUpload } from '@/lib/useUpload';
+import { UploadState, useUpload } from '@/hooks/useUpload';
 import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PostSuccessPopup } from './PostSuccessPopup';
 import { useCloseAfter } from '../../hooks/useCloseAfter';
-import { PublicitySelect } from '../common/PublicitySelect';
 
 export function PostPopup() {
   const { data: session, status } = useSession();
   const [content, setContent] = useState('');
-  const router = useRouter();
   const { uploadState, imageUrl, handleFileInputChange, } = useUpload();
   const [open, setOpen] = useState(false);
   const [successModal, setSuccessModal] = useCloseAfter(false, 3000);
@@ -37,8 +32,6 @@ export function PostPopup() {
     e.preventDefault();
     mutation.mutate({content, image: imageUrl})
   }
-
-  const handleGoToStylePage = () => { router.push('/combine'); };
 
   const handlePostClick = () => {
     setOpen(false);
@@ -64,9 +57,7 @@ export function PostPopup() {
         <form onSubmit={submit} className="flex flex-col items-center m-2 rounded-2xl" >
           <div className="flex items-center justify-between w-full">
             <p className="flex-1 text-xl font-bold text-center">Create post</p>
-            <button className="p-2 mr-2 bg-gray-200 rounded-full" onClick={e => { e.preventDefault(); setOpen(false) }}>
-              <Image src="/close-icon.svg" alt="Close" width={25} height={25} />
-            </button>
+            <CloseButton></CloseButton>
           </div>
 
           <div className="w-full m-0 mt-4 border-b border-gray-300"></div> {/* Separation line */}
@@ -79,10 +70,10 @@ export function PostPopup() {
               <p className="ml-2 text-lg font-semibold">{session?.user?.name}</p>
               <PublicitySelect></PublicitySelect>
             </div>
-            <button className="inline-flex items-center px-4 py-2 ml-auto font-semibold bg-gray-200 border-2 border-gray-300 rounded-lg" onClick={handleGoToStylePage}>
+            <Link href="/combine" className="inline-flex items-center px-4 py-2 ml-auto font-semibold bg-gray-200 border-2 border-gray-300 rounded-lg" >
               <p className="mr-3">Add style</p>
               <Image src="/upload-icon--sideway.svg" alt="Add style img" width={15} height={15} />
-            </button>
+            </Link>
           </div>
 
           <div className="overflow-y-auto max-h-[50vh] w-full mt-4 rounded-md">
