@@ -1,9 +1,9 @@
 import { CommentType } from "@/types/CommentType"
 import { Comment } from "./Comment"
 import React, { useEffect, useState } from 'react'
-import { WriteComment } from "./WriteComment"
 import { useInfiniteQuery, useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
 import axios from "axios"
+import { transformResponse } from "@/lib/axiosBigint"
 
 type Props = {
   postId: string;
@@ -34,7 +34,7 @@ export function CommentSection({ postId }: Props) {
         isVisible &&
         <ol>
           {data.pages.map((group, i) => <React.Fragment key={i}>
-            {group.map((comment) => <li key={comment.id}>
+            {group.map((comment) => <li key={comment.id.toString()}>
               <Comment comment={comment}></Comment>
             </li>)}
           </React.Fragment>)}
@@ -55,7 +55,8 @@ function fetchComments({postId}: {postId:string}, { pageParam = 0 }) {
   return axios.get(`/api/post/${postId}/comment`, {
     params: {
       skip: pageParam
-    }
+    },
+    transformResponse
   }).then(res => {
     return res.data;
   });
