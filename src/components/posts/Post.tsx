@@ -1,6 +1,6 @@
 import Image from "next/image"
 import React, { useState } from "react";
-import { useRouter } from "next/router";
+import Link from "next/link"
 import UploadedImage from "../common/UploadedImage";
 import { formatDate } from "@/lib/functions";
 import { WriteComment } from "./comments/WriteComment";
@@ -8,13 +8,12 @@ import { CommentSection } from "./comments/CommentSection";
 import { PostType } from "@/types/PostType";
 import { ReactionPicker } from "./reactions/ReactionPicker";
 import { Reactions } from "./reactions/Reactions";
-import { useSession } from "next-auth/react";
 import { CommentCount } from "./comments/CommentCount";
 import { ProfileImage } from '@/components/common/ProfileImage'
 
-const Post: React.FC<{ post: PostType }> = ({ post }) => {
+export const Post: React.FC<{ post: PostType }> = ({ post }) => {
   const authorName = post.author ? post.author.name : "Unknown author";
-  const router = useRouter();
+
   return (
     <div className="p-5 bg-white rounded-lg">
       <div className="flex">
@@ -30,17 +29,17 @@ const Post: React.FC<{ post: PostType }> = ({ post }) => {
       </div>
 
       <p className="mt-2 break-all whitespacing-pre-wrap">{post.content}</p>
-      <button onClick={() => router.push(`/post/${post.id}`)}>
+      <Link href={`/post/${post.id}`}>
         {post.image && <UploadedImage src={post.image} alt="Uploaded image" className="object-contain w-full mt-2 cursor-pointer" />}
-      </button>
+      </Link>
 
       <div className="flex">
         <Reactions postId={post.id}></Reactions>
         <div className="flex ml-auto">
           <p className="inline-block"><CommentCount postId={post.id}></CommentCount></p>
-          <Image src="comment-icon.svg" alt="Comment" width={16} height={16} />
+          <Image src="/comment-icon.svg" alt="Comment" width={16} height={16} />
           <p className="inline-block">1</p>
-          <Image src="share-icon.svg" alt="Share" width={16} height={16} />
+          <Image src="/share-icon.svg" alt="Share" width={16} height={16} />
         </div>
       </div>
 
@@ -50,11 +49,11 @@ const Post: React.FC<{ post: PostType }> = ({ post }) => {
         <ReactionPicker postId={post.id} className="flex items-center mx-auto"></ReactionPicker>
 
         <div className="flex mx-auto">
-          <Image src="comment-icon.svg" alt="Comment" width={16} height={16} />
+          <Image src="/comment-icon.svg" alt="Comment" width={16} height={16} />
           <p>Comment</p>
         </div>
         <div className="flex mx-auto">
-          <Image src="share-icon.svg" alt="Share" width={16} height={16} />
+          <Image src="/share-icon.svg" alt="Share" width={16} height={16} />
           <p>Share</p>
         </div>
       </div>
