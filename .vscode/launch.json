@@ -16,12 +16,18 @@
       "type": "node-terminal",
       "request": "launch",
       "command": "npm run dev",
-      "console": "integratedTerminal",
+      // "console": "integratedTerminal",
+      // "externalConsole": true,
       "serverReadyAction": {
         "pattern": "started server on .+, url: (https?://.+)",
         "uriFormat": "%s",
         "action": "debugWithChrome"
-      }
+      },
+      "skipFiles": [
+        "<node_internals>/**",
+        "node_modules/**",
+        ".git/**",
+      ]
     }
   ]
 }
