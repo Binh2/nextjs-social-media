@@ -34,9 +34,9 @@ export const Post: React.FC<{ post: PostType }> = ({ post }) => {
       </Link>
 
       <div className="flex">
-        <Reactions postId={post.id}></Reactions>
+        <Reactions postId={post.id.toString()}></Reactions>
         <div className="flex ml-auto">
-          <p className="inline-block"><CommentCount postId={post.id}></CommentCount></p>
+          <p className="inline-block"><CommentCount postId={post.id.toString()}></CommentCount></p>
           <Image src="/comment-icon.svg" alt="Comment" width={16} height={16} />
           <p className="inline-block">1</p>
           <Image src="/share-icon.svg" alt="Share" width={16} height={16} />
@@ -46,7 +46,7 @@ export const Post: React.FC<{ post: PostType }> = ({ post }) => {
       <hr className="pb-2 mt-2 border-gray-300" />
 
       <div className="flex content-between">
-        <ReactionPicker postId={post.id} className="flex items-center mx-auto"></ReactionPicker>
+        <ReactionPicker postId={post.id.toString()} className="flex items-center mx-auto"></ReactionPicker>
 
         <div className="flex mx-auto">
           <Image src="/comment-icon.svg" alt="Comment" width={16} height={16} />
@@ -57,8 +57,8 @@ export const Post: React.FC<{ post: PostType }> = ({ post }) => {
           <p>Share</p>
         </div>
       </div>
-      <CommentSection postId={post.id}></CommentSection>
-      <WriteComment postId={post.id}></WriteComment>
+      <CommentSection postId={post.id.toString()}></CommentSection>
+      <WriteComment postId={post.id.toString()}></WriteComment>
     </div>
   );
 };
