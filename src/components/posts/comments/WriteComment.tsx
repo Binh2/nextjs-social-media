@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { ProfileImage } from "../../common/ProfileImage";
-import { useUpload } from "@/lib/useUpload";
-import Router from "next/router";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPaperPlane } from "@fortawesome/free-solid-svg-icons";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
@@ -58,7 +56,5 @@ export function WriteComment(props: Props) {
         </button>
       </form>
     </div>
-
-
   );
 }
