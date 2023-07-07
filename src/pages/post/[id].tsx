@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from 'react';
-import 'src/app/globals.css';
 import Image from "next/image"
 import { useRouter } from "next/router";
 import { formatDate } from "@/lib/functions";
@@ -12,7 +11,6 @@ import { ReactionPicker } from "@/components/posts/reactions/ReactionPicker";
 import { CommentSection } from "@/components/posts/comments/CommentSection";
 import { WriteComment } from "@/components/posts/comments/WriteComment";
 import { MenuUser } from "@/components/common/Header/MenuUser";
-import { ReactionType } from '@/types/ReactionType';
 import { transformResponse } from '@/lib/axiosBigint';
 
 type Props = {
