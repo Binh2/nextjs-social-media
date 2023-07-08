@@ -3,9 +3,9 @@ type Props = {
   height?: number | string,
 }
 
-export function Loading({width = 40, height = 40}: Props) {
-  return (<div className={`relative w-[${width}px] h-[${height}px]`}>
-  <div className={`absolute w-[${width}px] h-[${height}px] animate-spin border-8 border-solid border-transparent border-t-teal-200 rounded-[100%]`}></div>
-  <div className={`absolute w-[${width}px] h-[${height}px] animate-spin-reverse border-8 border-solid border-transparent border-l-teal-200 rounded-[100%]`}></div>
+export function Loading({width = 24, height = 24}: Props) {
+  return (<div className={`relative`} style={{width, height}}>
+  <div className={`absolute animate-spin border-4 border-solid border-transparent border-t-teal-200 rounded-[100%]`} style={{width, height}}></div>
+  <div className={`absolute animate-spin-reverse border-4 border-solid border-transparent border-l-teal-200 rounded-[100%]`} style={{width, height}}></div>
 </div>)
 }

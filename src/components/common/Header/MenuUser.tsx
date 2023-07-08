@@ -3,7 +3,7 @@ import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import { ProfileImage } from '../ProfileImage';
 import React, { useState } from 'react';
-import { Urls } from '@/lib/urls';
+import * as Urls from '@/lib/urls';
 
 export function MenuUser() {
   const { data: session, status } = useSession();
