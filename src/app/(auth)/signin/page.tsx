@@ -1,19 +1,11 @@
 "use client";
 import { SessionProvider, signIn, useSession } from "next-auth/react";
 import { FormEvent, FormEventHandler, MouseEventHandler, useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { AppLogo } from "@/components/common";
 import { z } from 'zod';
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
-export default function SessionProvided() {
-  return (<>
-    <SessionProvider>
-      <SignIn></SignIn>
-    </SessionProvider>
-  </>)
-}
 
 const FormSchema = z.object({
   username: z.union([
@@ -21,39 +13,33 @@ const FormSchema = z.object({
     z.string({required_error: "Email is required"}).email("This is not an email"),
   ]),
   password: z.string({required_error: "Password is required"}).min(6, "Password must be at least 6 characters"),
+  server: z.null().optional(),
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-function SignIn() {
+export default function SignIn() {
   const { status, data: session } = useSession();
   const router = useRouter();
-
-  const { 
-    control, register, reset,
-    // watch,
-    handleSubmit: handleSubmitWrapper,
-    getValues, formState: { errors, isSubmitting },
-  } = useForm<FormSchemaType>({
-    resolver: zodResolver(FormSchema),
-  });
-
-  const signInUserWithCredentials: FormEventHandler<HTMLFormElement> = handleSubmitWrapper(async (data) => {
+  const { setError, register, handleSubmit, formState: { errors, isSubmitting } } = useForm<FormSchemaType>({ resolver: zodResolver(FormSchema) });
+  const signInUserWithCredentials: FormEventHandler<HTMLFormElement> = handleSubmit(async (data) => {
     const { username, password } = data;
-    const user = await signIn("credentials", {
-      redirect: true,
+    await signIn("credentials", {
       type: "signin",
       username: username,
       email: username,
       password: password,
-      callbackUrl: '/', 
-    });
+      redirect: false,
+      // callbackUrl: '/', 
+    }).then((res) => {
+      if (!res) return;
+      const { ok, error } = res;
+      if (ok) router.push('/')
+      if (error) setError('server', { type: 'server', message: 'Your username or password is incorrect' })
+    })
   })
   const signInUserWithGitHub: MouseEventHandler<HTMLButtonElement> = async (event) => {
     event.preventDefault();
-    await signIn("github", {
-      redirect: true,
-      callBackUrl: '/',
-    });
+    await signIn("github", { redirect: true, callBackUrl: '/' });
   }
   const isLoading = isSubmitting || status == 'loading'
 
@@ -79,7 +65,7 @@ function SignIn() {
             className="w-full px-4 py-2 border border-gray-300 rounded-md disabled:opacity-20"
           />
         </div>
-        { errors.username && <p className="text-red-500 text-xm">{errors.username.message || ''}</p>}
+        { errors.username && <p className="text-red-500 text-sm">{errors.username.message || ''}</p>}
         <div className="mb-4">
           <label className="block mb-2">Password:</label>
           <input
@@ -88,8 +74,9 @@ function SignIn() {
             disabled={isLoading}
             className="w-full px-4 py-2 border border-gray-300 rounded-md disabled:opacity-20"
           />
+          { errors.password && <p className="text-red-500 text-sm">{errors.password.message || ''}</p>}
+          { errors.server && <p className="text-red-500 text-sm">{errors.server.message as string || ''}</p>}
         </div>
-        { errors.password && <p className="text-red-500 text-xm">{errors.password.message || ''}</p>}
         <div className="flex items-center mb-4">
           <span className="mr-1">Don&apos;t have an account?</span>
           <a href="/signup" className="text-blue-500">Sign up</a>
