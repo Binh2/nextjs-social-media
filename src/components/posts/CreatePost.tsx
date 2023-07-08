@@ -2,6 +2,7 @@ import { ProfileImage } from "../common/ProfileImage";
 import { PostPopup } from "./PostPopup";
 import Image from "next/image";
 
+const imageStyle = {width: "auto", height: "auto"}
 export function CreatePost() {
   return (<>
     <div className="my-4 bg-white rounded-lg shadow">
@@ -13,15 +14,15 @@ export function CreatePost() {
 
       <div className="flex justify-between px-3 mt-1 mb-1">
         <div className="flex items-center h-12 p-10 py-1 pl-5 mb-2 ml-2 space-x-1 cursor-pointer hover:bg-gray-200 hover:rounded-lg">
-          <Image src="/livestream-icon.svg" alt="View all" width={32} height={32} />
+          <Image src="/livestream-icon.svg" alt="View all" width={32} height={32} style={imageStyle} />
           <button className="text-sm font-medium">Livestream</button>
         </div>
         <div className="flex items-center p-10 py-1 pl-5 mb-2 space-x-1 cursor-pointer hover:bg-gray-200 hover:rounded-lg">
-          <Image src="/photo-icon.svg" alt="View all" width={32} height={32} />
+          <Image src="/photo-icon.svg" alt="View all" width={32} height={32} style={imageStyle} />
           <button className="text-sm font-medium">Photo/Video</button>
         </div>
         <div className="flex items-center p-10 py-1 pl-5 mb-2 mr-2 space-x-1 cursor-pointer hover:bg-gray-200 hover:rounded-lg">
-          <Image src="/flag-icon.svg" alt="View all" width={25} height={25} />
+          <Image src="/flag-icon.svg" alt="View all" width={25} height={25} style={imageStyle} />
           <button className="text-sm font-medium">Life events</button>
         </div>
       </div>
