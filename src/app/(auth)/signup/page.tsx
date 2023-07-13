@@ -2,14 +2,18 @@
 import { useEffect, useState } from "react";
 import Image from 'next/image';
 import DatePicker from "react-datepicker";
-import { Intro } from "@/components/common/Intro"
+import { Intro } from "@/components/common"
 import Link from "next/link";
 import "react-datepicker/dist/react-datepicker.css";
 import { SessionProvider, signIn, useSession } from "next-auth/react";
-import { useRouter } from "next/navigation";
 import { z } from "zod";
 import { SubmitHandler, useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
+
+const errorMap = (message: string): z.ZodErrorMap => (error, ctx) => {
+  if (error.code == z.ZodIssueCode.invalid_literal) return { message } 
+  return { message: ctx.defaultError };
+};
 
 const FormSchema = z.object({
   firstName: z.string().optional(),
@@ -19,33 +23,20 @@ const FormSchema = z.object({
   isMale: z.coerce.boolean().nullable(),
   birthday: z.date().optional(),
   password: z.string({required_error: "Password is required"}).min(6, "Password must be at least 6 characters"),
-  termsAndConditions: z.literal(true, {
-    invalid_type_error: "You must accept Terms and Conditions.",
-  }),
+  termsAndConditions: z.literal<boolean>(true, { errorMap: errorMap("You must accept Terms and Conditions.") }),
 });
 type FormSchemaType = z.infer<typeof FormSchema>;
 
-function SignUpPage() {
-  const {
-    control,
-    register,
-    reset,
-    // watch,
-    handleSubmit: handleSubmitWrapper,
-    getValues,
-    formState: { errors, isSubmitting },
-  } = useForm<FormSchemaType>({
+export default function SignUpPage() {
+  const { control, register, reset, handleSubmit, getValues, formState: { errors, isSubmitting } } = 
+  useForm<FormSchemaType>({
+    mode: 'onChange',
     resolver: zodResolver(FormSchema),
   });
   const [ isPasswordVisible, setIsPasswordVisible ] = useState(false);
-  const router = useRouter();
   const { status, data: session } = useSession();
 
-  useEffect(() => {
-    if (status == "authenticated") router.push("/")
-  })
-
-  const handleSubmit = handleSubmitWrapper( async (data) => {
+  const submit = handleSubmit( async (data) => {
     const { username, password, birthday, email, isMale, firstName, lastName } = data;
     const user = await signIn("credentials", {
       type: "signup",
@@ -56,6 +47,8 @@ function SignUpPage() {
       isMale,
       firstName,
       lastName,
+      redirect: true,
+      callbackUrl: '/',
     })
   })
 
@@ -65,7 +58,7 @@ function SignUpPage() {
     <Intro className="w-[50%]"></Intro>
     <div className="w-[50%] my-auto">
       <h1 className="mb-1 text-2xl font-bold text-center">Create an Account</h1>
-      <form onSubmit={handleSubmit} className="px-6 py-2 bg-white">
+      <form onSubmit={submit} className="px-6 py-2 bg-white">
         <div className="flex flex-col gap-3">
           <div>
             <label htmlFor="first-name" className="font-bold text-md">
@@ -94,7 +87,7 @@ function SignUpPage() {
                 {...register("email")}
               />
             </div>
-            { errors.email && <p className="text-red-500 text-xm">{errors.email.message || ''}</p>}
+            { errors.email && <p className="text-red-500 text-sm">{errors.email.message || ''}</p>}
           </div>
 
           <div className="">
@@ -108,7 +101,7 @@ function SignUpPage() {
                 {...register("username")}
               />
             </div>
-            { errors.username && <p className="text-red-500 text-xm">{errors.username.message || ''}</p>}
+            { errors.username && <p className="text-red-500 text-sm">{errors.username.message || ''}</p>}
           </div>
 
           <div className="grid grid-cols-[1fr_auto] grid-rows-[auto_auto_auto]">
@@ -136,7 +129,7 @@ function SignUpPage() {
                 render={({ field }) => (
                   <DatePicker className="w-full px-2 py-1 border border-black border-solid rounded-lg disabled:opacity-20" 
                     disabled={isLoading}
-                    selected={field.value} onChange={(date) => field.onChange(date)}
+                    selected={field.value} onChange={(date) => (date && field.onChange(date))}
                     peekNextMonth
                     showMonthDropdown
                     showYearDropdown
@@ -144,8 +137,8 @@ function SignUpPage() {
                 )}
               ></Controller>
             </div>
-            { errors.isMale && <p className="text-red-500 text-xm">{errors.isMale.message || ''}</p>}
-            { errors.birthday && <p className="text-red-500 text-xm">{errors.birthday.message || ''}</p>}
+            { errors.isMale && <p className="text-red-500 text-sm">{errors.isMale.message || ''}</p>}
+            { errors.birthday && <p className="text-red-500 text-sm">{errors.birthday.message || ''}</p>}
           </div>
 
           <div className="">
@@ -165,7 +158,7 @@ function SignUpPage() {
                 <div className="absolute top-0 h-8 right-2"><Image className="relative top-[50%] -translate-y-[50%]" src="password-hidden-icon.svg" alt="Password hide" width={0} height={0} style={{width: "1rem", height: "auto"}} onClick={() => setIsPasswordVisible(true)} /></div>
               }
             </div>
-            { errors.password && <p className="text-red-500 text-xm">{errors.password.message || ''}</p>}
+            { errors.password && <p className="text-red-500 text-sm">{errors.password.message || ''}</p>}
           </div>
         </div>
 
@@ -173,7 +166,7 @@ function SignUpPage() {
           <input id="term-and-condition" type="checkbox" className="mr-1 disabled:opacity-20" {...register('termsAndConditions')} disabled={isLoading} />
           <label htmlFor="term-and-condition" className="text-xs">Agree with Terms & Conditons</label>
         </div>
-        { errors.termsAndConditions && <p className="text-red-500 text-xm">{errors.termsAndConditions.message || ''}</p>}
+        { errors.termsAndConditions && <p className="text-red-500 text-sm">{errors.termsAndConditions.message || ''}</p>}
         <button className="block px-8 py-1 mx-auto my-2 font-bold uppercase bg-teal-500 rounded-lg disabled:opacity-20" disabled={isLoading}>
           Sign Up
         </button>
@@ -187,10 +180,4 @@ function SignUpPage() {
       </form>
     </div>
   </main>);
-}
-
-export default function SessionProvided() {
-  return <SessionProvider>
-    <SignUpPage></SignUpPage>
-  </SessionProvider>
 }
