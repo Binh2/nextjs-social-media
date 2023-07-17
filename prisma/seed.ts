@@ -1,6 +1,28 @@
+import { SchoolTypes } from '@/lib/constants/school';
 import { PrismaClient } from '@prisma/client'
 import * as argon2 from 'argon2';
+import { posts, schoolCourses, schoolDegrees, schools, users } from './data';
+import { Publicities } from '@/lib/constants/publicity';
 const prisma = new PrismaClient()
+
+async function main() {
+  createSchoolTypes(); // need to be before createSchools();
+  createSchools();
+  createSchoolCourses();
+  createSchoolDegrees();
+  createUsers();
+  createPosts();
+  createPublicities();
+}
+main()
+.then(async () => {
+  await prisma.$disconnect()
+})
+.catch(async (e) => {
+  console.error(e)
+  await prisma.$disconnect()
+  process.exit(1)
+})
 
 function makeRandomString(length: number) {
   let result = '';
@@ -13,106 +35,110 @@ function makeRandomString(length: number) {
   }
   return result;
 }
-
-const users = [
-  {
-    name: "Test user",
-    username: "testuser",
-    email: "testuser@gmail.com",
-    image: "https://res.cloudinary.com/ddyd5lv06/image/upload/v1687214769/274062289_1109173296538169_2618922202593783639_n.jpg_oj4pi9.jpg",
-    password: "123456",
-  },
-  {
-    name: "Atlassian",
-    username: "atlassian",
-    email: "atlassian@gmail.com",
-    image: "https://res.cloudinary.com/ddyd5lv06/image/upload/v1687214757/352778336_3556828711306476_3311621240719828479_n.png_ljlzmf.png",
-    password: "123456"
-  },
-  {
-    name: "Nguyễn Thị Sáu",
-    username: "saunt123",
-    email: "saunt@gmail.com",
-    image: "https://i.pinimg.com/736x/16/e1/d1/16e1d12cf49295519beac0270496923b.jpg",
-    password: "123456"
-  }
-]
-const posts = [
-  {
-    image: "https://res.cloudinary.com/ddyd5lv06/image/upload/v1687214685/8721900573438274616_gmmfrf.jpg",
-    content: "này là làm nhạc vì đam mê chứ lời lãi gì 😵‍💫",
-    authorEmail: "saunt@gmail.com"
-  },
-  {
-    image: "https://res.cloudinary.com/ddyd5lv06/image/upload/v1687214737/332733108_23854404815810392_8809918604942217499_n.png_dachyu.jpg",
-    content: "Nếu bạn muốn các bộ phận Vận hành CNTT, Lập trình và Kinh doanh đều ăn ý để phối hợp tốt hơn, bạn không cần tìm đâu xa. Hãy xem bản hướng dẫn này về Quản lý Dịch vụ Doanh nghiệp. Tải xuống ngay",
-    authorEmail: "atlassian@gmail.com"
-  }
-]
-
-async function main() {
-  for (let i = 0; i < users.length; i++) {
-    const { name, username, email, image, password } = users[i];
+function createSchoolTypes() {
+  Object.values(SchoolTypes).forEach(async schoolType => {
+    try {
+      await prisma.schoolType.create({
+        data: { name: schoolType }
+      })
+    } catch (e) { console.log(e) }
+  })
+}
+function createSchools() {
+  schools.forEach(async school => {
+    try {
+      const { type: typeName, name } = school;
+      await prisma.school.create({
+        data: {
+          name,
+          type: { connect: { name: typeName }}
+        }
+      })
+    } catch (e) { console.log(e) }
+  })
+}
+function createSchoolCourses() {
+  schoolCourses.forEach(async schoolCourse => {
+    try {
+      const { name } = schoolCourse;
+      await prisma.schoolCourse.create({
+        data: { name }
+      })
+    } catch (e) { console.log(e) }
+  })
+}
+function createSchoolDegrees() {
+  schoolDegrees.forEach(async schoolDegree => {
+    try {
+      const { name } = schoolDegree;
+      await prisma.schoolDegree.create({
+        data: {
+          name
+        }
+      })
+    } catch (e) { console.log(e) }
+  })
+}
+function createUsers() {
+  users.forEach(async user => {
+    const { name, username, email, image, password } = user;
     const hashedPassword = await argon2.hash(password);
     try {
       const user = await prisma.user.create({
-        data: {
-          name,
-          username,
-          email,
-          image,
-          hashedPassword,
-        }
+        data: { name, username, email, image, hashedPassword }
       });
-    } catch (err) {
-      console.log(err)
-    }
-  }
-  
-  const feed = []
+    } catch (err) { console.log(err) }
+  })
+}
+function createPosts() {
   const email = "testuser@gmail.com"
   for (let i = 0; i < 20; i++) {
-    const post = await prisma.post.create({
-      data: {
-        content: makeRandomString(100),
-        image: '',
-        published: true,
-        author: {
-          connect: {
-            email: email,
+    try {
+      (async () => {
+        await prisma.post.create({
+          data: {
+            content: makeRandomString(100),
+            image: '',
+            published: true,
+            author: {
+              connect: {
+                email: email,
+              }
+            }
           }
-        }
-      }
-    })
-    feed.push(post);
+        })
+      })();
+    } catch (e) { console.log(e) }
   } 
 
   for (let i = 0; i < posts.length; i++) {
     const { content, image, authorEmail: email } = posts[i];
     try {
-      await prisma.post.create({
-        data: {
-          content,
-          image,
-          published: true,
-          author: {
-            connect: {
-              email: email,
+      (async () => {
+        await prisma.post.create({
+          data: {
+            content,
+            image,
+            published: true,
+            author: {
+              connect: {
+                email: email,
+              }
             }
           }
-        }
-      })
+        })
+      })();
     } catch (err) {
       console.log(err)
     }
   }
 }
-main()
-  .then(async () => {
-    await prisma.$disconnect()
-  })
-  .catch(async (e) => {
-    console.error(e)
-    await prisma.$disconnect()
-    process.exit(1)
-  })
+function createPublicities() {
+  try {
+    Object.values(Publicities).forEach(async (publicity) => {
+      await prisma.publicity.create({
+        data: { name: publicity }
+      })
+    })
+  } catch (e) { console.log(e) }
+}
