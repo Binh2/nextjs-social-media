@@ -1,14 +1,11 @@
-import { DynamicSelect, Input, Textarea } from "@/components/common/controls";
+import { DynamicSelect, Input, Option, Textarea } from "@/components/common/controls";
 import { zodResolver } from "@hookform/resolvers/zod";
 import axios from "axios";
-import { useForm } from "react-hook-form";
+import { Controller, useForm } from "react-hook-form";
 import { z } from "zod"
-import Select from 'react-select'
-import { useQuery } from "@tanstack/react-query";
-import { transformResponse } from "@/lib/axiosBigint";
 
 const FormSchema = z.object({
-  school: z.string(),
+  school: z.string().min(6, "School name need to be atleast 6 characters"),
   fromYear: z.number(),
   toYear: z.number(),
   graduated: z.boolean(),
@@ -23,6 +20,7 @@ type FormSchemaType = z.infer<typeof FormSchema>;
 export default function UniversityForm() {
   const { control, register, reset, handleSubmit, getValues, formState: { errors, isSubmitting } } = 
   useForm<FormSchemaType>({
+    mode: "onChange",
     resolver: zodResolver(FormSchema),
   });
   const submit = handleSubmit(async (data) => {
@@ -33,8 +31,10 @@ export default function UniversityForm() {
   return (<>
     <form className={``}>
       <div>
-        {/* <Input id="school" label="School" {...register('school')}></Input>  */}
-        <DynamicSelect id='school' label='School' {...register('school')}></DynamicSelect>
+        <Controller control={control} name='school' render={({ field }) => 
+          <DynamicSelect id='school' value={field.value} label='School' onChange={field.onChange} />}
+        />
+        { errors.school && <p className="error">{errors.school.message || ''}</p>}
         <p>Time Period</p>
 
         <Textarea id="description" label="Description" {...register('description')}></Textarea>
@@ -46,8 +46,8 @@ export default function UniversityForm() {
         <div className={`flex justify-between`}>
           <button></button>
           <div className={`flex`}>
-            <button>Cancel</button>
-            <button>Submit</button>
+            <button className={`button`}>Cancel</button>
+            <button className={`button button--standout`}>Submit</button>
           </div>
         </div>
       </div>
