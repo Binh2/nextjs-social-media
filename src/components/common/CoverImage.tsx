@@ -10,7 +10,7 @@ export function CoverImage(props: Props) {
   return (<>
     { src ?
       <Image src={src} alt={alt || ''} className={`w-[100%]`}></Image>  :
-      <div className={`w-[100%]`}></div>
+      <div className={`w-[100%] h-[300px]`}></div>
     }
   </>)
 }
