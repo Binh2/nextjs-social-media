@@ -7,28 +7,28 @@
     {
       "type": "chrome",
       "request": "launch",
-      "name": "Launch Edge against localhost",
+      "name": "Launch Chrome against localhost",
       "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}"
-    },
-    {
-      "name": "Next.js: debug full stack",
-      "type": "node-terminal",
-      "request": "launch",
-      "command": "npm run dev",
-      "console": "integratedTerminal",
-      "url": "http://localhost:3000",
-      // "externalConsole": true,
-      "serverReadyAction": {
-        "pattern": "started server on .+, url: (https?://.+)",
-        "uriFormat": "%s",
-        "action": "debugWithChrome"
-      },
-      "skipFiles": [
-        "<node_internals>/**",
-        "node_modules/**",
-        ".git/**",
-      ]
     }
+    // {
+    //   "name": "Next.js: debug full stack",
+    //   "type": "node-terminal",
+    //   "request": "launch",
+    //   "command": "npm run dev",
+    //   "console": "integratedTerminal",
+    //   "url": "http://localhost:3000",
+    //   // "externalConsole": true,
+    //   "serverReadyAction": {
+    //     "pattern": "started server on .+, url: (https?://.+)",
+    //     "uriFormat": "%s",
+    //     "action": "debugWithChrome"
+    //   },
+    //   "skipFiles": [
+    //     "<node_internals>/**",
+    //     "node_modules/**",
+    //     ".git/**",
+    //   ]
+    // }
   ]
 }
