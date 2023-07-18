@@ -7,9 +7,10 @@ import CredentialsProvider from 'next-auth/providers/credentials';
 import prisma from '../../../lib/prisma';
 import * as argon2 from "argon2";
 import Cookies from 'cookies';
-import { encode, decode } from 'next-auth/jwt';
+import { encode, decode, JWT } from 'next-auth/jwt';
 import { User } from '@/types/next-auth';
 import { AdapterUser } from 'next-auth/adapters';
+// import { decodeJWT, encodeJWT } from '@/lib/auth';
 
 let req: NextApiRequest, res: NextApiResponse;
 const authHandler: NextApiHandler = (req_, res_) => {
@@ -106,22 +107,8 @@ export const authOptions: AuthOptions = {
   },
   jwt: {
     // Customize the JWT encode and decode functions to overwrite the default behaviour of storing the JWT token in the session cookie when using credentials providers. Instead we will store the session token reference to the session in the database.
-    encode: async ({token, secret, maxAge}) => {
-      if (req.query.nextauth && req.query.nextauth.includes('callback') && req.query.nextauth.includes('credentials') && req.method === 'POST') {
-        const cookies = new Cookies(req,res)
-        const cookie = cookies.get('next-auth.session-token')
-        if(cookie) return cookie; else return '';
-      }
-      // Revert to default behaviour when not in the credentials provider callback flow
-      return encode({token, secret, maxAge})
-    },
-    decode: async ({token, secret}) => {
-      if (req.query.nextauth && req.query.nextauth.includes('callback') && req.query.nextauth.includes('credentials') && req.method === 'POST') {
-        return null
-      }
-      // Revert to default behaviour when not in the credentials provider callback flow
-      return decode({token, secret})
-    }
+    encode: encodeJWT,
+    decode: decodeJWT,
   },
   pages: {
     signIn: '/signin',
@@ -186,3 +173,22 @@ var rand = function() {
 function getToken() {
   return rand() + rand(); // to make it longer
 };
+export async function decodeJWT({token, secret}: {token?: string, secret: string | Buffer}) {
+  const nextauth = req.query.nextauth;
+  if (nextauth && nextauth.includes('callback') && nextauth.includes('credentials') && req.method === 'POST') {
+    return null
+  }
+  // Revert to default behaviour when not in the credentials provider callback flow
+  return decode({token, secret})
+}
+export async function encodeJWT({token, secret, maxAge}: {token?: JWT, secret: string | Buffer, maxAge?: number}) {
+  const nextauth = req.query.nextauth;
+  if (nextauth && nextauth.includes('callback') && nextauth.includes('credentials') && req.method === 'POST') {
+    const cookies = new Cookies(req, res)
+    const cookie = cookies.get('next-auth.session-token')
+    if (cookie) return cookie; 
+    else return '';
+  }
+  // Revert to default behaviour when not in the credentials provider callback flow
+  return encode({token, secret, maxAge})
+}

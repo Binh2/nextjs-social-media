@@ -32,4 +32,8 @@ module.exports = {
     },
   },
   plugins: [],
+  safeList: [
+    'dynamic-select',
+    ...['control', 'value-container', 'indicators', 'menu', 'menu-list', 'option'].map(postfix => `dynamic-select__${postfix}`)
+  ],
 }

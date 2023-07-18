@@ -1,4 +1,4 @@
-import { useUpload } from "@/lib/useUpload";
+import { useUpload } from "@/hooks/useUpload";
 import { SessionProvider } from "next-auth/react";
 import { useRef, useState } from "react";
 import * as tf from '@tensorflow/tfjs'

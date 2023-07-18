@@ -1,4 +1,3 @@
-import { signOut, useSession } from 'next-auth/react';
 import Image from 'next/image';
 import React, { CSSProperties, useEffect, useRef, useState } from 'react';
 import { MenuUser } from './MenuUser';
@@ -11,15 +10,7 @@ type Props = {
   style?: CSSProperties;
 };
 
-
 export function Header({ className = "", style = {} }: Props) {
-  const { data: session, status } = useSession();
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-
-  const toggleMenu = () => {
-    setIsMenuOpen(!isMenuOpen);
-  };
-
   return (<>
     <header className={`bg-white grid grid-cols-[35%_1fr_35%] grid-rows-[auto] items-center justify-center px-4 sticky top-0 shadow-md z-[1] ${className}`} style={style}>
       <div className='flex justify-self-start'>
@@ -34,7 +25,6 @@ export function Header({ className = "", style = {} }: Props) {
         <button className="p-2 ml-2 text-gray-700 bg-gray-200 rounded-full">
           <Image src="/notifications-icon.svg" alt="Notification icon" width={24} height={24} />
         </button>
-
         <MenuUser/>
       </div>
     </header>

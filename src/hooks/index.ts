@@ -1,7 +1,8 @@
 import { useCloseAfter } from "./useCloseAfter";
+import { useDebuggerStop } from "./useDebuggerStop";
 import { useFadeAfter } from "./useFadeAfter";
 import { UploadState, useUpload } from "./useUpload";
 
 export {
-  useCloseAfter, useFadeAfter, useUpload, UploadState
+  useCloseAfter, useDebuggerStop, useFadeAfter, useUpload, UploadState
 }
