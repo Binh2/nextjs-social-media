@@ -7,18 +7,19 @@ generator client {
 
 datasource db {
   //For production
-  provider = "postgresql" //gitignore
-  url = env("POSTGRES_PRISMA_URL") // uses connection pooling //gitignore
-  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection //gitignore
-  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations /gitignore
+  provider = "postgresql"
+  url = env("POSTGRES_PRISMA_URL") // uses connection pooling
+  directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
+  shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
 
   // For local development
-  // provider = "sqlserver" //gitignore
-  // url = env("SQL_SERVER_URL") //gitignore
+  // provider = "sqlserver"
+  // url = env("SQL_SERVER_URL")
 }
 
 model Post {
-  id        String  @id @default(cuid())
+  id        BigInt  @id @default(autoincrement())
+  handle    String  @unique @default(cuid())
   content   String
   image     String?
   published Boolean @default(false)
@@ -28,17 +29,19 @@ model Post {
   updatedAt DateTime @default(now())
   comments  Comment[]
   reactions Reaction[]
+
+  @@index([handle])
 }
 model Comment {
-  id          String  @id @default(cuid())
+  id          BigInt  @id @default(autoincrement())
   post        Post@relation(fields:[postId], references:[id], onDelete: Cascade)
-  postId      String
+  postId      BigInt
   author      User@relation(fields:[authorId], references:[id], onUpdate: NoAction)
   authorId    String
   content     String
   image       String?
   parent      Comment?@relation("comment_parent", fields:[parentId], references:[id], onUpdate: NoAction, onDelete: NoAction)
-  parentId    String?
+  parentId    BigInt?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
   comments    Comment[]@relation("comment_parent")
@@ -46,7 +49,7 @@ model Comment {
 
 model Reaction {
   post        Post@relation(fields:[postId], references:[id], onDelete: Cascade)
-  postId      String
+  postId      BigInt
   author      User@relation(fields:[authorEmail], references:[email], onUpdate: NoAction)
   authorEmail String
   type        Int
@@ -84,6 +87,7 @@ model Session {
 
 model User {
   id            String    @id @default(cuid())
+  handle        String    @unique @default(cuid())
   name          String?
   username      String?@unique
   email         String?@unique
@@ -92,36 +96,78 @@ model User {
   image         String?
   isMale        Boolean?
   birthday      DateTime? @db.Date
-  schools       UserSchool[]
   posts         Post[]
+  user_school   User_School[]
   accounts      Account[]
   sessions      Session[]
   comments      Comment[]
   reactions     Reaction[]
   friend1       Friend? @relation("friend_user1")
   friend2       Friend? @relation("friend_user2")
+  @@index([handle])
 }
-model UserSchool {
-  id        String @id @default(cuid())
+model School {
+  id        BigInt @id @default(autoincrement())
   name      String @unique
-  image     String
-  users     User[]
-  roleId    String?
-  role      UserSchoolRole? @relation(fields:[roleId], references:[id]) 
+  image     String?
+  user_school User_School[] 
+  typeId    BigInt
+  type      SchoolType @relation(fields:[typeId], references:[id])
 }
-model UserSchoolRole {
-  id        String @id @default(cuid())
-  name      String
-  schools   UserSchool[]
+model User_School {
+  id        BigInt @id @default(autoincrement())
+  schoolId  BigInt
+  school    School @relation(fields:[schoolId], references:[id])
+  userId    String
+  user      User @relation(fields:[userId], references:[id])
+  from      Int?
+  to        Int?
+  graduated Boolean @default(false)
+  description   String?
+  undergraduate Boolean?
+  course1Id     BigInt?
+  course2Id     BigInt?
+  course3Id     BigInt?
+  course1       SchoolCourse? @relation("user_school_course1", fields:[course1Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
+  course2       SchoolCourse? @relation("user_school_course2", fields:[course2Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
+  course3       SchoolCourse? @relation("user_school_course3", fields:[course3Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
+  schoolDegreeId  BigInt
+  schoolDegree    SchoolDegree @relation(fields:[schoolDegreeId], references:[id])
+  publicityId   BigInt
+  publicity     Publicity @relation(fields:[publicityId], references:[id])
+}
+model SchoolType {
+  id        BigInt @id @default(autoincrement())
+  name      String @unique
+  school    School[]
+}
+model SchoolDegree {
+  id        BigInt @id @default(autoincrement())
+  name      String @unique
+  user_school User_School[]
+}
+model SchoolCourse {
+  id          BigInt @id @default(autoincrement())
+  name        String
+  user_school_course1 User_School[] @relation("user_school_course1")
+  user_school_course2 User_School[] @relation("user_school_course2")
+  user_school_course3 User_School[] @relation("user_school_course3")
+}
+model Publicity {
+  id        BigInt @id @default(autoincrement())
+  name      String @unique
+  description String?
+  user_school User_School[]
 }
 
 model Friend {
-  id      String  @id @default(cuid())
+  id      BigInt  @id @default(autoincrement())
   user1Id String  @unique
   user2Id String  @unique
   user1   User    @relation("friend_user1", fields:[user1Id], references:[id], onUpdate: NoAction)
   user2   User    @relation("friend_user2", fields:[user2Id], references:[id], onUpdate: NoAction)
   type    Int
+  
   @@unique([user1Id, user2Id])
 }
 

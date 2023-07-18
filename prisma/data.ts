@@ -1,4 +1,4 @@
-import { SchoolTypes } from "@/lib/constants/school"
+import { SchoolTypes } from "../src/lib/constants/school"
 
 export const users = [
   {

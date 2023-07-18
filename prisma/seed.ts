@@ -2,7 +2,7 @@ import { SchoolTypes } from '@/lib/constants/school';
 import { PrismaClient } from '@prisma/client'
 import * as argon2 from 'argon2';
 import { posts, schoolCourses, schoolDegrees, schools, users } from './data';
-import { Publicities } from '@/lib/constants/publicity';
+import { Publicities } from '../src/lib/constants/publicity';
 const prisma = new PrismaClient()
 
 async function main() {
