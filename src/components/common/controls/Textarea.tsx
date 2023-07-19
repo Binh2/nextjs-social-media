@@ -11,7 +11,7 @@ export function Textarea({id, label, ...props}: Props) {
   const [ value, setValue ] = useState('');
   return (<>
     <WithLabel htmlFor={id} label={label} focus={focus} value={value}>
-      <textarea className={`px-2 outline-none w-full`} 
+      <textarea className={`px-2 outline-none w-full resize-none`} 
         id={id} value={value} {...props} onChange={(e) => setValue(e.target.value)}
         onFocus={() => setFocus(true)} onBlur={() => setFocus(false)}
       ></textarea>
