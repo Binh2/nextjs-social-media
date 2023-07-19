@@ -148,7 +148,7 @@ model SchoolDegree {
 }
 model SchoolCourse {
   id          BigInt @id @default(autoincrement())
-  name        String
+  name        String @unique
   user_school_course1 User_School[] @relation("user_school_course1")
   user_school_course2 User_School[] @relation("user_school_course2")
   user_school_course3 User_School[] @relation("user_school_course3")
