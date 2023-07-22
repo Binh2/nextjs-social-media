@@ -14,8 +14,14 @@ export type Option = {
   value: string,
 }
 
-export function DynamicSelect({id, value, onChange, label='', promiseOptions, mutate, loading, ...props}: {id: string, value?: string, onChange?: any, label: string, promiseOptions: (query: string) => Promise<Option[]>, mutate: (value: string) => void, loading: boolean}) {
+export function DynamicSelect({id, value, onChange, label='', promiseValues, mutate, loading, ...props}: {id: string, value: string, onChange: (value: string) => void, label: string, promiseValues: (query: string) => Promise<string[]>, mutate: (value: string) => void, loading: boolean}) {
   const [ focus, setFocus ] = useState(false);
+  const [ option, setOption ] = useState<Option | null>(null);
+  useEffect(() => {
+    const newOption = { label: value, value };
+    if (option != newOption) setOption(newOption);
+  }, [value]);
+
   return (<>
     <WithLabel label={label} focus={focus} value={value || ''} htmlFor={id}>
       <AsyncCreatableSelect {...props} 
@@ -30,31 +36,12 @@ export function DynamicSelect({id, value, onChange, label='', promiseOptions, mu
       isClearable
       cacheOptions
       defaultOptions
-      loadOptions={promiseOptions}
+      loadOptions={(query) => promiseValues(query).then(values => values.map(value => { console.log(value); return ({label: value, value})}))}
       isDisabled={loading} isLoading={loading}
-      onChange={option => {onChange && onChange(option?.value || '')}}
+      value={option}
+      onChange={option => {onChange && onChange(option?.value || ''); setOption(option)}}
       onCreateOption={value => mutate(value)}
-      ></AsyncCreatableSelect>
+      />
     </WithLabel> 
   </>)
-}
-export function useDynamicSelect(apiUrl: string) {
-  const [ value, setValue ] = useState('')
-  const promiseOptions = async (query: string): Promise<Option[]> => {
-    const schools: School[] = await axios.get(apiUrl, {
-      params: { query }, 
-      transformResponse
-    }).then(res => res.data);
-    return schools?.map(({name}) => ({label: name, value: name}))
-  }
-  const mutation = useMutation({
-    mutationFn: async (school: {name: string, type: string}) => {
-      return await axios.post(apiUrl, school).then(res => res.data)
-    },
-    onSuccess: (school: School) => {
-      setValue(school.name);
-    }
-  })
-  const { mutate, isLoading: loading } = mutation;
-  return { value, setValue, promiseOptions, mutate, loading }
 }
