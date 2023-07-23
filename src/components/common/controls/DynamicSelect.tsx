@@ -36,7 +36,7 @@ export function DynamicSelect({id, value, onChange, label='', promiseValues, mut
       isClearable
       cacheOptions
       defaultOptions
-      loadOptions={(query) => promiseValues(query).then(values => values.map(value => { console.log(value); return ({label: value, value})}))}
+      loadOptions={(query) => promiseValues(query).then(values => values.map(value => ({label: value, value})))}
       isDisabled={loading} isLoading={loading}
       value={option}
       onChange={option => {onChange && onChange(option?.value || ''); setOption(option)}}

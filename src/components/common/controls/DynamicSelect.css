@@ -1,9 +1,7 @@
-/* @tailwind components;
-@layer components { */
 body .dynamic-select__control           { @apply min-h-0 }
 body .dynamic-select__dropdown-indicator{ @apply hidden }
 body .dynamic-select__value-container   { @apply px-2 }
 body .dynamic-select__input-container   { @apply cursor-text }
-body .dynamic-select__menu              { @apply border border-gray-300 bg-white top-[calc(100%+0.5rem)] rounded-lg }
+body .dynamic-select__menu              { @apply border border-gray-300 bg-white top-[calc(100%+0.5rem)] rounded-lg z-10 }
 body .dynamic-select__option            { @apply px-2 }
 body .dynamic-select__option:hover      { @apply bg-gray-100 rounded-md }
