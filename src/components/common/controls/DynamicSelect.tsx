@@ -8,7 +8,7 @@ export type Option = {
   value: string,
 }
 
-export function DynamicSelect({id, value, onChange, label='', promiseValues, mutate, loading, className='', ...props}: {id: string, value: string, onChange: (value: string) => void, label: string, promiseValues: (query: string) => Promise<string[]>, mutate: (value: string) => void, loading: boolean, className?: string}) {
+export function DynamicSelect({id, value, onChange, label='', name='', promiseValues, mutate, loading, className='', ...props}: {id: string, value: string, onChange: (value: string) => void, label: string, promiseValues: (query: string) => Promise<string[]>, mutate: (value: string) => void, loading: boolean, className?: string, name?: string}) {
   const [ focus, setFocus ] = useState(false);
   const [ option, setOption ] = useState<Option | null>(null);
   useEffect(() => {
