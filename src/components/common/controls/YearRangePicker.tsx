@@ -4,7 +4,7 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export function YearRangePicker({className=''}: {className?: string}) {
+export function YearRangePicker({className='', year1Id='', year2Id=''}: {className?: string, year1Id?: string, year2Id?: string}) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   return (<>
@@ -12,6 +12,7 @@ export function YearRangePicker({className=''}: {className?: string}) {
       <div className={`relative inline-block`}>
         <FontAwesomeIcon icon={faCaretDown} className="fa-solid absolute z-[1] right-2 top-[50%] -translate-y-[50%]" />
         <DatePicker
+        id={year1Id}
         className={`px-3 py-1 outline-none border border-gray-600 rounded-lg`}
         selected={startDate}
         onChange={(date) => date && date.getFullYear() <= endDate.getFullYear() && setStartDate(date)}
@@ -26,6 +27,7 @@ export function YearRangePicker({className=''}: {className?: string}) {
       <div className={`relative inline-block`}>
         <FontAwesomeIcon icon={faCaretDown} className="fa-solid absolute z-[1] right-2 top-[50%] -translate-y-[50%]" />
         <DatePicker
+        id={year2Id}
         className={`px-3 py-1 outline-none border border-gray-600 rounded-lg`}
         selected={endDate}
         onChange={(date) => date && startDate.getFullYear() <= date.getFullYear() && setEndDate(date)}
