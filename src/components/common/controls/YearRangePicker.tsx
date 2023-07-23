@@ -4,11 +4,11 @@ import { useState } from "react";
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 
-export function YearRangePicker() {
+export function YearRangePicker({className=''}: {className?: string}) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   return (<>
-    <div>
+    <div className={className}>
       <div className={`relative inline-block`}>
         <FontAwesomeIcon icon={faCaretDown} className="fa-solid absolute z-[1] right-2 top-[50%] -translate-y-[50%]" />
         <DatePicker
