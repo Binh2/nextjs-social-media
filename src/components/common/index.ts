@@ -10,7 +10,6 @@ import { Intro } from "./Intro";
 import { LeftSidebar } from "./LeftSidebar";
 import { Loading } from "./Loading";
 import { ProfileImage } from "./ProfileImage";
-import { PublicitySelect } from "./PublicitySelect";
 import { RightSidebar } from "./RightSidebar";
 import { SelectWithIcon } from "./SelectWithicon";
 import { UploadedImage } from "./UploadedImage";
@@ -21,6 +20,6 @@ export {
 
   AddInfoLink, AddInfoButton, AppLogo, AuthGuard, 
   CloseButton, CoverImage, Hr, Intro,
-  LeftSidebar, Loading, ProfileImage, PublicitySelect, 
+  LeftSidebar, Loading, ProfileImage, 
   RightSidebar, SelectWithIcon, UploadedImage, VerticalLine
 }
