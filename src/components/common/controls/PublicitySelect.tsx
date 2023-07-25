@@ -50,7 +50,7 @@ export function PublicitySelect({id='publicity-select'}: {id?: string}) {
           onChange={value => setValue(value)} checked={value == option.value} 
           className={`${value == option.value ? 'bg-teal-50': 'hover:bg-gray-50'}`} />)}
         </div>
-        <PopupFooter onCancel={() => setOpen(false)} />
+        <PopupFooter onCancel={() => setOpen(false)} onDone={() => setOpen(false)} />
       </div>
     </Popup>
     {/* <Popup open={open2} onClose={() => setOpen2(false)} position="center center">
