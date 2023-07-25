@@ -1,9 +1,5 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { useEffect, useState } from "react";
 import Image from 'next/image';
-import { useSession } from "next-auth/react";
-import Select, { GroupBase, OptionProps } from 'react-select';
-import { components } from 'react-select';
-const { Option } = components;
 
 type IconOptionType = { 
   value: string, 
@@ -15,38 +11,31 @@ type IconOptionType = {
   style?: Object,
 };
 
-type Props = {
-  defaultValue: any;
-  onChange?: Dispatch<SetStateAction<any>>;
-  options: IconOptionType[];
+export function SelectWithIcon({options}: { options: IconOptionType[] }) {
+  const [ option, setOption ] = useState(options[0])
+  const [ menuShown, setMenuShown ] = useState(false);
+
+  useEffect(() => {
+    function showMenu() { setMenuShown(false) }
+    window.addEventListener("click", showMenu);
+    return () => window.removeEventListener("click", showMenu)
+  }, [])
+
+  return (<div className={`relative`}>
+    <div onClick={(e) => {e.stopPropagation(); setMenuShown(true)}} className={`bg-gray-300 px-2 py-1 rounded-lg hover:bg-gray-200 inline-block`}>
+      <OptionWithIcon option={option} />
+    </div>
+    {menuShown && <div className={`absolute top-[100%] px-2`}>
+      {options.map(option => <OptionWithIcon onClick={(option) => setOption(option)} option={option} />)}
+    </div>}
+  </div>);
 }
-
-export function SelectWithIcon(props: Props) {
-  const { defaultValue, onChange, options } = props;
-  const [ value, setValue ] = useState(defaultValue);
-  const option = options.find(o => o.value == value);
-
+function OptionWithIcon({option, onClick, className=''}: {option: IconOptionType, onClick?: (option: IconOptionType) => void, className?: string}) {
+  const { src, alt, width, height, style, value, label } = option;
   return (<>
-    <div>
-      <Image src={option?.src || ''} alt={option?.alt || ''} width={option?.width || 0} height={option?.height || 0}
-        className="rounded-[100%]"></Image>
-      <Select
-        defaultValue={defaultValue}
-        onChange={v => { onChange && onChange(v); setValue(v);}}
-        options={options}
-        components={{ Option: IconOption }}
-        className={`ml-${option?.width || 0}`}
-      ></Select>
+    <div className={`flex items-center cursor-default ${className}`} onClick={() => onClick && onClick(option)}>
+      <Image src={src} alt={alt} width={width} height={height} className={`inline mr-1`} />
+      <p className={`inline`}>{label}</p>
     </div>
   </>)
-}
-
-type IconOptionProps = OptionProps<any, false, GroupBase<any>> & {data: IconOptionType}
-const IconOption = (props: IconOptionProps) => {
-  const { src, alt, width, height, style } = props.data;
-  const label = props.label;
-  return <Option {...props}>
-    <Image {...{ src, alt, width, height, style }}></Image>
-    {label}
-  </Option> 
 }
