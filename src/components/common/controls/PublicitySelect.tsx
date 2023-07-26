@@ -4,6 +4,7 @@ import Popup from 'reactjs-popup'
 import { CheckIcon, Cog6ToothIcon, UserMinusIcon, UserPlusIcon, UsersIcon } from '@heroicons/react/24/solid';
 import { CloseButton } from '../CloseButton';
 import { RadioButton } from './RadioButton';
+import { Publicities } from '@/lib/constants/publicity';
 
 type OptionType = { 
   title: string
@@ -17,17 +18,16 @@ type OptionType = {
 };
 
 const options: OptionType[] = [
-  { title: "Public", description: "Anyone on and off Facebook", value: "public", src: "/public-icon.svg", alt: "Public icon", width: 24, height: 24 },
-  { title: "Friends", description: "Your friends on Facebook", value: "friends", src: "", alt: "Friends icon", width: 24, height: 24, icon: <UsersIcon />},
+  { title: "Public", description: "Anyone on and off Facebook", value: Publicities.PUBLIC, src: "/public-icon.svg", alt: "Public icon", width: 24, height: 24 },
+  { title: "Friends", description: "Your friends on Facebook", value: Publicities.FRIENDS, src: "", alt: "Friends icon", width: 24, height: 24, icon: <UsersIcon />},
   { title: "Friends except...", description: "Don't show to some friends", value: "friends-except", src: "", alt: "Friends except... icon", width: 24, height: 24, icon: <UserMinusIcon />},
   { title: "Specific friends", description: "Only show to some friends", value: "specific-friends", src: "", alt: "Specific friends icon", width: 24, height: 24, icon: <UserPlusIcon />},
-  { title: "Only me", description: "", value: "onlyme", src: "/lock-closed.svg", alt: "Only me icon", width: 24, height: 24 },
+  { title: "Only me", description: "", value: Publicities.ONLY_ME, src: "/lock-closed.svg", alt: "Only me icon", width: 24, height: 24 },
   { title: "Custom", description: "Include and exclude friends and lists", value: "custom", src: "", alt: "Custom list of friends icon", width: 24, height: 24, icon: <Cog6ToothIcon />},
 ]
-const firstOption = options[1]
-export function PublicitySelect({id='publicity-select'}: {id?: string}) {
+const firstOption = options[0]
+export function PublicitySelect({id='publicity-select', value, onChange}: {id?: string, value: string, onChange: (value: string) => void}) {
   const [ open, setOpen ] = useState(false);
-  const [ value, setValue ] = useState(firstOption.value);
   const [ open2, setOpen2 ] = useState(false);
   return (<>
     <button onClick={() => setOpen(true)} className={`flex items-center p-2 rounded-lg bg-gray-200 `}>
@@ -46,8 +46,8 @@ export function PublicitySelect({id='publicity-select'}: {id?: string}) {
         <PopupHeader className={``} onClose={() => setOpen(false)}>Select your audiences</PopupHeader>
         <div className={`bg-white overflow-auto w-[80vw] max-h-[60vh]`}>
           {options.map(option => 
-          <Option id={`${id}__${option.value}`} name={id} option={option} onClick={value => setValue(value)}
-          onChange={value => setValue(value)} checked={value == option.value} 
+          <Option id={`${id}__${option.value}`} name={id} option={option} onClick={onChange}
+          onChange={onChange} checked={value == option.value} 
           className={`${value == option.value ? 'bg-teal-50': 'hover:bg-gray-50'}`} />)}
         </div>
         <PopupFooter onCancel={() => setOpen(false)} onDone={() => setOpen(false)} />
