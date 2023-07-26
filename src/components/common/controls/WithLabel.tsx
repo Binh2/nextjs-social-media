@@ -1,6 +1,6 @@
-export function WithLabel({children, focus=false, value='', label='', htmlFor}: {children: JSX.Element, focus?: boolean, value?: string, label?: string, htmlFor: string}) {
+export function WithLabel({children, focus=false, value='', label='', htmlFor, className=''}: {children: JSX.Element, focus?: boolean, value?: string, label?: string, htmlFor: string, className?: string}) {
   return (<>
-    <div className={`relative w-full`}>
+    <div className={`relative w-full ${className}`}>
       <label className={`
         ${focus && 'text-teal-600 text-xs'}
         ${value != '' && 'text-xs'}
