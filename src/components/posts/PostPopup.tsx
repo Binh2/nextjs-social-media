@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { useSession } from 'next-auth/react';
 import Popup from 'reactjs-popup';
 import Image from 'next/image';
-import { CloseButton, Loading, ProfileImage, PublicitySelect, UploadedImage } from '../common';
+import { CloseButton, Loading, ProfileImage, UploadedImage } from '../common';
 import 'reactjs-popup/dist/index.css';
 import { ChangeEvent, useRef, useState } from 'react';
 import { UploadState, useUpload } from '@/hooks/useUpload';
@@ -10,6 +10,8 @@ import axios from 'axios';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PostSuccessPopup } from './PostSuccessPopup';
 import { useCloseAfter } from '../../hooks/useCloseAfter';
+import { PublicitySelect } from '../common/controls';
+import { Publicities } from '@/lib/constants/publicity';
 
 export function PostPopup() {
   const { data: session, status } = useSession();
@@ -18,6 +20,7 @@ export function PostPopup() {
   const [open, setOpen] = useState(false);
   const [successModal, setSuccessModal] = useCloseAfter(false, 3000);
   const queryClient = useQueryClient();
+  const [ publicity, setPublicity ] = useState(Publicities.PUBLIC)
   const mutation = useMutation({
     mutationFn: (post: {content: string, image: string}) => {
       return axios.post('/api/post', post);
@@ -68,7 +71,7 @@ export function PostPopup() {
             </div>
             <div className="ml-2 ">
               <p className="ml-2 text-lg font-semibold">{session?.user?.name}</p>
-              <PublicitySelect></PublicitySelect>
+              <PublicitySelect value={publicity} onChange={setPublicity} />
             </div>
             <Link href="/combine" className="inline-flex items-center px-4 py-2 ml-auto font-semibold bg-gray-200 border-2 border-gray-300 rounded-lg" >
               <p className="mr-3">Add style</p>
