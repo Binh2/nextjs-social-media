@@ -30,7 +30,7 @@ export function PublicitySelect({id='publicity-select', value, onChange}: {id?: 
   const [ open, setOpen ] = useState(false);
   const [ open2, setOpen2 ] = useState(false);
   return (<>
-    <button onClick={() => setOpen(true)} className={`flex items-center p-2 rounded-lg bg-gray-100`}>
+    <button onClick={() => setOpen(true)} className={`flex items-center p-2 rounded-lg bg-gray-200`}>
       <div className={`mr-1`}>
         { firstOption.src ? 
         <Image className={`inline`} src={firstOption.src} alt={firstOption.alt || ''} width={24} height={24} />:
