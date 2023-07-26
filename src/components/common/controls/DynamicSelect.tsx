@@ -17,11 +17,11 @@ export function DynamicSelect({id, value, onChange, label='', name='', promiseVa
   }, [value]);
 
   return (<>
-    <WithLabel label={label} focus={focus} value={value || ''} htmlFor={id}>
+    <WithLabel label={label} focus={focus} value={value || ''} htmlFor={id} className={className}>
       <AsyncCreatableSelect {...props} 
       unstyled
       placeholder=''
-      className={`dynamic-select ${className}`}
+      className={`dynamic-select`}
       classNamePrefix='dynamic-select'
       onFocus={() => setFocus(true)}
       onBlur={() => setFocus(false)}
