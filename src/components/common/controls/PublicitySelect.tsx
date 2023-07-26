@@ -25,18 +25,23 @@ const options: OptionType[] = [
   { title: "Only me", description: "", value: Publicities.ONLY_ME, src: "/lock-closed.svg", alt: "Only me icon", width: 24, height: 24 },
   { title: "Custom", description: "Include and exclude friends and lists", value: "custom", src: "", alt: "Custom list of friends icon", width: 24, height: 24, icon: <Cog6ToothIcon />},
 ]
-const firstOption = options[0]
+
 export function PublicitySelect({id='publicity-select', value, onChange}: {id?: string, value: string, onChange: (value: string) => void}) {
   const [ open, setOpen ] = useState(false);
   const [ open2, setOpen2 ] = useState(false);
+  const [ selected, setSelected ] = useState(options.find(option => option.value == value) || options[0]);
+  function handleChange(value: string) {
+    onChange(value);
+    setSelected(options.find(option => option.value == value) || options[0]);
+  }
   return (<>
     <button onClick={() => setOpen(true)} className={`flex items-center p-2 rounded-lg bg-gray-200`}>
       <div className={`mr-1`}>
-        { firstOption.src ? 
-        <Image className={`inline`} src={firstOption.src} alt={firstOption.alt || ''} width={24} height={24} />:
-        <div className={`w-6 h-6`}>{firstOption.icon}</div>}
+        { selected.src ? 
+        <Image className={`inline`} src={selected.src} alt={selected.alt || ''} width={24} height={24} />:
+        <div className={`w-6 h-6`}>{selected.icon}</div>}
       </div>
-      <p className={`inline`}>{firstOption.title}</p>
+      <p className={`inline`}>{selected.title}</p>
     </button>
 
     {/* Overlay */}
@@ -46,8 +51,8 @@ export function PublicitySelect({id='publicity-select', value, onChange}: {id?: 
         <PopupHeader className={``} onClose={() => setOpen(false)}>Select your audiences</PopupHeader>
         <div className={`bg-white overflow-auto w-[80vw] max-h-[60vh]`}>
           {options.map(option => 
-          <Option id={`${id}__${option.value}`} name={id} option={option} onClick={onChange}
-          onChange={onChange} checked={value == option.value} 
+          <Option id={`${id}__${option.value}`} name={id} option={option} onClick={handleChange}
+          onChange={handleChange} checked={value == option.value} 
           className={`${value == option.value ? 'bg-teal-50': 'hover:bg-gray-50'}`} />)}
         </div>
         <PopupFooter onCancel={() => setOpen(false)} onDone={() => setOpen(false)} />
