@@ -11,7 +11,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { PostSuccessPopup } from './PostSuccessPopup';
 import { useCloseAfter } from '../../hooks/useCloseAfter';
 import { PublicitySelect } from '../common/controls';
-import { Publicities } from '@/lib/constants/publicity';
+import { Publicities } from '@/lib/constants/publicities';
 
 export function PostPopup() {
   const { data: session, status } = useSession();

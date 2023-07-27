@@ -4,7 +4,7 @@ import Popup from 'reactjs-popup'
 import { CheckIcon, Cog6ToothIcon, UserMinusIcon, UserPlusIcon, UsersIcon } from '@heroicons/react/24/solid';
 import { CloseButton } from '../CloseButton';
 import { RadioButton } from './RadioButton';
-import { Publicities } from '@/lib/constants/publicity';
+import { Publicities } from '@/lib/constants/publicities';
 
 type OptionType = { 
   title: string
