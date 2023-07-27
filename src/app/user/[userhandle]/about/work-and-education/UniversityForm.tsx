@@ -11,6 +11,15 @@ import { useSession } from "next-auth/react";
 import { Controller, useForm } from "react-hook-form";
 import { z } from "zod"
 
+function getZodDefaults<Schema extends z.AnyZodObject>(schema: Schema) {
+  return Object.fromEntries(
+    Object.entries(schema.shape).map(([key, value]) => {
+      if (value instanceof z.ZodDefault) return [key, value._def.defaultValue()]
+      return [key, undefined]
+    })
+  )
+}
+
 const FormSchema = z.object({
   school: z.string().min(6, "School name need to be atleast 6 characters"),
   fromYear: z.number().optional(),
@@ -24,6 +33,7 @@ const FormSchema = z.object({
   degree: z.string(),
   publicity: z.string().default(Publicities.PUBLIC),
 })
+const defaultValues = getZodDefaults(FormSchema);
 type FormSchemaType = z.infer<typeof FormSchema>;
 export default function UniversityForm({onCancel}: {onCancel: () => void}) {
   const { data: session, status } = useSession();
@@ -72,7 +82,7 @@ export default function UniversityForm({onCancel}: {onCancel: () => void}) {
 
         <div className={`mb-2 flex items-center`}>
           <Controller control={control} name="graduated" render={({field}) => 
-            <Checkbox id="university__graduated" checked={field.value} onChange={field.onChange} className={`mr-1`} />
+            <Checkbox id="university__graduated" checked={field.value || defaultValues.graduated} onChange={field.onChange} className={`mr-1`} />
           } />
           <label htmlFor="university__graduated">Graduated</label>
         </div>
@@ -151,11 +161,11 @@ function ProgramController({control, className=''}: {control: any, className?: s
   return (<Controller control={control} name="program" render={({field}) => (
     <div className={className}>
       <div className={`flex items-center`}>
-        <RadioButton className={`mr-1`} id="university__program-undergraduate" value="undergraduate" checked={field.value == "undergraduate"} onChange={field.onChange} />
+        <RadioButton className={`mr-1`} id="university__program-undergraduate" value="undergraduate" checked={(field.value || defaultValues.program) == "undergraduate"} onChange={field.onChange} />
         <label htmlFor="university__program-undergraduate">Undergraduate</label>
       </div>
       <div className={`flex items-center`}>
-        <RadioButton className={`mr-1`} id="university__program-postgraduate" value="postgraduate" checked={field.value == "postgraduate"} onChange={field.onChange} />
+        <RadioButton className={`mr-1`} id="university__program-postgraduate" value="postgraduate" checked={(field.value || defaultValues.program) == "postgraduate"} onChange={field.onChange} />
         <label htmlFor="university__program-postgraduate">Postgraduate</label>
       </div>
     </div>
