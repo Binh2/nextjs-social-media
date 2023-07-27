@@ -1,5 +1,5 @@
 import { Reaction } from "./Reaction";
-import { ReactionTypes } from "@/lib/reactionTypes";
+import { ReactionTypes } from "@/lib/constants/reactionTypes";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { ReactionType } from "@/types/ReactionType";

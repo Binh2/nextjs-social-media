@@ -1,6 +1,6 @@
 
 import prisma from "@/lib/prisma";
-import { ReactionTypes } from "@/lib/reactionTypes";
+import { ReactionTypes } from "@/lib/constants/reactionTypes";
 import { authOptions } from "@/pages/api/auth/[...nextauth]";
 import { Reaction } from "@prisma/client";
 import { NextApiHandler } from "next";

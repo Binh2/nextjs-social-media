@@ -1,8 +1,8 @@
 import { Checkbox, DynamicSelect, Input, Option, PublicitySelect, RadioButton, Textarea } from "@/components/common/controls";
 import { YearRangePicker } from "@/components/common/controls/YearRangePicker";
 import { transformResponse } from "@/lib/axiosBigint";
-import { Publicities } from "@/lib/constants/publicity";
-import { SchoolTypes } from "@/lib/constants/school";
+import { Publicities } from "@/lib/constants/publicities";
+import { SchoolTypes } from "@/lib/constants/schoolTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { School, SchoolCourse, SchoolDegree } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";

@@ -1,4 +1,4 @@
-import { ReactionTypes } from '@/lib/reactionTypes';
+import { ReactionTypes } from '@/lib/constants/reactionTypes';
 import { faFaceAngry, faFaceGrinSquintTears, faFaceSadCry, faFaceSurprise, faHeart, faThumbsUp } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
