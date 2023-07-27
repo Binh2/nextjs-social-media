@@ -16,7 +16,7 @@ export function LazyForm({children, show, setShow}: Props) {
         <span className={`text-teal-500 font-bold ml-1 hover:underline`}>Add a university</span>
       </button>
     }
-    <Suspense fallback={<Loading />}>
+    <Suspense fallback={<Loading className={`mb-2`} />}>
       {show && children}
     </Suspense>
   </>)
