@@ -6,7 +6,7 @@ const handle: NextApiHandler = async (req, res) => {
   if (req.method == "GET") {
     const postId = parseInt(req.query.postid as string);
     if (isNaN(postId)) { res.status(StatusCodes.UNPROCESSABLE_ENTITY).end(); }
-    const count = await prisma.reaction.count({
+    const count = await prisma.reactions.count({
       where: {
         postId
       }

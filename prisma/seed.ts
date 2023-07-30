@@ -38,7 +38,7 @@ function makeRandomString(length: number) {
 function createSchoolTypes() {
   Object.values(SchoolTypes).forEach(async schoolType => {
     try {
-      await prisma.schoolType.create({
+      await prisma.schoolTypes.create({
         data: { name: schoolType }
       })
     } catch (e) { console.log(e) }
@@ -48,7 +48,7 @@ function createSchools() {
   schools.forEach(async school => {
     try {
       const { type: typeName, name } = school;
-      await prisma.school.create({
+      await prisma.schools.create({
         data: {
           name,
           type: { connect: { name: typeName }}
@@ -61,7 +61,7 @@ function createSchoolCourses() {
   schoolCourses.forEach(async schoolCourse => {
     try {
       const { name } = schoolCourse;
-      await prisma.schoolCourse.create({
+      await prisma.schoolCourses.create({
         data: { name }
       })
     } catch (e) { console.log(e) }
@@ -71,7 +71,7 @@ function createSchoolDegrees() {
   schoolDegrees.forEach(async schoolDegree => {
     try {
       const { name } = schoolDegree;
-      await prisma.schoolDegree.create({
+      await prisma.schoolDegrees.create({
         data: {
           name
         }
@@ -95,7 +95,7 @@ function createPosts() {
   for (let i = 0; i < 20; i++) {
     try {
       (async () => {
-        await prisma.post.create({
+        await prisma.posts.create({
           data: {
             content: makeRandomString(100),
             image: '',
@@ -115,7 +115,7 @@ function createPosts() {
     const { content, image, authorEmail: email } = posts[i];
     try {
       (async () => {
-        await prisma.post.create({
+        await prisma.posts.create({
           data: {
             content,
             image,
@@ -136,7 +136,7 @@ function createPosts() {
 function createPublicities() {
   try {
     Object.values(Publicities).forEach(async (publicity) => {
-      await prisma.publicity.create({
+      await prisma.publicities.create({
         data: { name: publicity }
       })
     })

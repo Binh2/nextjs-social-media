@@ -11,7 +11,7 @@ const handle: NextApiHandler = async (req, res) => {
     const postId = parseInt(req.query.postId as string);
     if (!userId) { res.status(StatusCodes.UNAUTHORIZED).end(); return; }
     if (isNaN(postId)) { res.status(StatusCodes.UNPROCESSABLE_ENTITY).end()}
-    const reaction = await prisma.reaction.findFirst({
+    const reaction = await prisma.reactions.findFirst({
       where: {
         postId,
         userId

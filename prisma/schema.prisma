@@ -17,7 +17,7 @@ datasource db {
   // url = env("SQL_SERVER_URL")
 }
 
-model Post {
+model Posts {
   id        BigInt  @id @default(autoincrement())
   handle    String  @unique @default(cuid())
   content   String
@@ -27,31 +27,31 @@ model Post {
   userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
-  comments  Comment[]
-  reactions Reaction[]
+  comments  Comments[]
+  reactions Reactions[]
 
   @@index([handle])
 }
-model Comment {
+model Comments {
   id          BigInt  @id @default(autoincrement())
-  post        Post@relation(fields:[postId], references:[id], onDelete: Cascade)
+  post        Posts@relation(fields:[postId], references:[id], onDelete: Cascade)
   postId      BigInt
   user        User@relation(fields:[userId], references:[id], onUpdate: NoAction)
   userId      String
   content     String
   image       String?
-  parent      Comment?@relation("comment_parent", fields:[parentId], references:[id], onUpdate: NoAction, onDelete: NoAction)
+  parent      Comments?@relation("comment_parent", fields:[parentId], references:[id], onUpdate: NoAction, onDelete: NoAction)
   parentId    BigInt?
   createdAt   DateTime @default(now())
   updatedAt   DateTime @default(now())
-  comments    Comment[]@relation("comment_parent")
+  comments    Comments[]@relation("comment_parent")
 }
 
-model Reaction {
-  post        Post@relation(fields:[postId], references:[id], onDelete: Cascade)
+model Reactions {
+  post        Posts@relation(fields:[postId], references:[id], onDelete: Cascade)
   postId      BigInt
-  user      User@relation(fields:[userId], references:[id], onUpdate: NoAction)
-  userId    String
+  user        User@relation(fields:[userId], references:[id], onUpdate: NoAction)
+  userId      String
   type        Int
   @@id([postId, userId])
 }
@@ -96,28 +96,28 @@ model User {
   image         String?
   isMale        Boolean?
   birthday      DateTime? @db.Date
-  posts         Post[]
-  user_school   User_School[]
+  posts         Posts[]
+  user_school   User_Schools[]
   accounts      Account[]
   sessions      Session[]
-  comments      Comment[]
-  reactions     Reaction[]
-  friend1       Friend? @relation("friend_user1")
-  friend2       Friend? @relation("friend_user2")
+  comments      Comments[]
+  reactions     Reactions[]
+  friend1       Friends? @relation("friend_user1")
+  friend2       Friends? @relation("friend_user2")
   @@index([handle])
 }
-model School {
+model Schools {
   id        BigInt @id @default(autoincrement())
   name      String @unique
   image     String?
-  user_school User_School[] 
+  user_school User_Schools[] 
   typeId    BigInt
-  type      SchoolType @relation(fields:[typeId], references:[id])
+  type      SchoolTypes @relation(fields:[typeId], references:[id])
 }
-model User_School {
+model User_Schools {
   id        BigInt @id @default(autoincrement())
   schoolId  BigInt
-  school    School @relation(fields:[schoolId], references:[id])
+  school    Schools @relation(fields:[schoolId], references:[id])
   userId    String
   user      User @relation(fields:[userId], references:[id])
   from      Int?
@@ -128,39 +128,39 @@ model User_School {
   course1Id     BigInt?
   course2Id     BigInt?
   course3Id     BigInt?
-  course1       SchoolCourse? @relation("user_school_course1", fields:[course1Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
-  course2       SchoolCourse? @relation("user_school_course2", fields:[course2Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
-  course3       SchoolCourse? @relation("user_school_course3", fields:[course3Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
+  course1       SchoolCourses? @relation("user_school_course1", fields:[course1Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
+  course2       SchoolCourses? @relation("user_school_course2", fields:[course2Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
+  course3       SchoolCourses? @relation("user_school_course3", fields:[course3Id], references:[id], onUpdate: NoAction, onDelete: NoAction)
   schoolDegreeId  BigInt
-  schoolDegree    SchoolDegree @relation(fields:[schoolDegreeId], references:[id])
+  schoolDegree    SchoolDegrees @relation(fields:[schoolDegreeId], references:[id])
   publicityId   BigInt
-  publicity     Publicity @relation(fields:[publicityId], references:[id])
+  publicity     Publicities @relation(fields:[publicityId], references:[id])
 }
-model SchoolType {
+model SchoolTypes {
   id        BigInt @id @default(autoincrement())
   name      String @unique
-  school    School[]
+  school    Schools[]
 }
-model SchoolDegree {
+model SchoolDegrees {
   id        BigInt @id @default(autoincrement())
   name      String @unique
-  user_school User_School[]
+  user_school User_Schools[]
 }
-model SchoolCourse {
+model SchoolCourses {
   id          BigInt @id @default(autoincrement())
   name        String @unique
-  user_school_course1 User_School[] @relation("user_school_course1")
-  user_school_course2 User_School[] @relation("user_school_course2")
-  user_school_course3 User_School[] @relation("user_school_course3")
+  user_school_course1 User_Schools[] @relation("user_school_course1")
+  user_school_course2 User_Schools[] @relation("user_school_course2")
+  user_school_course3 User_Schools[] @relation("user_school_course3")
 }
-model Publicity {
+model Publicities {
   id        BigInt @id @default(autoincrement())
   name      String @unique
   description String?
-  user_school User_School[]
+  user_school User_Schools[]
 }
 
-model Friend {
+model Friends {
   id      BigInt  @id @default(autoincrement())
   user1Id String  @unique
   user2Id String  @unique

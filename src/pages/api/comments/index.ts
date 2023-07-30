@@ -10,7 +10,7 @@ const handle: NextApiHandler = async (req, res) => {
     const take = parseInt(req.query.take as string) || 4;
     const skip = parseInt(req.query.skip as string) || 0;
     if (isNaN(postId)) res.status(StatusCodes.UNPROCESSABLE_ENTITY).end();
-    const result = await prisma.comment.findMany({
+    const result = await prisma.comments.findMany({
       take,
       skip,
       where: {
@@ -26,7 +26,7 @@ const handle: NextApiHandler = async (req, res) => {
         }
       }
     })
-    const count = await prisma.comment.count({
+    const count = await prisma.comments.count({
       where: {
         postId
       }
@@ -39,7 +39,7 @@ const handle: NextApiHandler = async (req, res) => {
     const { content, image } = req.body;
     if (!userId) { res.status(StatusCodes.UNAUTHORIZED).end(); return; }
     if (isNaN(postId)) res.status(StatusCodes.UNPROCESSABLE_ENTITY).end()
-    const result = await prisma.comment.create({
+    const result = await prisma.comments.create({
       data: {
         postId,
         userId,
