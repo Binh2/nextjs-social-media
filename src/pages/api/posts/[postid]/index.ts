@@ -6,7 +6,7 @@ const handle: NextApiHandler = async (req, res) => {
   if (req.method == "GET") {
     const postId = parseInt(req.query.postId as string);
     if (isNaN(postId)) { res.status(StatusCodes.UNPROCESSABLE_ENTITY).end() }
-    const post = await prisma.post.findFirst({
+    const post = await prisma.posts.findFirst({
       where: {
         id: postId,
         published: true,

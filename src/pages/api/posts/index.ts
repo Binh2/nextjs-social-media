@@ -9,7 +9,7 @@ const handle: NextApiHandler<PostType[]> = async (req: NextApiRequest, res: Next
   if (req.method == 'GET') {
     const skip = parseInt(req.query.skip as string) || 0;
     const take = parseInt(req.query.take as string) || 4;
-    const feed = await prisma.post.findMany({
+    const feed = await prisma.posts.findMany({
       skip,
       take,
       where: {
@@ -33,7 +33,7 @@ const handle: NextApiHandler<PostType[]> = async (req: NextApiRequest, res: Next
     const userId = session?.user.id
     const { content, image } = req.body;
     if (!userId) { res.status(StatusCodes.UNAUTHORIZED).end(); return; }
-    const result = await prisma.post.create({
+    const result = await prisma.posts.create({
       data: {
         content: content,
         image,

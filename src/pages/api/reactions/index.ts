@@ -9,7 +9,7 @@ const handle: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse)
     const postId = parseInt(req.query.postid as string);
     const take = parseInt(req.query.take as string) || 100;
     if (isNaN(postId)) res.status(StatusCodes.UNPROCESSABLE_ENTITY).end()
-    const reactions = await prisma.reaction.findMany({
+    const reactions = await prisma.reactions.findMany({
       take,
       where: {
         postId,
@@ -26,7 +26,7 @@ const handle: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse)
     if (!userId) { res.status(StatusCodes.UNAUTHORIZED).end(); return; }
     if (isNaN(postId)) res.status(StatusCodes.UNPROCESSABLE_ENTITY).end()
 
-    const reaction = await prisma.reaction.upsert({
+    const reaction = await prisma.reactions.upsert({
       where: {
         postId_userId: {
           postId,
