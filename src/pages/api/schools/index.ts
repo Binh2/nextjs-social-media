@@ -5,7 +5,7 @@ import { NextApiHandler } from "next";
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "GET") {
     const query = req.query.query as string || '';
-    const schools = await prisma.school.findMany({
+    const schools = await prisma.schools.findMany({
       where: {
         name: {
           startsWith: query
@@ -16,7 +16,7 @@ const handler: NextApiHandler = async (req, res) => {
     res.json(schools);
   } else if (req.method == "POST" || req.method == "PUT") {
     const { name, type: typeName } = req.body as { name: string, type: string };
-    const school = await prisma.school.create({
+    const school = await prisma.schools.create({
       data: {
         name,
         type: { connect: { name: typeName }}
