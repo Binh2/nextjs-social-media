@@ -1,3 +1,4 @@
+import { Publicities } from "@/lib/constants/publicities"
 import { SchoolTypes } from "../src/lib/constants/schoolTypes"
 
 export const users = [
@@ -22,6 +23,10 @@ export const users = [
     image: "https://i.pinimg.com/736x/16/e1/d1/16e1d12cf49295519beac0270496923b.jpg",
     password: "123456"
   }
+]
+export const user_schools = [
+  { username: "saunt123", schoolName: "University of Information and Technology - Vietnam University", schoolDegreeName: "Bachelor of Computer Science", publicityName: Publicities.PUBLIC },
+  { username: "testuser", schoolName: "University of Information and Technology - Vietnam University", schoolDegreeName: "Bachelor of Computer Science", publicityName: Publicities.PUBLIC },
 ]
 export const schools = [
   { name: "University of Information and Technology - Vietnam University", type: SchoolTypes.UNIVERSITY },

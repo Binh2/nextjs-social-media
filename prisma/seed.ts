@@ -1,7 +1,7 @@
 import { SchoolTypes } from '@/lib/constants/schoolTypes';
 import { PrismaClient } from '@prisma/client'
 import * as argon2 from 'argon2';
-import { posts, schoolCourses, schoolDegrees, schools, users } from './data';
+import { posts, schoolCourses, schoolDegrees, schools, user_schools, users } from './data';
 import { Publicities } from '../src/lib/constants/publicities';
 const prisma = new PrismaClient()
 
@@ -11,6 +11,7 @@ async function main() {
   createSchoolCourses();
   createSchoolDegrees();
   createUsers();
+  createUser_Schools();
   createPosts();
   createPublicities();
 }
@@ -88,6 +89,21 @@ function createUsers() {
         data: { name, username, email, image, hashedPassword }
       });
     } catch (err) { console.log(err) }
+  })
+}
+function createUser_Schools() {
+  user_schools.forEach(async user_school => {
+    try { 
+      const { username, schoolName, schoolDegreeName, publicityName } = user_school;
+      await prisma.user_Schools.create({
+        data: {
+          user: { connect: {username}},
+          school: {connect: {name: schoolName}},
+          schoolDegree: { connect: {name: schoolDegreeName }},
+          publicity: { connect: {name: publicityName }}
+        }
+      })
+    } catch (e) { console.log(e)}
   })
 }
 function createPosts() {
