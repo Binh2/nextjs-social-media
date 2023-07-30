@@ -23,8 +23,8 @@ model Post {
   content   String
   image     String?
   published Boolean @default(false)
-  author    User@relation(fields:[authorId], references:[id])
-  authorId  String
+  user      User@relation(fields:[userId], references:[id])
+  userId    String
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   comments  Comment[]
@@ -36,8 +36,8 @@ model Comment {
   id          BigInt  @id @default(autoincrement())
   post        Post@relation(fields:[postId], references:[id], onDelete: Cascade)
   postId      BigInt
-  author      User@relation(fields:[authorId], references:[id], onUpdate: NoAction)
-  authorId    String
+  user        User@relation(fields:[userId], references:[id], onUpdate: NoAction)
+  userId      String
   content     String
   image       String?
   parent      Comment?@relation("comment_parent", fields:[parentId], references:[id], onUpdate: NoAction, onDelete: NoAction)
@@ -50,10 +50,10 @@ model Comment {
 model Reaction {
   post        Post@relation(fields:[postId], references:[id], onDelete: Cascade)
   postId      BigInt
-  author      User@relation(fields:[authorEmail], references:[email], onUpdate: NoAction)
-  authorEmail String
+  user      User@relation(fields:[userId], references:[id], onUpdate: NoAction)
+  userId    String
   type        Int
-  @@id([postId, authorEmail])
+  @@id([postId, userId])
 }
 
 model Account {

@@ -100,7 +100,7 @@ function createPosts() {
             content: makeRandomString(100),
             image: '',
             published: true,
-            author: {
+            user: {
               connect: {
                 email: email,
               }
@@ -120,7 +120,7 @@ function createPosts() {
             content,
             image,
             published: true,
-            author: {
+            user: {
               connect: {
                 email: email,
               }
