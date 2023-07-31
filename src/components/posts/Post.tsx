@@ -11,9 +11,8 @@ import { Reactions } from "./reactions/Reactions";
 import { CommentCount } from "./comments/CommentCount";
 import { ProfileImage } from '@/components/common/ProfileImage'
 
-const imageStyle = {width: "auto", height: "auto"};
 export const Post: React.FC<{ post: PostType }> = ({ post }) => {
-  const authorName = post.author ? post.author.name : "Unknown author";
+  const authorName = post.user ? post.user.name : "Unknown author";
 
   return (
     <div className="p-5 bg-white rounded-lg">
@@ -38,9 +37,9 @@ export const Post: React.FC<{ post: PostType }> = ({ post }) => {
         <Reactions postId={post.id.toString()}></Reactions>
         <div className="flex ml-auto">
           <p className="inline-block"><CommentCount postId={post.id.toString()}></CommentCount></p>
-          <Image src="/comment-icon.svg" alt="Comment" width={16} height={16} style={imageStyle} />
+          <Image src="/comment-icon.svg" alt="Comment" width={16} height={16} />
           <p className="inline-block">1</p>
-          <Image src="/share-icon.svg" alt="Share" width={16} height={16} style={imageStyle}/>
+          <Image src="/share-icon.svg" alt="Share" width={16} height={16} />
         </div>
       </div>
 
@@ -50,11 +49,11 @@ export const Post: React.FC<{ post: PostType }> = ({ post }) => {
         <ReactionPicker postId={post.id.toString()} className="flex items-center mx-auto"></ReactionPicker>
 
         <div className="flex mx-auto">
-          <Image src="/comment-icon.svg" alt="Comment" width={16} height={16} style={imageStyle}/>
+          <Image src="/comment-icon.svg" alt="Comment" width={16} height={16} />
           <p>Comment</p>
         </div>
         <div className="flex mx-auto">
-          <Image src="/share-icon.svg" alt="Share" width={16} height={16} style={imageStyle}/>
+          <Image src="/share-icon.svg" alt="Share" width={16} height={16} />
           <p>Share</p>
         </div>
       </div>
