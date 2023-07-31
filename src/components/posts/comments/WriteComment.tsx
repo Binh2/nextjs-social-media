@@ -16,14 +16,14 @@ export function WriteComment(props: Props) {
   const queryClient = useQueryClient();
   const mutation = useMutation({
     mutationFn: () => {
-      return axios.post(`/api/post/${postId}/comment`, {
+      return axios.post(`/api/posts/${postId}/comments`, {
         content,
         image: ''
       })
     },
     onSuccess: (data) => {
-      queryClient.invalidateQueries(['post', postId, 'comment'])
-      queryClient.invalidateQueries(['post', postId, 'comment', 'count'])
+      queryClient.invalidateQueries(['posts', postId, 'comments'])
+      queryClient.invalidateQueries(['posts', postId, 'comments', 'count'])
       setContent('')
     }
   })

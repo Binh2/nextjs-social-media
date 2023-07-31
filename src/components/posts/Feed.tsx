@@ -13,7 +13,7 @@ type Props = {
 
 export function Feed(props: Props) {
   const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status } = 
-  useInfiniteQuery<PostType[], Error, PostType[]>(['post'], {
+  useInfiniteQuery<PostType[], Error, PostType[]>(['posts'], {
     initialData: () => {
       if (!props.feed) return;
       return {
@@ -56,7 +56,7 @@ export function Feed(props: Props) {
 }
 
 function fetchMoreData({pageParam = 0}) {
-  const data = axios.get(`/api/post`, {
+  const data = axios.get(`/api/posts`, {
     params: {
       skip: pageParam
     },

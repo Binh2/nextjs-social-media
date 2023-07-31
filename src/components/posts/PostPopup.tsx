@@ -23,10 +23,10 @@ export function PostPopup() {
   const [ publicity, setPublicity ] = useState(Publicities.PUBLIC)
   const mutation = useMutation({
     mutationFn: (post: {content: string, image: string}) => {
-      return axios.post('/api/post', post);
+      return axios.post('/api/posts', post);
     },
     onSuccess: async () => {
-      queryClient.invalidateQueries(['post'])
+      queryClient.invalidateQueries(['posts'])
       setContent('')
     }
   })

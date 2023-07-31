@@ -14,13 +14,12 @@ import { MenuUser } from "@/components/common/Header/MenuUser";
 import { transformResponse } from '@/lib/axiosBigint';
 import { ProfileImage } from '@/components/common';
 
-const imageStyle = {width: "auto", height: "auto"}
 export default function Post() {
   const router = useRouter();
   const postId = router.query.id as string;
-  const { data: post }: {data: PostType | undefined} = useQuery(['post', postId], {
+  const { data: post }: {data: PostType | undefined} = useQuery(['posts', postId], {
     queryFn: () => {
-      const result = axios.get(`/api/post/${postId}`, {transformResponse}).then(res => res.data);
+      const result = axios.get(`/api/posts/${postId}`, {transformResponse}).then(res => res.data);
       return result; 
     },
   })
@@ -50,10 +49,10 @@ export default function Post() {
           <div className="fixed top-0 right-0 w-1/4 h-full pl-2 pr-2 overflow-y-scroll bg-slate-50">
             <div className="flex items-center justify-end">
               <button className="p-2 ml-2 text-gray-700 bg-gray-200 rounded-full">
-                <Image src="/messenger-icon.svg" alt="Messenger icon" width={24} height={24} style={imageStyle}/>
+                <Image src="/messenger-icon.svg" alt="Messenger icon" width={24} height={24} />
               </button>
               <button className="p-2 ml-2 text-gray-700 bg-gray-200 rounded-full">
-                <Image src="/notifications-icon.svg" alt="Notification icon" width={24} height={24} style={imageStyle}/>
+                <Image src="/notifications-icon.svg" alt="Notification icon" width={24} height={24} />
               </button>
 
               <MenuUser />

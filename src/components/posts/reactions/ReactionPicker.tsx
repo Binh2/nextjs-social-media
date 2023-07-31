@@ -14,22 +14,22 @@ type Props = {
 
 export function ReactionPicker({ postId, className = ''}: Props) {
   const queryClient = useQueryClient();
-  const { data: reaction } = useQuery<ReactionType>(['post', postId, 'reaction', 'self'], {
+  const { data: reaction } = useQuery<ReactionType>(['posts', postId, 'reactions', 'self'], {
     queryFn: () => {
-      const result = axios.get(`/api/post/${postId}/reaction/self`, {transformResponse}).then(res => res.data)
+      const result = axios.get(`/api/posts/${postId}/reactions/self`, {transformResponse}).then(res => res.data)
       return result
     }
   })
   const mutation = useMutation({
-    mutationKey: ['post', postId, 'reaction', 'self'],
+    mutationKey: ['posts', postId, 'reactions', 'self'],
     mutationFn: (type: number) => {
-      return axios.post(`/api/post/${postId}/reaction`, {
+      return axios.post(`/api/posts/${postId}/reactions`, {
         type: type
       }).then(res => res.data)
     },
     onSuccess: () => {
-      queryClient.invalidateQueries(['post', postId, 'reaction'])
-      queryClient.invalidateQueries(['post', postId, 'reaction', 'self'])
+      queryClient.invalidateQueries(['posts', postId, 'reactions'])
+      queryClient.invalidateQueries(['posts', postId, 'reactions', 'self'])
     }
   })
 

@@ -13,14 +13,14 @@ export function CommentSection({ postId }: Props) {
   const queryClient = useQueryClient();
   const { data, error, fetchNextPage, hasNextPage, isFetching, isFetchingNextPage, status, refetch } = 
   useInfiniteQuery<CommentType[]>({
-    queryKey: ['post', postId, 'comment'],
+    queryKey: ['posts', postId, 'comments'],
     queryFn: ({pageParam}) => fetchComments({postId},{pageParam}),
     getNextPageParam(lastPage, allPages) {
       return allPages.reduce((count, group) => count + group.length, 0);
     }
   })
   
-  queryClient.prefetchQuery(['post', postId, 'comment'])
+  queryClient.prefetchQuery(['posts', postId, 'comments'])
 
   const [isVisible, setVisible] = useState(true);
   return ( data && data.pages ? 
@@ -52,7 +52,7 @@ export function CommentSection({ postId }: Props) {
 }
 
 function fetchComments({postId}: {postId:string}, { pageParam = 0 }) {
-  return axios.get(`/api/post/${postId}/comment`, {
+  return axios.get(`/api/posts/${postId}/comments`, {
     params: {
       skip: pageParam
     },

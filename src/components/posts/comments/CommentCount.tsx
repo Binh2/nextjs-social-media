@@ -6,9 +6,9 @@ type Props = {
   postId: string
 }
 export function CommentCount({postId}: Props) {
-  const { data } = useQuery<number>(["post", postId, "comment", "count"], {
+  const { data } = useQuery<number>(["posts", postId, "comments", "count"], {
     queryFn: () => {
-      return axios.get(`/api/post/${postId}/comment/count`, {transformResponse}).then(res => res.data)
+      return axios.get(`/api/posts/${postId}/comments/count`, {transformResponse}).then(res => res.data)
     }
   })
   return (<>
