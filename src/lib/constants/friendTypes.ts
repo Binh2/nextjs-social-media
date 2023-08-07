@@ -4,4 +4,5 @@ export const FriendTypes = {
   UNFRIEND: 3,
   BLOCKED: 4,
   REQUEST_DENIED: 5,
+  SUGGESTION_REMOVED: 6,
 }
