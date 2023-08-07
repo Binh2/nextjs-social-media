@@ -1,8 +1,8 @@
 export const FriendTypes = {
-  REQUEST: 1,
-  FRIEND: 2,
-  UNFRIEND: 3,
-  BLOCKED: 4,
-  REQUEST_DENIED: 5,
-  SUGGESTION_REMOVED: 6,
+  REQUEST: "Request",
+  FRIEND: "Friend",
+  UNFRIEND: "Unfriend",
+  BLOCKED: "Blocked",
+  REQUEST_DENIED: "Request denied",
+  SUGGESTION_REMOVED: "Suggestion removed",
 }
