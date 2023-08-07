@@ -102,8 +102,8 @@ model User {
   sessions      Session[]
   comments      Comments[]
   reactions     Reactions[]
-  friend1       Friends? @relation("friend_user1")
-  friend2       Friends? @relation("friend_user2")
+  friend1       Friends[] @relation("friend_user1")
+  friend2       Friends[] @relation("friend_user2")
   @@index([handle])
 }
 model Schools {
@@ -162,8 +162,8 @@ model Publicities {
 
 model Friends {
   id      BigInt  @id @default(autoincrement())
-  user1Id String  @unique
-  user2Id String  @unique
+  user1Id String
+  user2Id String
   user1   User    @relation("friend_user1", fields:[user1Id], references:[id], onUpdate: NoAction)
   user2   User    @relation("friend_user2", fields:[user2Id], references:[id], onUpdate: NoAction)
   type    Int
