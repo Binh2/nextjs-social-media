@@ -1,21 +1,15 @@
-// schema.prisma
-
 generator client {
   provider = "prisma-client-js"
   previewFeatures = ["jsonProtocol"]
 }
 
 datasource db {
-  //For production
   provider = "postgresql"
   url = env("POSTGRES_PRISMA_URL") // uses connection pooling
   directUrl = env("POSTGRES_URL_NON_POOLING") // uses a direct connection
   shadowDatabaseUrl = env("POSTGRES_URL_NON_POOLING") // used for migrations
-
-  // For local development
-  // provider = "sqlserver"
-  // url = env("SQL_SERVER_URL")
 }
+
 
 model Posts {
   id        BigInt  @id @default(autoincrement())
@@ -46,7 +40,6 @@ model Comments {
   updatedAt   DateTime @default(now())
   comments    Comments[]@relation("comment_parent")
 }
-
 model Reactions {
   post        Posts@relation(fields:[postId], references:[id], onDelete: Cascade)
   postId      BigInt
@@ -55,6 +48,7 @@ model Reactions {
   type        Int
   @@id([postId, userId])
 }
+
 
 model Account {
   id                 String  @id @default(cuid())
@@ -76,7 +70,6 @@ model Account {
 
   @@unique([provider, providerAccountId])
 }
-
 model Session {
   id           String   @id @default(cuid())
   sessionToken String   @unique@map("session_token")
@@ -84,7 +77,6 @@ model Session {
   expires      DateTime @db.Date
   user         User     @relation(fields:[userId], references:[id], onDelete: Cascade)
 }
-
 model User {
   id            String    @id @default(cuid())
   handle        String    @unique @default(cuid())
@@ -106,6 +98,16 @@ model User {
   friend2       Friends[] @relation("friend_user2")
   @@index([handle])
 }
+model VerificationToken {
+  id         Int      @id @default(autoincrement())
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+
 model Schools {
   id        BigInt @id @default(autoincrement())
   name      String @unique
@@ -160,22 +162,20 @@ model Publicities {
   user_school User_Schools[]
 }
 
+
 model Friends {
   id      BigInt  @id @default(autoincrement())
   user1Id String
   user2Id String
   user1   User    @relation("friend_user1", fields:[user1Id], references:[id], onUpdate: NoAction)
   user2   User    @relation("friend_user2", fields:[user2Id], references:[id], onUpdate: NoAction)
-  type    Int
+  typeId  BigInt
+  type    FriendTypes @relation(fields:[typeId], references:[id])
   
   @@unique([user1Id, user2Id])
 }
-
-model VerificationToken {
-  id         Int      @id @default(autoincrement())
-  identifier String
-  token      String   @unique
-  expires    DateTime
-
-  @@unique([identifier, token])
+model FriendTypes {
+  id      BigInt @id @default(autoincrement())
+  name    String @unique
+  friends Friends[]
 }

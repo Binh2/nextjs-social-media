@@ -3,17 +3,22 @@ import { PrismaClient } from '@prisma/client'
 import * as argon2 from 'argon2';
 import { posts, schoolCourses, schoolDegrees, schools, user_schools, users } from './data';
 import { Publicities } from '../src/lib/constants/publicities';
+import { FriendTypes } from '@/lib/constants/friendTypes';
 const prisma = new PrismaClient()
 
 async function main() {
+  createUsers();
+
+  createPublicities();
+  createPosts();
+
   createSchoolTypes(); // need to be before createSchools();
   createSchools();
   createSchoolCourses();
   createSchoolDegrees();
-  createUsers();
   createUser_Schools();
-  createPosts();
-  createPublicities();
+
+  createFriendTypes();
 }
 main()
 .then(async () => {
@@ -42,7 +47,7 @@ function createSchoolTypes() {
       await prisma.schoolTypes.create({
         data: { name: schoolType }
       })
-    } catch (e) { console.log(e) }
+    } catch (e) { console.error(e) }
   })
 }
 function createSchools() {
@@ -55,7 +60,7 @@ function createSchools() {
           type: { connect: { name: typeName }}
         }
       })
-    } catch (e) { console.log(e) }
+    } catch (e) { console.error(e) }
   })
 }
 function createSchoolCourses() {
@@ -65,7 +70,7 @@ function createSchoolCourses() {
       await prisma.schoolCourses.create({
         data: { name }
       })
-    } catch (e) { console.log(e) }
+    } catch (e) { console.error(e) }
   })
 }
 function createSchoolDegrees() {
@@ -77,7 +82,7 @@ function createSchoolDegrees() {
           name
         }
       })
-    } catch (e) { console.log(e) }
+    } catch (e) { console.error(e) }
   })
 }
 function createUsers() {
@@ -88,7 +93,7 @@ function createUsers() {
       const user = await prisma.user.create({
         data: { name, username, email, image, hashedPassword }
       });
-    } catch (err) { console.log(err) }
+    } catch (err) { console.error(err) }
   })
 }
 function createUser_Schools() {
@@ -103,7 +108,7 @@ function createUser_Schools() {
           publicity: { connect: {name: publicityName }}
         }
       })
-    } catch (e) { console.log(e)}
+    } catch (e) { console.error(e)}
   })
 }
 function createPosts() {
@@ -124,7 +129,7 @@ function createPosts() {
           }
         })
       })();
-    } catch (e) { console.log(e) }
+    } catch (e) { console.error(e) }
   } 
 
   for (let i = 0; i < posts.length; i++) {
@@ -145,7 +150,7 @@ function createPosts() {
         })
       })();
     } catch (err) {
-      console.log(err)
+      console.error(err)
     }
   }
 }
@@ -156,5 +161,14 @@ function createPublicities() {
         data: { name: publicity }
       })
     })
-  } catch (e) { console.log(e) }
+  } catch (e) { console.error(e) }
+}
+function createFriendTypes() {
+  try {
+    Object.values(FriendTypes).forEach(async (type) => {
+      await prisma.friendTypes.create({
+        data: { name: type }
+      })
+    })
+  } catch(e) {console.error(e)}
 }
