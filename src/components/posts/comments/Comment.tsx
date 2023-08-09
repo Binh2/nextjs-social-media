@@ -13,29 +13,29 @@ export function Comment(props: Props) {
 
   return (
     <div className="flex items-start space-x-2">
-      <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0">
-        {comment.author.image ? (
-          <Image src={comment.author.image} alt="Commenter's profile image" width={40} height={40} />
+      <div className="flex-shrink-0 w-10 h-10 overflow-hidden rounded-full">
+        {comment.user.image ? (
+          <Image src={comment.user.image} alt="Commenter's profile image" width={40} height={40} />
         ) : (
           <div className="w-full h-full bg-gray-300"></div>
         )}
       </div>
       <div>
-        <div className="bg-gray-100 rounded-lg p-2">
-          <p className="font-semibold">{comment.author.name}</p>
+        <div className="p-2 bg-gray-100 rounded-lg">
+          <p className="font-semibold">{comment.user.name}</p>
           <p>{comment.content}</p>
         </div>
-        <div className="flex items-center space-x-2 mt-1">
-          <button className="text-gray-500 hover:text-gray-700 text-sm font-bold ml-3">Like</button>
-          <button className="text-gray-500 hover:text-gray-700 text-sm font-bold">Reply</button>
-          <p className="text-gray-500 text-sm">{formatDateShort(comment.updatedAt)}</p>
+        <div className="flex items-center mt-1 space-x-2">
+          <button className="ml-3 text-sm font-bold text-gray-500 hover:text-gray-700">Like</button>
+          <button className="text-sm font-bold text-gray-500 hover:text-gray-700">Reply</button>
+          <p className="text-sm text-gray-500">{formatDateShort(comment.updatedAt)}</p>
         </div>
         {isReplyVisible ? (
           // <CommentSection postId={postId} />
           <></>
         ) : (
           <button
-            className="text-gray-500 hover:text-gray-700 mt-1"
+            className="mt-1 text-gray-500 hover:text-gray-700"
             onClick={() => setIsReplyVisible(true)}>
             View more replies
           </button>

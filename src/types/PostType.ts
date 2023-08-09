@@ -1,9 +1,9 @@
-import { Post } from "@prisma/client";
+import { Posts } from "@prisma/client";
 import { CommentType } from "./CommentType";
 import { ReactionType } from "./ReactionType";
 
-export type PostType = Post & {
-  author: {
+export type PostType = Posts & {
+  user: {
     id: string,
     name: string | null,
     image: string | null,

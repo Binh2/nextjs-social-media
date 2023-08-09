@@ -1,7 +1,7 @@
-import { Comment } from "@prisma/client"
+import { Comments } from "@prisma/client"
 
-export type CommentType = Comment & {
-  author: {
+export type CommentType = Comments & {
+  user: {
     image: string | null,
     name: string | null,
   },

@@ -1,3 +1,3 @@
-import { Reaction } from '@prisma/client';
+import { Reactions } from '@prisma/client';
 
-export type ReactionType = Reaction
+export type ReactionType = Reactions
