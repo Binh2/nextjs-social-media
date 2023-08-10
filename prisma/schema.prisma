@@ -16,9 +16,10 @@ model Posts {
   handle    String  @unique @default(cuid())
   content   String
   image     String?
-  published Boolean @default(false)
-  user      User@relation(fields:[userId], references:[id])
   userId    String
+  user      User@relation(fields:[userId], references:[id])
+  publicityId BigInt
+  publicity Publicities @relation(fields:[publicityId], references:[id])
   createdAt DateTime @default(now())
   updatedAt DateTime @default(now())
   comments  Comments[]
@@ -160,6 +161,7 @@ model Publicities {
   name      String @unique
   description String?
   user_school User_Schools[]
+  posts     Posts[]
 }
 
 
