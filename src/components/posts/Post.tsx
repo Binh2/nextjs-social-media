@@ -18,7 +18,7 @@ export const Post: React.FC<{ post: PostType }> = ({ post }) => {
     <div className="p-5 bg-white rounded-lg">
       <div className="flex">
         <div className="inline-grid grid-cols-[48px_1fr] grid-rows-2 row-gap-2">
-          <ProfileImage src={post.image} className="row-span-2"></ProfileImage>
+          <ProfileImage src={post.user.image} className="row-span-2"></ProfileImage>
           <p className="ml-2">{authorName}</p>
           <p className="ml-2 text-xs">{formatDate(post.createdAt)}</p>
         </div>
