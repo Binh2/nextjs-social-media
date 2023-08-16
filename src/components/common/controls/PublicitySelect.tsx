@@ -2,7 +2,7 @@ import { useState } from 'react';
 import Image from 'next/image'
 import Popup from 'reactjs-popup'
 import { CheckIcon, Cog6ToothIcon, UserMinusIcon, UserPlusIcon, UsersIcon } from '@heroicons/react/24/solid';
-import { CloseButton } from '../CloseButton';
+import { CloseButton } from './buttons/CloseButton';
 import { RadioButton } from './RadioButton';
 import { Publicities } from '@/lib/constants/publicities';
 

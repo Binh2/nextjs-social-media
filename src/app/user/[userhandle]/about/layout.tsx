@@ -10,7 +10,7 @@ export default function About({ children }: {children: JSX.Element}) {
         <Navbar></Navbar>
       </div>
       <VerticalLine className={`bg-gray-400`}></VerticalLine>
-      <div className={`py-2 px-2`}>{children}</div>
+      <div className={`py-2 px-2 w-full`}>{children}</div>
     </div>
   </>)
 }

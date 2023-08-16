@@ -120,7 +120,7 @@ function createPosts() {
           data: {
             content: makeRandomString(100),
             image: '',
-            published: true,
+            publicity: { connect: { name: Publicities.PUBLIC } },
             user: {
               connect: {
                 email: email,
@@ -140,7 +140,7 @@ function createPosts() {
           data: {
             content,
             image,
-            published: true,
+            publicity: { connect: { name: Publicities.PUBLIC } },
             user: {
               connect: {
                 email: email,

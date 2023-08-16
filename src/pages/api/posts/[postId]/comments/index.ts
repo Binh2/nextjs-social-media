@@ -34,7 +34,7 @@ const handle: NextApiHandler = async (req, res) => {
     res.json(result);
   } else if (req.method == "POST" || req.method == "PUT") {
     const session = await getServerSession(req, res, authOptions);
-    const postId = parseInt(req.query.postid as string);
+    const postId = parseInt(req.query.postId as string);
     const userId = session?.user.id;
     const { content, image } = req.body;
     if (!userId) { res.status(StatusCodes.UNAUTHORIZED).end(); return; }

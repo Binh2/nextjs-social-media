@@ -2,7 +2,7 @@ import { AddInfoButton } from "./AddInfoButton";
 import { AddInfoLink } from "./AddInfoLink";
 import { AppLogo } from "./AppLogo";
 import { AuthGuard } from "./AuthGuard";
-import { CloseButton } from "./CloseButton";
+import { CloseButton } from "./controls/buttons/CloseButton";
 import { CoverImage } from "./CoverImage";
 import { Header } from "./Header";
 import { Hr } from "./Hr";

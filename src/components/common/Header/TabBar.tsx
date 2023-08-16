@@ -1,15 +1,16 @@
+"use client";
 import Link from 'next/link';
 import { BuildingStorefrontIcon, HomeIcon, TvIcon, UserGroupIcon } from '@heroicons/react/24/outline';
 import { UsersIcon } from "@heroicons/react/24/solid";
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
 type Props = {
   className?: string
 }
 
 export function TabBar(props: Props) {
-  const router = useRouter();
-  const isActive = (route: string) => router.pathname == route;
+  const pathname = usePathname();
+  const isActive = (route: string) => pathname == route;
   return (<>
     <ol className={`flex flex-0 gap-2 justify-center ${props.className}`}>
       <li className="w-8">

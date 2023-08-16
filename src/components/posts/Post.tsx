@@ -29,7 +29,7 @@ export const Post: React.FC<{ post: PostType }> = ({ post }) => {
       </div>
 
       <p className="mt-2 break-all whitespacing-pre-wrap">{post.content}</p>
-      <Link href={`/post/${post.id}`}>
+      <Link href={`/posts/${post.id}`}>
         {post.image && <UploadedImage src={post.image} alt="Uploaded image" className="object-contain w-full mt-2 cursor-pointer" />}
       </Link>
 

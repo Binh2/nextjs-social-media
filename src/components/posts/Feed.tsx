@@ -1,3 +1,4 @@
+"use client";
 import Post from "./Post";
 import { PostType } from "@/types/PostType";
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -30,7 +31,6 @@ export function Feed(props: Props) {
     if (data && data.pages.length != 0) return;
     fetchNextPage();
   }, [])
-  // console.log(data)
 
   return (<>
     {

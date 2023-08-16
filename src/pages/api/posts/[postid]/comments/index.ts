@@ -6,7 +6,7 @@ import { StatusCodes } from 'http-status-codes';
 
 const handle: NextApiHandler = async (req, res) => {
   if (req.method == "GET") {
-    const postId = parseInt(req.query.postid as string);
+    const postId = parseInt(req.query.postId as string);
     const take = parseInt(req.query.take as string) || 4;
     const skip = parseInt(req.query.skip as string) || 0;
     if (isNaN(postId)) res.status(StatusCodes.UNPROCESSABLE_ENTITY).end();
@@ -34,7 +34,7 @@ const handle: NextApiHandler = async (req, res) => {
     res.json(result);
   } else if (req.method == "POST" || req.method == "PUT") {
     const session = await getServerSession(req, res, authOptions);
-    const postId = parseInt(req.query.postid as string);
+    const postId = parseInt(req.query.postId as string);
     const userId = session?.user.id;
     const { content, image } = req.body;
     if (!userId) { res.status(StatusCodes.UNAUTHORIZED).end(); return; }

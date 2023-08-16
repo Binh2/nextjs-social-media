@@ -6,7 +6,7 @@ import { getServerSession } from "next-auth";
 
 const handle: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse) => {
   if (req.method == 'GET') {
-    const postId = parseInt(req.query.postid as string);
+    const postId = parseInt(req.query.postId as string);
     const take = parseInt(req.query.take as string) || 100;
     if (isNaN(postId)) res.status(StatusCodes.UNPROCESSABLE_ENTITY).end()
     const reactions = await prisma.reactions.findMany({
@@ -15,16 +15,16 @@ const handle: NextApiHandler = async (req: NextApiRequest, res: NextApiResponse)
         postId,
       },
     })
-
     res.json(reactions);
   }
   else if (req.method == 'PUT' || req.method == 'POST') {
+    console.error(req.query, req.body, "hello")
     const session = await getServerSession(req, res, authOptions);
     const userId = session?.user?.id;
     const postId = parseInt(req.query.postId as string);
     const { type } = req.body;
     if (!userId) { res.status(StatusCodes.UNAUTHORIZED).end(); return; }
-    if (isNaN(postId)) res.status(StatusCodes.UNPROCESSABLE_ENTITY).end()
+    if (isNaN(postId)) { res.status(StatusCodes.UNPROCESSABLE_ENTITY).end(); return; }
 
     const reaction = await prisma.reactions.upsert({
       where: {
