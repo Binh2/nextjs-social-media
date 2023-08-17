@@ -14,8 +14,7 @@ export function DynamicSelect({id, value, onChange, label='', name='', promiseVa
   useEffect(() => {
     const newOption = { label: value, value };
     if (option != newOption) setOption(newOption);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [value]);
+  }, [value, option]);
 
   return (<>
     <WithLabel label={label} focus={focus} value={value || ''} htmlFor={id} className={className}>
