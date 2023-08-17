@@ -28,21 +28,16 @@ export default function Post() {
   const alt = 'Post image';
   return (
     <div className="relative">
-      <img
-        className={` cursor-pointer`}
-        src={post?.image || ''}
-        alt={alt}
-      />
+      <Image className={` cursor-pointer`} src={post?.image || ''} alt={alt} 
+      width={0} height={0} unoptimized />
 
       {/* {modalIsOpen && ( */}
       <div className="fixed inset-0 z-50 flex items-center justify-center w-">
         <div className="flex bg-black">
           <div className="fixed top-0 left-0 flex items-center justify-center w-3/4 h-full bg-black">
-            <img
-              className="object-contain max-w-full max-h-full"
-              src={post?.image || ''}
-              alt={alt}
-            />
+            <Image className="object-contain max-w-full max-h-full"
+            src={post?.image || ''} alt={alt}
+            width={0} height={0} unoptimized />
           </div>
 
           {/* Comment section */}
