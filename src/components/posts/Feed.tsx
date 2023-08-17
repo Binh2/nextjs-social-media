@@ -30,7 +30,7 @@ export function Feed(props: Props) {
   useEffect(() => {
     if (data && data.pages.length != 0) return;
     fetchNextPage();
-  }, [])
+  }, [data, fetchNextPage])
 
   return (<>
     {
