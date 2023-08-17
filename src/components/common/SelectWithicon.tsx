@@ -27,7 +27,7 @@ export function SelectWithIcon({options}: { options: IconOptionType[] }) {
       <OptionWithIcon option={option} />
     </div>
     {menuShown && <div className={`absolute top-[100%] px-2`}>
-      {options.map(option => <OptionWithIcon onClick={(option) => setOption(option)} option={option} />)}
+      {options.map(option => <OptionWithIcon key={option.value} onClick={(option) => setOption(option)} option={option} />)}
     </div>}
   </div>);
 }
