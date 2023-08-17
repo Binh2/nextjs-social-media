@@ -18,6 +18,7 @@ function Page() {
     if (params && status == "authenticated") 
       router.push(`${Urls.user(
         session.user.handle, 
+        '/' + 
         params.path ? 
           typeof params.path == 'string' ? 
           params.path : 
