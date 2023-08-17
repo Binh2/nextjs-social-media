@@ -12,10 +12,18 @@ function Page() {
   const router = useRouter();
   const params = useParams();
   const { status, data: session } = useSession();
+  console.log(router, params)
 
   useEffect(() => {
     if (params && status == "authenticated") 
-      router.push(`${Urls.user(session.user.handle)}/${typeof params.path == 'string' ? params.path : params.path.join('/')}`)
+      router.push(`${Urls.user(
+        session.user.handle, 
+        params.path ? 
+          typeof params.path == 'string' ? 
+          params.path : 
+          params.path.join('/') : 
+        ''
+      )}`)
   }, [status, session, router, params])
   return <p>Redirecting...</p>
 }
