@@ -51,7 +51,7 @@ export function PublicitySelect({id='publicity-select', value, onChange}: {id?: 
         <PopupHeader className={``} onClose={() => setOpen(false)}>Select your audiences</PopupHeader>
         <div className={`bg-white overflow-auto w-[80vw] max-h-[60vh]`}>
           {options.map(option => 
-          <Option id={`${id}__${option.value}`} name={id} option={option} onClick={handleChange}
+          <Option key={`${id}__${option.value}`} id={`${id}__${option.value}`} name={id} option={option} onClick={handleChange}
           onChange={handleChange} checked={value == option.value} 
           className={`${value == option.value ? 'bg-teal-50': 'hover:bg-gray-50'}`} />)}
         </div>
