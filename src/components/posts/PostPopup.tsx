@@ -221,8 +221,8 @@ export function PublicitySelectMenu({id='publicity-select', value, onChange, pre
       {/* Body */}
       <div className={`bg-white overflow-auto w-full max-h-[60vh]`}>
         {options.map(option => 
-        <Option id={`${id}__${option.value}`} name={id} option={option} onClick={handleChange}
-        onChange={handleChange} checked={value == option.value} 
+        <Option key={option.value} id={`${id}__${option.value}`} name={id} option={option} 
+        onClick={handleChange} onChange={handleChange} checked={value == option.value} 
         className={`${value == option.value ? 'bg-teal-50': 'hover:bg-gray-50'}`} />)}
       </div>
 
