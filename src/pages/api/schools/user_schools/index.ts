@@ -1,11 +1,16 @@
 import prisma from "@/lib/prisma";
 import { HttpStatusCode } from "axios";
 import { NextApiHandler } from "next";
+import { getServerSession } from "next-auth";
+import { authOptions } from "../../auth/[...nextauth]";
+import { StatusCodes } from "http-status-codes";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "POST" || req.method == "PUT") {
     try {  
-      const { schoolName, schoolTypeName, userId, from, to, graduated, description, undergraduate, schoolDegreeName, publicityName } = req.body;
+      const session = await getServerSession(req, res, authOptions)
+      if (!session || !session.user.id) { res.status(StatusCodes.UNAUTHORIZED).end(); return; }
+      const { schoolName, schoolTypeName, from, to, graduated, description, undergraduate, schoolDegreeName, publicityName } = req.body;
       const { course1Name, course2Name, course3Name } = req.body as {course1Name?: string, course2Name?: string, course3Name?: string};
 
       // Remove duplicates among courses
@@ -19,7 +24,7 @@ const handler: NextApiHandler = async (req, res) => {
               type: { connect: { name: schoolTypeName as string } }
             }
           }},
-          user: { connect: { id: userId as string } },
+          user: { connect: { id: session.user.id } },
           from,
           to,
           graduated,

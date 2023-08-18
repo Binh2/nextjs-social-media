@@ -4,7 +4,7 @@ import { transformResponse } from "@/lib/axiosBigint";
 import { Publicities } from "@/lib/constants/publicities";
 import { SchoolTypes } from "@/lib/constants/schoolTypes";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { School, SchoolCourse, SchoolDegree } from "@prisma/client";
+import { Schools, SchoolCourses, SchoolDegrees } from "@prisma/client";
 import { useMutation } from "@tanstack/react-query";
 import axios from "axios";
 import { useSession } from "next-auth/react";
@@ -47,7 +47,7 @@ export default function UniversityForm({onCancel}: {onCancel: () => void}) {
     if (!session?.user.handle) return;
     const postData = {
       schoolName: data.school,
-      userHandle: session.user.handle,
+      schoolTypeName: SchoolTypes.UNIVERSITY,
       from: data.fromYear,
       to: data.toYear,
       graduated: data.graduated,
@@ -59,7 +59,17 @@ export default function UniversityForm({onCancel}: {onCancel: () => void}) {
       schoolDegreeName: data.degree,
       publicityName: data.publicity
     }
-    const userSchool = await axios.post("/api/school/userschool", postData)
+    const res = await fetch("/api/schools/user_schools", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(postData),
+    })
+    if (res.ok) {
+      reset();
+      onCancel();
+    }
   })
   const loading = status == 'loading' || isSubmitting;
 
@@ -115,45 +125,24 @@ export default function UniversityForm({onCancel}: {onCancel: () => void}) {
   </>)
 }
 function SchoolController({control, className=''}: {control: any, className?: string}) {
-  return (<Controller control={control} name='school' render={({ field }) => {
-    const promiseValues = async (query: string) => (await axios.get("/api/school", { params: { query }, transformResponse }).then(res => res.data) as School[]).map(({name}) => name);
-    const mutation = useMutation({
-      mutationFn: async (school: {name: string, type: string}) => await axios.post("/api/school", school).then(res => res.data),
-      onSuccess: (school: School) => field.onChange(school.name)
-    });
-    const mutate = (value: string) => mutation.mutate({name: value, type: SchoolTypes.UNIVERSITY})
-    const loading = mutation.isLoading
-    return <DynamicSelect className={className} id='university__school' name='school' label='School' value={field.value} onChange={field.onChange} 
-      promiseValues={promiseValues} mutate={mutate} loading={loading} />}}
+  const promiseValues = async (query: string) => (await axios.get("/api/schools", { params: { query }, transformResponse }).then(res => res.data) as Schools[]).map(({name}) => name);
+  return (<Controller control={control} name='school' render={({ field }) => 
+    (<DynamicSelect className={className} id='university__school' name='school' label='School' value={field.value} onChange={field.onChange} 
+      promiseValues={promiseValues} />)}
   />)
 }
 function CourseController({className='', courseNumber, control}: {className?: string, courseNumber: number, control: any}) {
-  return (<Controller control={control} name={`course${courseNumber}`} render={({ field }) => {
-    const promiseValues = async (query: string) => (await axios.get("/api/school/course", { params: { query }, transformResponse }).then(res => res.data) as SchoolCourse[]).map(({name}) => name);
-    const mutation = useMutation({
-      mutationFn: async (data: {name: string}) => await axios.post("/api/school/course", data).then(res => res.data),
-      onSuccess: (data: SchoolCourse) => field.onChange(data.name)
-    })
-    const loading = mutation.isLoading;
-    const mutate = (value: string) => mutation.mutate({name: value})
-    return (<DynamicSelect className={className} id={`university__course${courseNumber}`} label={`Course ${courseNumber}`} value={field.value} onChange={field.onChange} 
-    promiseValues={promiseValues} loading={loading} mutate={mutate}/>)}}
+  const promiseValues = async (query: string) => (await axios.get("/api/schools/courses", { params: { query }, transformResponse }).then(res => res.data) as SchoolCourses[]).map(({name}) => name);
+  return (<Controller control={control} name={`course${courseNumber}`} render={({ field }) => 
+    (<DynamicSelect className={className} id={`university__course${courseNumber}`} label={`Course ${courseNumber}`} value={field.value} onChange={field.onChange} 
+    promiseValues={promiseValues} />)}
   />)
 }
 function DegreeController({className='', control}: {className?: string, control: any}) {
-  return (<Controller control={control} name='degree' render={({ field }) => {
-    const promiseValues = async (query: string) => (await axios.get("/api/school/degree", { params: { query }, transformResponse }).then(res => res.data) as School[]).map(({name}) => name) 
-    const mutation = useMutation({
-      mutationFn: async (data: {name: string}) => await axios.post("/api/school/degree", data).then(res => res.data), 
-      onSuccess: (data: SchoolDegree) => field.onChange(data.name)
-    })
-    const loading = mutation.isLoading;
-    const mutate = (value: string) => mutation.mutate({name: value})
-      
-    return (<DynamicSelect className={className} id='university__degree' value={field.value} label='Degree' onChange={field.onChange} 
-      promiseValues={promiseValues} loading={loading} mutate={mutate}
-    />)}
-  }
+  const promiseValues = async (query: string) => (await axios.get("/api/schools/degrees", { params: { query }, transformResponse }).then(res => res.data) as Schools[]).map(({name}) => name) 
+  return (<Controller control={control} name='degree' render={({ field }) => 
+    (<DynamicSelect className={className} id='university__degree' value={field.value} label='Degree' onChange={field.onChange} 
+      promiseValues={promiseValues} />)}
   />)
 }
 
