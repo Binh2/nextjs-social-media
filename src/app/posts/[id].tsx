@@ -56,7 +56,7 @@ export default function Post() {
 
             <div className="flex items-center py-1 pb-2 cursor-pointer hover:bg-gray-300 hover:rounded-lg">
               <div className="inline-grid grid-cols-[48px_1fr] grid-rows-2 row-gap-2">
-                <ProfileImage className={`row-span-2`} src={post?.author?.image}></ProfileImage>
+                <ProfileImage className={`row-span-2`} src={post?.user?.image}></ProfileImage>
                 <p className="ml-2">{session?.user?.name}</p>
                 <p className="ml-2 text-xs">{formatDate(post?.createdAt || '')}</p>
               </div>
