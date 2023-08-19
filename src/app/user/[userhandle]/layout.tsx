@@ -17,7 +17,7 @@ export default function Layout({children}: {children: JSX.Element}) {
         <AuthGuard>
           <Navbar />
           <div className="mx-[10%]">
-            <CoverImage />
+            <CoverImage className={`mb-4`} />
             { children }
           </div>
         </AuthGuard>

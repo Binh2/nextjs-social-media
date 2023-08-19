@@ -20,7 +20,21 @@ export const users = [
     name: "Nguyễn Thị Sáu",
     username: "saunt123",
     email: "saunt@gmail.com",
-    image: "https://i.pinimg.com/736x/16/e1/d1/16e1d12cf49295519beac0270496923b.jpg",
+    image: "https://res.cloudinary.com/ddyd5lv06/image/upload/v1692174495/bunny_ear_lh1maa.jpg",
+    password: "123456"
+  },
+  {
+    name: "John Smith",
+    username: "johnsmith",
+    email: "johnsmith@gmail.com",
+    image: "",
+    password: "123456"
+  },
+  {
+    name: "Jane Williams",
+    username: "janewilliams",
+    email: "janewilliam@gmail.com",
+    image: "",
     password: "123456"
   }
 ]

@@ -87,6 +87,7 @@ model User {
   emailVerified DateTime?
   hashedPassword  String?
   image         String?
+  coverImage    String?
   isMale        Boolean?
   birthday      DateTime? @db.Date
   posts         Posts[]
