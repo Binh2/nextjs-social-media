@@ -1,5 +1,5 @@
 import { PublicitySelect } from "./PublicitySelect";
-import { DynamicSelect, Option } from "./DynamicSelect";
+import { DynamicSelect } from "./DynamicSelect";
 import { Input } from "./Input";
 import { LazyForm } from "./LazyForm";
 import { RadioButton } from "./RadioButton";
@@ -10,4 +10,3 @@ export {
   Checkbox, DynamicSelect, Input, LazyForm, 
   PublicitySelect, RadioButton, Textarea,
 }
-export type { Option }
