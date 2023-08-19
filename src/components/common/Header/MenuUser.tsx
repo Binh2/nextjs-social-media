@@ -24,7 +24,7 @@ export function MenuUser() {
         <div className="absolute right-0 h-auto mt-2 rounded-md shadow-lg bg-slate-50 w-80">
           <ul className="p-2">
             <li className='px-2'>
-              <Link href={`${Urls.user(session?.user.id)}`} className="w-[100%] flex items-center pt-3 pb-3 pl-2 bg-gray-100 rounded shadow-md cursor-pointer hover:bg-slate-300 hover:rounded">
+              <Link href={`${Urls.user(session?.user.handle)}`} className="w-[100%] flex items-center pt-3 pb-3 pl-2 bg-gray-100 rounded shadow-md cursor-pointer hover:bg-slate-300 hover:rounded">
                 <ProfileImage size={32} />
                 <p className="ml-2 text-base font-semibold">{session?.user?.name}</p>
               </Link>
