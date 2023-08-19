@@ -8,7 +8,7 @@ export function Navbar() {
   const { data: session } = useSession();
   const handle = session?.user.handle;
   const isActive = (path: string) => pathname?.includes(Urls.user(handle, path))
-  const className = "px-4 py-4 font-bold" 
+  const className = "block px-4 py-4 font-bold" 
 
   return (<>
     <ol className="flex bg-white">
