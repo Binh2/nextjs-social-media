@@ -4,11 +4,12 @@ import { NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) => {
   if (req.method == "GET") {
-    const query = req.query.query as string;
+    const query = req.query.query as string | undefined || '';
     const degrees = await prisma.schoolCourses.findMany({
       where: {
         name: {
-          startsWith: query
+          contains: query,
+          mode: "insensitive"
         }
       },
       take: 4,

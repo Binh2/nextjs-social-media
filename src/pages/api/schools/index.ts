@@ -3,16 +3,20 @@ import { StatusCodes } from "http-status-codes";
 import { NextApiHandler } from "next";
 
 const handler: NextApiHandler = async (req, res) => {
+  console.log('hello')
   if (req.method == "GET") {
-    const query = req.query.query as string || '';
+    console.log('get')
+    const query = req.query.query as string | undefined || '';
     const schools = await prisma.schools.findMany({
       where: {
         name: {
-          startsWith: query
+          contains: query,
+          mode: "insensitive",
         }
       },
       take: 4
     });
+    console.log(schools)
     res.json(schools);
   } else if (req.method == "POST" || req.method == "PUT") {
     const { name, type: typeName } = req.body as { name: string, type: string };
