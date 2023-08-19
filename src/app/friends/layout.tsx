@@ -12,7 +12,7 @@ export default function Layout({children}: {children: JSX.Element}) {
 }
 
 const queryClient = new QueryClient();
-export function Providers({children}: {children: JSX.Element}) {
+function Providers({children}: {children: JSX.Element}) {
   return (
     <QueryClientProvider client={queryClient}>
       <SessionProvider>
