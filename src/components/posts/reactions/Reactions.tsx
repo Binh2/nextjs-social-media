@@ -26,7 +26,7 @@ export function Reactions({ postId }: Props) {
   })
   
   queryClient.prefetchQuery(['posts', postId, 'reactions'])
-  const didSelfReact = reactions && reactions.map(reaction => reaction.authorEmail).includes(session?.user?.email || '')
+  const didSelfReact = reactions && reactions.map(reaction => reaction.userId).includes(session?.user?.id || '')
   let othersCount = 0;
   if (count) othersCount = Math.max(count - (didSelfReact ? 1 : 0), 0);
   // console.log(othersCount)
