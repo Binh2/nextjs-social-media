@@ -26,7 +26,7 @@ promiseValues: (query: string) => Promise<string[]>}) {
       setValues(values);
       queryCache.current[query] = values
     })
-  }, [query]);
+  }, [query, promiseValues]);
 
   useEffect(() => {
     if (focus) {
@@ -76,7 +76,7 @@ promiseValues: (query: string) => Promise<string[]>}) {
             <div key={value} onClick={() => { onChange(value); }} 
             className={`px-2 ${index == 0 && 'pt-2'} pb-1 ${index == values.length-1 && 'rounded-b-lg'} border-x border-b border-gray-700 ${!delayedFocus && 'hidden'}`}>{value}</div>
           )) :
-          <p className={`px-2 pt-2 pb-1 rounded-b-lg border border-gray-700 ${!delayedFocus && 'hidden'}`} onClick={() => onChange(query)}>Create "{query}"</p>
+          <p className={`px-2 pt-2 pb-1 rounded-b-lg border border-gray-700 ${!delayedFocus && 'hidden'}`} onClick={() => onChange(query)}>Create &ldquo;{query}&rdquo;</p>
         }
       </div>
     </div>
